@@ -1,0 +1,140 @@
+-- Common SQL Server Data Types Reference
+
+-- Numeric Types
+-- INT             -- Integer (-2,147,483,648 to 2,147,483,647)
+-- BIGINT          -- Large integer (-2^63 to 2^63-1)
+-- SMALLINT        -- Small integer (-32,768 to 32,767)
+-- TINYINT         -- Tiny integer (0 to 255)
+-- DECIMAL(p, s)   -- Fixed precision and scale number
+-- NUMERIC(p, s)   -- Same as DECIMAL
+-- FLOAT           -- Approximate number (8 bytes)
+-- REAL            -- Approximate number (4 bytes)
+-- BIT             -- Boolean (0 or 1)
+
+-- Date and Time Types
+-- DATE            -- Stores date only (YYYY-MM-DD)
+-- TIME            -- Stores time only (HH:MM:SS)
+-- DATETIME        -- Date and time (accurate to 1/300s)
+-- SMALLDATETIME   -- Less precise datetime
+-- DATETIME2       -- Date and time with higher precision
+-- DATETIMEOFFSET  -- Date/time with time zone offset
+
+-- Character/String Types
+-- CHAR(n)         -- Fixed-length non-Unicode string (1 to 8000)
+-- VARCHAR(n)      -- Variable-length non-Unicode string
+-- VARCHAR(MAX)    -- Variable-length string up to 2 GB
+-- NCHAR(n)        -- Fixed-length Unicode string
+-- NVARCHAR(n)     -- Variable-length Unicode string
+-- NVARCHAR(MAX)   -- Variable-length Unicode string up to 2 GB
+
+-- Binary Types
+-- BINARY(n)       -- Fixed-length binary data
+-- VARBINARY(n)    -- Variable-length binary data
+-- VARBINARY(MAX)  -- Large binary data (e.g., images, files)
+
+-- Other Types
+-- UNIQUEIDENTIFIER -- Globally unique identifier (GUID)
+-- XML              -- XML-formatted data
+-- GEOGRAPHY        -- Spatial data type for geographic data
+-- GEOMETRY         -- Spatial data type for geometric shapes
+-- HIERARCHYID      -- Stores hierarchical relationships
+
+----------------------------------------------------------------------------------------
+-- Scripts below create the required tables in the Inspection Module
+-- 
+-- HazardType
+-- InspectionHazard
+-- HazardReport
+-- Inspection
+-- Notification
+-- Escalation
+----------------------------------------------------------------------------------------
+
+-- Create HazardType table
+CREATE TABLE HazardType (
+    HazardTypeID INT PRIMARY KEY IDENTITY(1,1), --PK
+    HazardType NVARCHAR(50) NOT NULL, --FK
+    HealthRiskRating NVARCHAR(6) NOT NULL, --High,Medium,Low
+    Category NVARCHAR(MAX) NULL
+);
+
+-- Create InspectionHazard table
+CREATE TABLE InspectionHazard (
+    InspectionHazardID INT PRIMARY KEY IDENTITY(1,1), --PK
+    HazardTypeID INT NOT NULL, --FK
+    InspectionID INT NOT NULL, --FK
+    HazardReportID INT NOT NULL, --FK
+    Severity NVARCHAR(6) NOT NULL, --High,Medium,Low
+    Notes NVARCHAR(MAX) NULL
+);
+
+-- Create HazardReport table
+CREATE TABLE HazardReport (
+    HazardReportID INT PRIMARY KEY IDENTITY(1,1), --PK
+    PropertyID INT NOT NULL, --FK
+    TenantID INT NOT NULL, --FK
+    DateReported DATE NOT NULL,
+    ReportedBy INT NOT NULL, --TenantID,StaffID,etc
+    Description NVARCHAR(100),
+    PhotoEvidence NVARCHAR(100),
+    LocationDetails NVARCHAR(100),
+    InvestigationType NVARCHAR(10), --Does this need a separate entity with defined options (standard, renewed, further, emergency)
+    InvestigationDueDate DATE,
+    EmergencyActionTaken BIT,
+    MadeSafeDate DATE,
+    FurtherWorkRequired BIT,
+    FurtherWorkDueDate DATE,
+    ReportStatus NVARCHAR(15) --Does this need a separate entity with defined options (open, under review, made safe, closed, etc)
+);
+
+-- Create Inspection table
+CREATE TABLE Inspection (
+    InspectionID INT PRIMARY KEY IDENTITY(1,1), --PK
+    PropertyID INT NOT NULL, --FK
+    TenantID INT NOT NULL, --FK
+    TenancyID INT NOT NULL, --FK
+    TriggerSource NVARCHAR(30) NOT NULL, --Does this need a separate entity with defined options (TenantReport, RoutineCheck, EnvironmentalSensor, StaffReport, etc)
+    HazardReportedDate DATE NOT NULL,
+    InspectionScheduledDate DATE NOT NULL,
+    InspectionCompletedDate DATE,
+    InspectorName NVARCHAR(30),
+    HazardConfirmed BIT,
+    RepairRequired BIT,
+    RepairScheduledDate DATE,
+    RepairCompletedDate DATE,
+    SLABreachFlag BIT,
+    EscalationStatus NVARCHAR(10),
+    NotificationSentToTenant BIT,
+    InspectionNotes NVARCHAR(MAX)
+);
+
+-- Create Notification table
+CREATE TABLE Notification (
+    NotificationID INT PRIMARY KEY IDENTITY(1,1), --PK
+    InspectionID INT NOT NULL, --FK
+    TenantID INT NOT NULL, --FK
+    WorkOrderID INT NOT NULL, --FK
+    NotificationType NVARCHAR(10), --Does this need a separate entity with defined options (scheduled, result, advice, delay, etc)
+    DateSent DATE,
+    Method NVARCHAR(6), --Email, SMS, Letter
+    ContentSummary NVARCHAR(MAX)
+);
+
+-- Create Escalation table
+CREATE TABLE Escalation (
+    EscalationID INT PRIMARY KEY IDENTITY(1,1), --PK
+    InspectionID INT NOT NULL, --FK
+    EscalationReason NVARCHAR(30),
+    EscalationStatus NVARCHAR(10),
+    EscalationType NVARCHAR(15),
+    EscalatedTo NVARCHAR(50),
+    EscalationStartDate DATE,
+    EscalationEndDate DATE,
+    ActionTaken NVARCHAR(MAX),
+    CompensationOffered BIT,
+    CompensationAmount DECIMAL(10,2), --May need updating to reflect potential compensation amounts
+    AlternativeAccomodationOffered BIT,
+    AlternativeAccomodationDetails NVARCHAR(MAX),
+    TenantAcceptance BIT,
+    EscalationNotes NVARCHAR(MAX)
+);
