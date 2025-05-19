@@ -22,13 +22,6 @@ The project includes a Streamlit-based demonstration with three key components:
 - GitHub repository access
 - Schema version control tracking
 
-#### 2. Data Validation Interface
-- File upload functionality (JSON/CSV)
-- Automated validation processing
-- Compliance reporting dashboard
-    - Success rate metrics
-    - Error identification
-    - Missing field detection
 
 #### 3. Schema Documentation
 - Interactive schema explorer
