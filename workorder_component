@@ -1,0 +1,166 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/schemas/WorkOrderComponent.schema.json",
+  "title": "WorkOrderComponent",
+  "description": "Schema for managing damp and mould work orders in compliance with Awaab's Law and HACT UK Housing Data Standards.",
+  "type": "object",
+  "properties": {
+    "WorkOrder": { "$ref": "#/$defs/WorkOrder" }
+  },
+  "$defs": {
+    "WorkOrder": {
+      "type": "object",
+      "description": "Primary entity representing a damp or mould-related work order.",
+      "properties": {
+        "WorkOrderID": { "type": "integer", "description": "Unique identifier for the work order." },
+        "WorkElementID": { "$ref": "#/$defs/WorkElement" },
+        "AddressID": { "type": "integer", "description": "Identifier of the address where the issue is reported." },
+        "InspectionID": { "type": "integer", "description": "Identifier for the associated inspection." },
+        "EscalationID": { "type": "integer", "description": "Optional identifier for any escalation linked to this work order." },
+        "TenancyID": { "type": "integer", "description": "Identifier for the associated tenancy." },
+        "TenantID": { "type": "integer", "description": "Identifier for the tenant affected." },
+        "HazardReportID": { "type": "integer", "description": "Identifier for the related hazard report." },
+        "DateRaised": { "type": "string", "format": "date", "description": "Date the work order was raised." },
+        "DateReported": { "type": "string", "format": "date", "description": "Date the issue was reported by the tenant or inspector." },
+        "PlannedStartDate": { "type": "string", "format": "date" },
+        "PlannedFinishDate": { "type": "string", "format": "date" },
+        "ActualCompletionDateTime": { "type": "string", "format": "date-time" },
+        "DescriptionOfWork": { "type": "string" },
+        "EstimatedCost": { "type": "number" },
+        "EstimatedLabourHours": { "type": "number" },
+        "LocationOfRepair": { "type": "string" },
+        "JobStatusUpdate": { "type": "string" },
+        "SpatialLocation": { "type": "string" },
+        "LocationAlert": { "$ref": "#/$defs/AlertRegardingLocation" },
+        "PersonAlert": { "$ref": "#/$defs/AlertRegardingPerson" },
+        "RepairSLABreachFlag": { "type": "string" }
+      }
+    },
+
+    "WorkElement": {
+      "type": "object",
+      "description": "Describes a component of work related to damp and mould intervention.",
+      "properties": {
+        "WorkElementID": { "type": "string" },
+        "RateScheduleItem": { "$ref": "#/$defs/RateScheduleItem" },
+        "ImpactedAssetReference": { "type": "string" },
+        "Trade": { "$ref": "#/$defs/TradeCode" },
+        "ServiceChargeSubject": { "type": "string" },
+        "DependsOn": { "$ref": "#/$defs/WorkElementDependency" }
+      }
+    },
+
+    "WorkElementDependency": {
+      "type": "object",
+      "description": "Defines dependency between work elements.",
+      "properties": {
+        "WorkElementID": { "type": "string" },
+        "DependsOnWorkElement": { "type": "string" },
+        "Type": { "type": "string" },
+        "Timing": { "type": "string" }
+      }
+    },
+
+    "WorkPriority": {
+      "type": "object",
+      "description": "Defines the priority assigned to a work order.",
+      "properties": {
+        "ID": { "type": "string" },
+        "PriorityCode": { "type": "string" },
+        "PriorityDescription": { "type": "string" },
+        "EffectiveDateTime": { "type": "integer" },
+        "NumberOfDays": { "type": "integer" },
+        "Comments": { "type": "string" },
+        "RequiredStartDateTime": { "type": "string" },
+        "RequiredCompletionDateTime": { "type": "string" }
+      }
+    },
+
+    "WorkClass": {
+      "type": "object",
+      "properties": {
+        "ID": { "type": "string" },
+        "WorkClassCode": { "type": "string" },
+        "WorkClassDescription": { "type": "string" }
+      }
+    },
+
+    "ContractorOrganisation": {
+      "type": "object",
+      "properties": {
+        "ID": { "type": "string" },
+        "Name": { "type": "string" },
+        "ContractorPortal": { "type": "string" },
+        "Subcontractors": { "type": "string" }
+      }
+    },
+
+    "TradeCode": {
+      "type": "object",
+      "properties": {
+        "Code": { "type": "string" },
+        "CustomCode": { "type": "string" },
+        "CustomName": { "type": "string" }
+      }
+    },
+
+    "RateScheduleItem": {
+      "type": "object",
+      "properties": {
+        "ID": { "type": "string" },
+        "M3NHFSORCode": { "type": "string" },
+        "CustomCode": { "type": "string" },
+        "CustomName": { "type": "string" }
+      }
+    },
+
+    "AlertRegardingLocation": {
+      "type": "object",
+      "properties": {
+        "Type": { "type": "string" },
+        "Attachment": { "type": "string" },
+        "Comments": { "type": "string" }
+      }
+    },
+
+    "AlertRegardingPerson": {
+      "type": "object",
+      "properties": {
+        "Type": { "type": "string" },
+        "Comments": { "type": "string" }
+      }
+    },
+
+    "WorkOrderStatusHistory": {
+      "type": "object",
+      "properties": {
+        "WorkOrderID": { "type": "integer" },
+        "Status": { "type": "string" },
+        "UpdatedBy": { "type": "string" },
+        "Timestamp": { "type": "string", "format": "date-time" },
+        "Comments": { "type": "string" }
+      }
+    },
+
+    "WorkOrderComplete": {
+      "type": "object",
+      "properties": {
+        "WorkOrderID": { "type": "string" },
+        "BillOfMaterialItem": { "type": "string" },
+        "CompletedWorkElements": { "type": "string" },
+        "OperativesUsed": { "type": "string" },
+        "JobStatusUpdate": { "type": "string" },
+        "FollowOnWork": { "type": "string" }
+      }
+    },
+
+    "WorkOrderAccessInformation": {
+      "type": "object",
+      "properties": {
+        "WorkOrderID": { "type": "string" },
+        "KeySafe": { "type": "string" },
+        "Description": { "type": "string" }
+      }
+    }
+  }
+}
