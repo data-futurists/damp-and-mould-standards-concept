@@ -36,7 +36,7 @@
         "EstimatedLabourHours": { "type": "number", "description": "Projected time in effort to complete the work, expressed in hours." },
         "LocationOfRepair": { "type": "string", "description": "Description of where in the unit the work is to be undertaken." },
         "JobStatusUpdate": { "type": "string", "description": "The status of the job at the time of the update." },
-        "RepairSLABreachFlag": { "type": "string", "description": "Flag indicating if the repair is a breach of the Service Level Agreement (SLA)." },
+        "RepairSLABreachFlag": { "type": "string", "description": "Flag indicating if the repair is a breach of the Service Level Agreement (SLA)." }
       }
     },
 
@@ -155,7 +155,7 @@
         "CreatedDateTime": { "type": "string", "format": "date-time", "description": "Date and time this entry was created. This may be after the status was technically entered if there was a delay between the status change taking place and it being recorded." },
         "EnteredDateTime": { "type": "string", "format": "date-time", "description": "The time that the work order entered this status." },
         "ExitedDateTime": { "type": "string", "format": "date-time", "description": "The time that this entry's status stopped applying, for example the work order moved to a new status." },
-        "Comments": { "type": "string", "description": "Free-form text for comments associated with the status change." },
+        "Comments": { "type": "string", "description": "Free-form text for comments associated with the status change." }
       }
     },
 
@@ -168,7 +168,7 @@
         "CompletedWorkElements": { "type": "string", "description": "The work elements that were actually completed as part of this work order." },
         "OperativesUsed": { "type": "string", "description": "The operative(s) who carried out the work. These operatives may also be linked to work elements they were invovled with by specifying one or more work element references on each operative. However, only work element references that are included in the list of Completed Work Elements above should be used." },
         "JobStatusUpdate": { "type": "string", "description": "The job status updates issued during the execution of this work order." },
-        "FollowOnWork": { "type": "string", "description": "Any follow-on works arising from this work order." },
+        "FollowOnWork": { "type": "string", "description": "Any follow-on works arising from this work order." }
       }
     },
 
@@ -178,7 +178,7 @@
       "properties": {
         "WorkOrderID": { "type": "string", "description": "Unique identifier for the work order." },
         "KeySafe": { "type": "string", "description": "Details of any keysafe location and access code that may be required to complete work." },
-        "Description": { "type": "string", "description": "Narrative description of how to access the relevant parts of the site, property and/or unit." },
+        "Description": { "type": "string", "description": "Narrative description of how to access the relevant parts of the site, property and/or unit." }
       }
     }
   }
