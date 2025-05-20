@@ -1,8 +1,81 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Inspection Component Schema",
-  "description": "A comprehensive data model for managing social housing properties, ensuring compliance with Awaab's Law requirements for damp and mould prevention.",
+  "title": "Inspection Module Data Model",
   "type": "object",
+  "properties": {
+    "HazardTypes": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/HazardType" }
+    },
+    "InspectionHazards": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/InspectionHazard" }
+    },
+    "HazardReports": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/HazardReport" }
+    },
+    "Inspections": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/Inspection" }
+    },
+    "Notifications": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/Notification" }
+    },
+    "Escalations": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/Escalation" }
+    },
+    "HealthRiskRatings": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/HealthRiskRating" }
+    },
+    "Severities": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/Severity" }
+    },
+    "InvestigationTypes": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/InvestigationType" }
+    },
+    "ReportStatuses": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/ReportStatus" }
+    },
+    "TriggerSources": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/TriggerSource" }
+    },
+    "EscalationStatuses": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/EscalationStatus" }
+    },
+    "NotificationTypes": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/NotificationType" }
+    },
+    "NotificationMethods": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/NotificationMethod" }
+    },
+    "EscalationStages": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/EscalationStage" }
+    },
+    "EscalationTypes": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/EscalationType" }
+    }
+  },
+  "required": [
+    "HazardTypes",
+    "InspectionHazards",
+    "HazardReports",
+    "Inspections",
+    "Notifications",
+    "Escalations"
+  ],
   "definitions": {
     "HazardType": {
       "type": "object",
