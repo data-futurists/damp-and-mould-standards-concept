@@ -1,5 +1,6 @@
 ----------------------------------------------------------------------------------------
 -- Author: George Foster (TPXImpact)
+-- Email: george.foster@tpximpact.com
 --
 -- Scripts below create the required tables in the Inspection Module
 -- 
@@ -11,13 +12,13 @@
 -- Escalation
 ----------------------------------------------------------------------------------------
 -- NOTES
--- 
+-- On delete or on update behaviour for the FKs? Leave for now
 ----------------------------------------------------------------------------------------
 
 -- Create HazardType table
 CREATE TABLE HazardType (
     HazardTypeID INT PRIMARY KEY IDENTITY(1,1),
-    HazardType NVARCHAR(50) NOT NULL,
+    HazardType NVARCHAR(100) NOT NULL,
     HealthRiskRatingID INT NOT NULL FOREIGN KEY REFERENCES HealthRiskRating(HealthRiskRatingID),
     Category NVARCHAR(500) NULL
 );
@@ -38,17 +39,17 @@ CREATE TABLE HazardReport (
     PropertyID INT NOT NULL FOREIGN KEY REFERENCES Property(PropertyID), 
     TenantID INT NOT NULL FOREIGN KEY REFERENCES Tenant(TenantID),
     DateReported DATE NOT NULL,
-    ReportedBy INT NOT NULL, --TenantID,StaffID,etc
-    Description NVARCHAR(500),
-    PhotoEvidence NVARCHAR(500),
-    LocationDetails NVARCHAR(500),
+    ReportedBy NVARCHAR(100) NOT NULL, --TenantID,StaffID,etc field length will need checking
+    Description NVARCHAR(500) NULL,
+    PhotoEvidence NVARCHAR(500) NULL,
+    LocationDetails NVARCHAR(500) NULL,
     InvestigationTypeID INT NOT NULL FOREIGN KEY REFERENCES InvestigationType(InvestigationTypeID), 
-    InvestigationDueDate DATE,
-    EmergencyActionTaken BIT,
-    MadeSafeDate DATE,
-    FurtherWorkRequired BIT,
-    FurtherWorkDueDate DATE,
-    ReportStatusID INT FOREIGN KEY REFERENCES ReportStatus(ReportStatusID)
+    InvestigationDueDate DATE NOT NULL,
+    EmergencyActionTaken BIT NOT NULL DEFAULT 0,
+    MadeSafeDate DATE NULL,
+    FurtherWorkRequired BIT NOT NULL DEFAULT 0,
+    FurtherWorkDueDate DATE NULL,
+    ReportStatusID INT NOT NULL FOREIGN KEY REFERENCES ReportStatus(ReportStatusID)
 );
 
 -- Create Inspection table
@@ -59,17 +60,17 @@ CREATE TABLE Inspection (
     TenancyID INT NOT NULL FOREIGN KEY REFERENCES Tenancy(TenancyID),
     TriggerSourceID INT NOT NULL FOREIGN KEY REFERENCES TriggerSource(TriggerSourceID),
     HazardReportedDate DATE NOT NULL,
-    InspectionScheduledDate DATE NOT NULL,
-    InspectionCompletedDate DATE,
-    InspectorName NVARCHAR(30),
-    HazardConfirmed BIT,
-    RepairRequired BIT,
-    RepairScheduledDate DATE,
-    RepairCompletedDate DATE,
-    SLABreachFlag BIT,
+    InspectionScheduledDate DATE NULL,
+    InspectionCompletedDate DATE NULL,
+    InspectorName NVARCHAR(100) NULL,
+    HazardConfirmed BIT NOT NULL DEFAULT 0,
+    RepairRequired BIT NOT NULL DEFAULT 0,
+    RepairScheduledDate DATE NULL,
+    RepairCompletedDate DATE NULL,
+    SLABreachFlag BIT NOT NULL DEFAULT 0,
     EscalationStatusID INT NOT NULL FOREIGN KEY REFERENCES EscalationStatus(EscalationStatusID),
-    NotificationSentToTenant BIT,
-    InspectionNotes NVARCHAR(500)
+    NotificationSentToTenant BIT NOT NULL DEFAULT 0,
+    InspectionNotes NVARCHAR(500) NULL
 );
 
 -- Create Notification table
@@ -79,28 +80,28 @@ CREATE TABLE Notification (
     TenantID INT NOT NULL FOREIGN KEY REFERENCES Tenant(TenantID),
     WorkOrderID INT NOT NULL FOREIGN KEY REFERENCES WorkOrder(WorkOrderID),
     NotificationTypeID INT NOT NULL FOREIGN KEY REFERENCES NotificationType(NotificationTypeID), 
-    DateSent DATE,
-    Method NVARCHAR(6), --Email, SMS, Letter
-    ContentSummary NVARCHAR(500)
+    DateSent DATE NOT NULL,
+    NotificationMethodID INT NOT NULL FOREIGN KEY REFERENCES NotificationMethod(NotificationMethodID),
+    ContentSummary NVARCHAR(500) NULL
 );
 
 -- Create Escalation table
 CREATE TABLE Escalation (
     EscalationID INT PRIMARY KEY IDENTITY(1,1),
     InspectionID INT NOT NULL FOREIGN KEY REFERENCES Inspection(InspectionID),
-    EscalationReason NVARCHAR(30),
+    EscalationReason NVARCHAR(100) NULL,
     EscalationStageID INT NOT NULL FOREIGN KEY REFERENCES EscalationStage(EscalationStageID),
-    EscalationType NVARCHAR(15),
-    EscalatedTo NVARCHAR(50),
-    EscalationStartDate DATE,
-    EscalationEndDate DATE,
-    ActionTaken NVARCHAR(500),
-    CompensationOffered BIT,
-    CompensationAmount DECIMAL(10,2), --May need updating to reflect potential compensation amounts
-    AlternativeAccomodationOffered BIT,
-    AlternativeAccomodationDetails NVARCHAR(500),
-    TenantAcceptance BIT,
-    EscalationNotes NVARCHAR(500)
+    EscalationTypeID INT NOT NULL FOREIGN KEY REFERENCES EscalationType(EscalationTypeID),
+    EscalatedTo NVARCHAR(100) NOT NULL,
+    EscalationStartDate DATE NOT NULL,
+    EscalationEndDate DATE NULL,
+    ActionTaken NVARCHAR(500) NULL,
+    CompensationOffered BIT NOT NULL DEFAULT 0,
+    CompensationAmount DECIMAL(10,2) NULL, --May need updating to reflect potential compensation amounts
+    AlternativeAccommodationOffered BIT NOT NULL DEFAULT 0,
+    AlternativeAccommodationDetails NVARCHAR(500) NULL,
+    TenantAcceptance BIT NOT NULL DEFAULT 0,
+    EscalationNotes NVARCHAR(500) NULL
 );
 
 ----------------------------------------------------------------------------------------
@@ -111,7 +112,7 @@ CREATE TABLE Escalation (
 -- HealthRiskRating Table
 CREATE TABLE HealthRiskRating (
     HealthRiskRatingID INT PRIMARY KEY IDENTITY(1,1),
-    HealthRiskRating NVARCHAR(6) NOT NULL
+    HealthRiskRating NVARCHAR(20) NOT NULL
 );
 INSERT INTO HealthRiskRating (HealthRiskRating)
 VALUES ('High'), ('Medium'), ('Low');
@@ -119,23 +120,23 @@ VALUES ('High'), ('Medium'), ('Low');
 -- Severity Table
 CREATE TABLE Severity (
     SeverityID INT PRIMARY KEY IDENTITY(1,1),
-    Severity NVARCHAR(6) NOT NULL
+    Severity NVARCHAR(20) NOT NULL
 );
 INSERT INTO Severity (Severity)
 VALUES ('High'), ('Medium'), ('Low');
 
--- InspectionType Table
+-- InvestigationType Table
 CREATE TABLE InvestigationType (
     InvestigationTypeID INT PRIMARY KEY IDENTITY(1,1),
-    InvestigationType NVARCHAR(9) NOT NULL
+    InvestigationType NVARCHAR(20) NOT NULL
 );
-INSERT INTO InspectionType (InspectionType)
+INSERT INTO InvestigationType (InvestigationType)
 VALUES ('Standard'), ('Renewed'), ('Further'), ('Emergency');
 
 -- ReportStatus Table
 CREATE TABLE ReportStatus (
     ReportStatusID INT PRIMARY KEY IDENTITY(1,1),
-    ReportStatus NVARCHAR(15) NOT NULL
+    ReportStatus NVARCHAR(20) NOT NULL
 );
 INSERT INTO ReportStatus (ReportStatus)
 VALUES ('Open'), ('Under Review'), ('Made Safe'), ('Closed');
@@ -151,7 +152,7 @@ VALUES ('Tenant Report'), ('Routine Check'), ('Environmental Sensor'), ('Staff R
 -- EscalationStatus Table
 CREATE TABLE EscalationStatus (
     EscalationStatusID INT PRIMARY KEY IDENTITY(1,1),
-    EscalationStatus NVARCHAR(12) NOT NULL
+    EscalationStatus NVARCHAR(20) NOT NULL
 );
 INSERT INTO EscalationStatus (EscalationStatus)
 VALUES ('None'), ('In Progress'), ('Escalated');
@@ -159,7 +160,7 @@ VALUES ('None'), ('In Progress'), ('Escalated');
 -- NotificationType Table
 CREATE TABLE NotificationType (
     NotificationTypeID INT PRIMARY KEY IDENTITY(1,1),
-    NotificationType NVARCHAR(10) NOT NULL
+    NotificationType NVARCHAR(20) NOT NULL
 );
 INSERT INTO NotificationType (NotificationType)
 VALUES ('Scheduled'), ('Result'), ('Advice'), ('Delay');
@@ -167,7 +168,23 @@ VALUES ('Scheduled'), ('Result'), ('Advice'), ('Delay');
 -- EscalationStage Table
 CREATE TABLE EscalationStage (
     EscalationStageID INT PRIMARY KEY IDENTITY(1,1),
-    EscalationStage NVARCHAR(10)
+    EscalationStage NVARCHAR(20) NOT NULL
 );
 INSERT INTO EscalationStage (EscalationStage)
 VALUES ('Open'), ('In Progress'), ('Resolved'), ('Rejected');
+
+-- NotificationMethod Table
+CREATE TABLE NotificationMethod (
+    NotificationMethodID INT PRIMARY KEY IDENTITY(1,1),
+    NotificationMethod NVARCHAR(20) NOT NULL
+); 
+INSERT INTO NotificationMethod (NotificationMethod)
+VALUES ('Email'), ('SMS'), ('Letter');
+
+-- EscalationType Table
+CREATE TABLE EscalationType (
+    EscalationTypeID INT PRIMARY KEY IDENTITY(1,1),
+    EscalationType NVARCHAR(30) NOT NULL
+);
+INSERT INTO EscalationType (EscalationType)
+VALUES ('Senior Review'), ('Legal Action'), ('Compensation'), ('Alternative Accomodation');
