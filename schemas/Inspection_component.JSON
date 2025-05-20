@@ -1,0 +1,221 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Inspection Component Schema",
+  "description": "A comprehensive data model for managing social housing properties, ensuring compliance with Awaab's Law requirements for damp and mould prevention.",
+  "type": "object",
+  "definitions": {
+    "HazardType": {
+      "type": "object",
+      "description": "",
+      "properties": {
+        "HazardTypeID": { "type": "integer" },
+        "HazardType": { "type": "string" },
+        "HealthRiskRatingID": { "type": "integer" },
+        "Category": { "type": ["string", "null"] }
+      },
+      "required": ["HazardType", "HealthRiskRatingID"]
+    },
+    "InspectionHazard": {
+      "type": "object",
+      "description": "",
+      "properties": {
+        "InspectionHazardID": { "type": "integer" },
+        "HazardTypeID": { "type": "integer" },
+        "InspectionID": { "type": "integer" },
+        "HazardReportID": { "type": "integer" },
+        "SeverityID": { "type": "integer" },
+        "Notes": { "type": ["string", "null"] }
+      },
+      "required": ["HazardTypeID", "InspectionID", "HazardReportID", "SeverityID"]
+    },
+    "HazardReport": {
+      "type": "object",
+      "description": "",
+      "properties": {
+        "HazardReportID": { "type": "integer" },
+        "PropertyID": { "type": "integer" },
+        "TenantID": { "type": "integer" },
+        "DateReported": { "type": "string", "format": "date" },
+        "ReportedBy": { "type": "string" },
+        "Description": { "type": ["string", "null"] },
+        "PhotoEvidence": { "type": ["string", "null"] },
+        "LocationDetails": { "type": ["string", "null"] },
+        "InvestigationTypeID": { "type": "integer" },
+        "InvestigationDueDate": { "type": "string", "format": "date" },
+        "EmergencyActionTaken": { "type": "boolean" },
+        "MadeSafeDate": { "type": ["string", "null"], "format": "date" },
+        "FurtherWorkRequired": { "type": "boolean" },
+        "FurtherWorkDueDate": { "type": ["string", "null"], "format": "date" },
+        "ReportStatusID": { "type": "integer" }
+      },
+      "required": [
+        "PropertyID", "TenantID", "DateReported", "ReportedBy",
+        "InvestigationTypeID", "InvestigationDueDate", "EmergencyActionTaken",
+        "FurtherWorkRequired", "ReportStatusID"
+      ]
+    },
+    "Inspection": {
+      "type": "object",
+      "description": "",
+      "properties": {
+        "InspectionID": { "type": "integer" },
+        "PropertyID": { "type": "integer" },
+        "TenantID": { "type": "integer" },
+        "TenancyID": { "type": "integer" },
+        "TriggerSourceID": { "type": "integer" },
+        "HazardReportedDate": { "type": "string", "format": "date" },
+        "InspectionScheduledDate": { "type": ["string", "null"], "format": "date" },
+        "InspectionCompletedDate": { "type": ["string", "null"], "format": "date" },
+        "InspectorName": { "type": ["string", "null"] },
+        "HazardConfirmed": { "type": "boolean" },
+        "RepairRequired": { "type": "boolean" },
+        "RepairScheduledDate": { "type": ["string", "null"], "format": "date" },
+        "RepairCompletedDate": { "type": ["string", "null"], "format": "date" },
+        "SLABreachFlag": { "type": "boolean" },
+        "EscalationStatusID": { "type": "integer" },
+        "NotificationSentToTenant": { "type": "boolean" },
+        "InspectionNotes": { "type": ["string", "null"] }
+      },
+      "required": [
+        "PropertyID", "TenantID", "TenancyID", "TriggerSourceID",
+        "HazardReportedDate", "HazardConfirmed", "RepairRequired",
+        "SLABreachFlag", "EscalationStatusID", "NotificationSentToTenant"
+      ]
+    },
+    "Notification": {
+      "type": "object",
+      "description": "",
+      "properties": {
+        "NotificationID": { "type": "integer" },
+        "InspectionID": { "type": "integer" },
+        "TenantID": { "type": "integer" },
+        "WorkOrderID": { "type": "integer" },
+        "NotificationTypeID": { "type": "integer" },
+        "DateSent": { "type": "string", "format": "date" },
+        "NotificationMethodID": { "type": "integer" },
+        "ContentSummary": { "type": ["string", "null"] }
+      },
+      "required": [
+        "InspectionID", "TenantID", "WorkOrderID", "NotificationTypeID",
+        "DateSent", "NotificationMethodID"
+      ]
+    },
+    "Escalation": {
+      "type": "object",
+      "description": "",
+      "properties": {
+        "EscalationID": { "type": "integer" },
+        "InspectionID": { "type": "integer" },
+        "EscalationReason": { "type": ["string", "null"] },
+        "EscalationStageID": { "type": "integer" },
+        "EscalationTypeID": { "type": "integer" },
+        "EscalatedTo": { "type": "string" },
+        "EscalationStartDate": { "type": "string", "format": "date" },
+        "EscalationEndDate": { "type": ["string", "null"], "format": "date" },
+        "ActionTaken": { "type": ["string", "null"] },
+        "CompensationOffered": { "type": "boolean" },
+        "CompensationAmount": { "type": ["number", "null"] },
+        "AlternativeAccommodationOffered": { "type": "boolean" },
+        "AlternativeAccommodationDetails": { "type": ["string", "null"] },
+        "TenantAcceptance": { "type": "boolean" },
+        "EscalationNotes": { "type": ["string", "null"] }
+      },
+      "required": [
+        "InspectionID", "EscalationStageID", "EscalationTypeID",
+        "EscalatedTo", "EscalationStartDate", "CompensationOffered",
+        "AlternativeAccommodationOffered", "TenantAcceptance"
+      ]
+    },
+
+    "HealthRiskRating": {
+      "type": "object",
+      "description": "",
+      "properties": {
+        "HealthRiskRatingID": { "type": "integer" },
+        "HealthRiskRating": { "type": "string" }
+      },
+      "required": ["HealthRiskRating"]
+    },
+    "Severity": {
+      "type": "object",
+      "description": "",
+      "properties": {
+        "SeverityID": { "type": "integer" },
+        "Severity": { "type": "string" }
+      },
+      "required": ["Severity"]
+    },
+    "InvestigationType": {
+      "type": "object",
+      "description": "",
+      "properties": {
+        "InvestigationTypeID": { "type": "integer" },
+        "InvestigationType": { "type": "string" }
+      },
+      "required": ["InvestigationType"]
+    },
+    "ReportStatus": {
+      "type": "object",
+      "description": "",
+      "properties": {
+        "ReportStatusID": { "type": "integer" },
+        "ReportStatus": { "type": "string" }
+      },
+      "required": ["ReportStatus"]
+    },
+    "TriggerSource": {
+      "type": "object",
+      "description": "",
+      "properties": {
+        "TriggerSourceID": { "type": "integer" },
+        "TriggerSource": { "type": "string" }
+      },
+      "required": ["TriggerSource"]
+    },
+    "EscalationStatus": {
+      "type": "object",
+      "description": "",
+      "properties": {
+        "EscalationStatusID": { "type": "integer" },
+        "EscalationStatus": { "type": "string" }
+      },
+      "required": ["EscalationStatus"]
+    },
+    "NotificationType": {
+      "type": "object",
+      "description": "",
+      "properties": {
+        "NotificationTypeID": { "type": "integer" },
+        "NotificationType": { "type": "string" }
+      },
+      "required": ["NotificationType"]
+    },
+    "NotificationMethod": {
+      "type": "object",
+      "description": "",
+      "properties": {
+        "NotificationMethodID": { "type": "integer" },
+        "NotificationMethod": { "type": "string" }
+      },
+      "required": ["NotificationMethod"]
+    },
+    "EscalationStage": {
+      "type": "object",
+      "description": "",
+      "properties": {
+        "EscalationStageID": { "type": "integer" },
+        "EscalationStage": { "type": "string" }
+      },
+      "required": ["EscalationStage"]
+    },
+    "EscalationType": {
+      "type": "object",
+      "description": "",
+      "properties": {
+        "EscalationTypeID": { "type": "integer" },
+        "EscalationType": { "type": "string" }
+      },
+      "required": ["EscalationType"]
+    }
+  }
+}
