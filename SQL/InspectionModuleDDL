@@ -187,4 +187,4 @@ CREATE TABLE EscalationType (
     EscalationType NVARCHAR(30) NOT NULL
 );
 INSERT INTO EscalationType (EscalationType)
-VALUES ('Senior Review'), ('Legal Action'), ('Compensation'), ('Alternative Accomodation');
+VALUES ('Senior Review'), ('Legal Action'), ('Compensation'), ('Alternative Accommodation');
