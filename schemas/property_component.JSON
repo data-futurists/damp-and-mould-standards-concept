@@ -1,111 +1,157 @@
 {
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "title": "Social Housing Property Management Schema for Awaab's Law",
-    "description": "A comprehensive data model for managing social housing properties, ensuring compliance with Awaab's Law requirements for damp and mould prevention.",
-    "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Social Housing Property Management Schema for Awaab's Law",
+  "description": "A comprehensive data model for managing social housing properties, ensuring compliance with Awaab's Law requirements for damp and mould prevention.",
+  "type": "object",
+  "properties": {
+    "sites": {
+    "type": "array",
+    "description": "List of housing sites or estates",
+    "items": { "$ref": "#/$defs/Site" }
+    },
     "properties": {
-      "sites": {
-        "type": "array",
-        "description": "List of housing sites or estates",
-        "items": { "$ref": "#/$defs/Site" }
+    "type": "array",
+    "description": "List of individual properties within sites",
+    "items": { "$ref": "#/$defs/Property" }
+    },
+    "units": {
+    "type": "array",
+    "description": "Individual housing units or apartments within properties",
+    "items": { "$ref": "#/$defs/Unit" }
+    },
+    "addresses": {
+    "type": "array",
+    "description": "Physical addresses for properties and units",
+    "items": { "$ref": "#/$defs/Address" }
+    }
+  },
+  "required": ["sites", "properties", "units", "addresses"],
+  "additionalProperties": false,
+  
+  "$defs": {
+    "Site": {
+    "$id": "#Site",
+    "type": "object",
+    "description": "Represents a housing site or estate",
+    "properties": {
+      "siteID": {
+      "type": "integer",
+      "description": "Unique identifier for the site"
       },
-      "properties": {
-        "type": "array",
-        "description": "List of individual properties within sites",
-        "items": { "$ref": "#/$defs/Property" }
+      "siteName": {
+      "type": "string",
+      "description": "Official name of the housing site"
       },
-      "units": {
-        "type": "array",
-        "description": "Individual housing units or apartments within properties",
-        "items": { "$ref": "#/$defs/Unit" }
-      },
-      "addresses": {
-        "type": "array",
-        "description": "Physical addresses for properties and units",
-        "items": { "$ref": "#/$defs/Address" }
+      "propertyID": {
+      "type": "integer",
+      "description": "Reference to the main property record"
       }
     },
-    "required": ["sites", "properties", "units", "addresses"],
-    "additionalProperties": false,
+    "required": ["siteID", "siteName", "propertyID"],
+    "additionalProperties": false
+    },
   
-    "$defs": {
-      "Site": {
-        "$id": "#Site",
-        "type": "object",
-        "description": "Represents a housing site or estate",
-        "properties": {
-          "siteID": {
-            "type": "integer",
-            "description": "Unique identifier for the site"
-          },
-          "siteName": {
-            "type": "string",
-            "description": "Official name of the housing site"
-          },
-          "propertyID": {
-            "type": "integer",
-            "description": "Reference to the main property record"
-          }
-        },
-        "required": ["siteID", "siteName", "propertyID"],
-        "additionalProperties": false
+    "Property": {
+    "$id": "#Property",
+    "type": "object",
+    "description": "Represents a physical building or structure within a site. A property belongs to one site and can contain multiple floors. Properties can be either connected to adjacent properties or standalone, with boundaries typically defined by building names, floor arrangements, and containment spaces.",
+    "properties": {
+      "propertyID": {
+      "type": "integer",
+      "description": "Unique identifier for the property"
       },
-  
-      "Property": {
-        "$id": "#Property",
-        "type": "object",
-        "description": "Represents an individual property within a site. Part of the spatial hierarchy that describes a physical building or structure. Properties have a strict relationship with both Sites and Floors: a Property can be within one and only one Site, and wholly contains zero or more Floors. Properties may be contiguous with adjacent properties (whether or not they belong to the same Site) or discrete (separated by  land or other features). For contiguous/connected buildings, identification of where Property boundaries lie can be determined by considering the following: (i) if the users of the building have a specific name for it - for example 'North Tower', then it should be considered a separate Property even if it is physically connected to another Property at lower levels (and the low-level connecting structures are likely to be considered their own, separate Property); (ii) a Property is a physical description of space that is composed of a number of floors that - for the most part - are arranged one on top of the other (i.e. each floor is completely or largely overlapping the floor below). Properties also usually allow containment to be determined - someone or something should be either 'in' or 'out' of the Property. This can be particularly helpful when understanding Properties that represent outside structures like surface parking, play areas or sports fields.",
-        "properties": {
-          "propertyID": {
-            "type": "integer",
-            "description": "Unique identifier for the property"
-          },
-          "siteID": {
-            "type": "integer",
-            "description": "Reference to the site this property belongs to"
-          },
-          "geographicalLocationID": {
-            "type": "string",
-            "description": "Geographic location reference for the property"
-          },
-          "propertyName": {
-            "type": "string",
-            "description": "Official name of the property"
-          },
-          "epcCertificationID":{
-            "type": "string",
-            "description": "Energy Performance Certification ID for the property"
-          }
-        },
-        "required": ["propertyID", "siteID", "geographicalLocationID", "epcCertificationID", "propertyName"],
-        "additionalProperties": false
+      "siteID": {
+      "type": "integer",
+      "description": "Reference to the site this property belongs to"
       },
-  
-      "Unit": {
-        "$id": "#Unit",
-        "type": "object",
-        "description": "Represents an individual housing unit or apartment",
-        "properties": {
-          "unitID": {
-            "type": "integer",
-            "description": "Unique identifier for the housing unit"
-          },
-          "propertyID": {
-            "type": "integer",
-            "description": "Reference to the property this unit belongs to"
-          },
-          "alertRegardingLocationID": {
-            "type": "integer",
-            "description": "Reference ID for any location-specific alerts or warnings"
-          },
-          "lease": {
-            "type": "string",
-            "description": "Details of the lease agreement for this unit"
-          }
-        },
-        "required": ["unitID", "propertyID", "alertRegardingLocationID", "lease"],
-        "additionalProperties": false
+      "HierarchyElementID": {
+      "type": "integer",
+      "description": "Reference ID for the hierarchy element this property belongs to"
+      },
+      "geographicalLocationID": {
+      "type": "string",
+      "description": "Geographic location reference for the property"
+      },
+      "propertyName": {
+      "type": "string",
+      "description": "Official name of the property"
+      },
+      "epcCertificationID":{
+      "type": "string",
+      "description": "Energy Performance Certification ID for the property"
       }
-    }
-}
+    },
+    "required": ["propertyID", "siteID", "geographicalLocationID", "epcCertificationID", "propertyName"],
+    "additionalProperties": false
+    },
   
+    "Unit": {
+    "$id": "#Unit",
+    "type": "object",
+    "description": "Represents an individual housing unit or apartment",
+    "properties": {
+      "unitID": {
+      "type": "integer",
+      "description": "Unique identifier for the housing unit"
+      },
+      "propertyID": {
+      "type": "integer",
+      "description": "Reference to the property this unit belongs to"
+      },
+      "alertRegardingLocationID": {
+      "type": "integer",
+      "description": "Reference ID for any location-specific alerts or warnings"
+      },
+      "lease": {
+      "type": "string",
+      "description": "Details of the lease agreement for this unit"
+      }
+    },
+    "required": ["unitID", "propertyID", "alertRegardingLocationID", "lease"],
+    "additionalProperties": false
+    },
+    
+    "Address": {
+    "$id": "#Address",
+    "type": "object",
+    "description": "Provides various common ways of describing a place. This is a base entity from which several other more specific types of address are derived.",
+    "properties": {
+      "addressID": {
+      "type": "integer",
+      "description": "Unique identifier for the address"
+      },
+      "unitID": {
+      "type": "integer",
+      "description": "Reference to the unit this address belongs to"
+      },
+      "propertyID": {
+      "type": "integer",
+      "description": "Reference to the property this address belongs to"
+      },
+      "AddressLine": {
+      "type": "string",
+      "description": "First line of the address"
+      },
+      "BuildingName": {
+      "type": "string",
+      "description": "The name of the building or house on a street of this address"
+      },
+      "BuildingNumber": {
+      "type": "string",
+      "description": "The number of a building or house on a street of this address."
+      },
+      "StreetName": {
+      "type": "string",
+      "description": "Name of a street or thoroughfare"
+      },
+      "PostCode": {
+      "type": ["string", null],
+      "description": "The identifier for one or more properties according to the postal service of that country; a group of letters and/or numbers added to the postal address to assist in the sorting of mail. E.g. UK postcode or US zip code"
+      }
+    },
+    "required": ["addressID", "unitID", "propertyID", "AddressLine", "StreetName", "PostCode"],
+    "additionalProperties": false
+    }
+  }
+}
+        
