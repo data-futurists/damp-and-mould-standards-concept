@@ -1,0 +1,190 @@
+----------------------------------------------------------------------------------------
+-- Author: George Foster (TPXImpact)
+-- Email: george.foster@tpximpact.com
+--
+-- Scripts below create the required tables in the Inspection Module
+-- 
+-- HazardType
+-- InspectionHazard
+-- HazardReport
+-- Inspection
+-- Notification
+-- Escalation
+----------------------------------------------------------------------------------------
+-- NOTES
+-- On delete or on update behaviour for the FKs? Leave for now
+----------------------------------------------------------------------------------------
+
+-- Create HazardType table
+CREATE TABLE HazardType (
+    HazardTypeID INT PRIMARY KEY IDENTITY(1,1),
+    HazardType NVARCHAR(100) NOT NULL,
+    HealthRiskRatingID INT NOT NULL FOREIGN KEY REFERENCES HealthRiskRating(HealthRiskRatingID),
+    Category NVARCHAR(500) NULL
+);
+
+-- Create InspectionHazard table
+CREATE TABLE InspectionHazard (
+    InspectionHazardID INT PRIMARY KEY IDENTITY(1,1),
+    HazardTypeID INT NOT NULL FOREIGN KEY REFERENCES HazardType(HazardTypeID),
+    InspectionID INT NOT NULL FOREIGN KEY REFERENCES Inspection(InspectionID),
+    HazardReportID INT NOT NULL FOREIGN KEY REFERENCES HazardReport(HazardReportID),
+    SeverityID INT NOT NULL FOREIGN KEY REFERENCES Severity(SeverityID),
+    Notes NVARCHAR(500) NULL
+);
+
+-- Create HazardReport table
+CREATE TABLE HazardReport (
+    HazardReportID INT PRIMARY KEY IDENTITY(1,1),
+    PropertyID INT NOT NULL FOREIGN KEY REFERENCES Property(PropertyID), 
+    TenantID INT NOT NULL FOREIGN KEY REFERENCES Tenant(TenantID),
+    DateReported DATE NOT NULL,
+    ReportedBy NVARCHAR(100) NOT NULL, --TenantID,StaffID,etc field length will need checking
+    Description NVARCHAR(500) NULL,
+    PhotoEvidence NVARCHAR(500) NULL,
+    LocationDetails NVARCHAR(500) NULL,
+    InvestigationTypeID INT NOT NULL FOREIGN KEY REFERENCES InvestigationType(InvestigationTypeID), 
+    InvestigationDueDate DATE NOT NULL,
+    EmergencyActionTaken BIT NOT NULL DEFAULT 0,
+    MadeSafeDate DATE NULL,
+    FurtherWorkRequired BIT NOT NULL DEFAULT 0,
+    FurtherWorkDueDate DATE NULL,
+    ReportStatusID INT NOT NULL FOREIGN KEY REFERENCES ReportStatus(ReportStatusID)
+);
+
+-- Create Inspection table
+CREATE TABLE Inspection (
+    InspectionID INT PRIMARY KEY IDENTITY(1,1),
+    PropertyID INT NOT NULL FOREIGN KEY REFERENCES Property(PropertyID),
+    TenantID INT NOT NULL FOREIGN KEY REFERENCES Tenant(TenantID),
+    TenancyID INT NOT NULL FOREIGN KEY REFERENCES Tenancy(TenancyID),
+    TriggerSourceID INT NOT NULL FOREIGN KEY REFERENCES TriggerSource(TriggerSourceID),
+    HazardReportedDate DATE NOT NULL,
+    InspectionScheduledDate DATE NULL,
+    InspectionCompletedDate DATE NULL,
+    InspectorName NVARCHAR(100) NULL,
+    HazardConfirmed BIT NOT NULL DEFAULT 0,
+    RepairRequired BIT NOT NULL DEFAULT 0,
+    RepairScheduledDate DATE NULL,
+    RepairCompletedDate DATE NULL,
+    SLABreachFlag BIT NOT NULL DEFAULT 0,
+    EscalationStatusID INT NOT NULL FOREIGN KEY REFERENCES EscalationStatus(EscalationStatusID),
+    NotificationSentToTenant BIT NOT NULL DEFAULT 0,
+    InspectionNotes NVARCHAR(500) NULL
+);
+
+-- Create Notification table
+CREATE TABLE Notification (
+    NotificationID INT PRIMARY KEY IDENTITY(1,1),
+    InspectionID INT NOT NULL FOREIGN KEY REFERENCES Inspection(InspectionID),
+    TenantID INT NOT NULL FOREIGN KEY REFERENCES Tenant(TenantID),
+    WorkOrderID INT NOT NULL FOREIGN KEY REFERENCES WorkOrder(WorkOrderID),
+    NotificationTypeID INT NOT NULL FOREIGN KEY REFERENCES NotificationType(NotificationTypeID), 
+    DateSent DATE NOT NULL,
+    NotificationMethodID INT NOT NULL FOREIGN KEY REFERENCES NotificationMethod(NotificationMethodID),
+    ContentSummary NVARCHAR(500) NULL
+);
+
+-- Create Escalation table
+CREATE TABLE Escalation (
+    EscalationID INT PRIMARY KEY IDENTITY(1,1),
+    InspectionID INT NOT NULL FOREIGN KEY REFERENCES Inspection(InspectionID),
+    EscalationReason NVARCHAR(100) NULL,
+    EscalationStageID INT NOT NULL FOREIGN KEY REFERENCES EscalationStage(EscalationStageID),
+    EscalationTypeID INT NOT NULL FOREIGN KEY REFERENCES EscalationType(EscalationTypeID),
+    EscalatedTo NVARCHAR(100) NOT NULL,
+    EscalationStartDate DATE NOT NULL,
+    EscalationEndDate DATE NULL,
+    ActionTaken NVARCHAR(500) NULL,
+    CompensationOffered BIT NOT NULL DEFAULT 0,
+    CompensationAmount DECIMAL(10,2) NULL, --May need updating to reflect potential compensation amounts
+    AlternativeAccommodationOffered BIT NOT NULL DEFAULT 0,
+    AlternativeAccommodationDetails NVARCHAR(500) NULL,
+    TenantAcceptance BIT NOT NULL DEFAULT 0,
+    EscalationNotes NVARCHAR(500) NULL
+);
+
+----------------------------------------------------------------------------------------
+-- Code lists
+-- Scripts below create the required code lists and populate the options
+----------------------------------------------------------------------------------------
+
+-- HealthRiskRating Table
+CREATE TABLE HealthRiskRating (
+    HealthRiskRatingID INT PRIMARY KEY IDENTITY(1,1),
+    HealthRiskRating NVARCHAR(20) NOT NULL
+);
+INSERT INTO HealthRiskRating (HealthRiskRating)
+VALUES ('High'), ('Medium'), ('Low');
+
+-- Severity Table
+CREATE TABLE Severity (
+    SeverityID INT PRIMARY KEY IDENTITY(1,1),
+    Severity NVARCHAR(20) NOT NULL
+);
+INSERT INTO Severity (Severity)
+VALUES ('High'), ('Medium'), ('Low');
+
+-- InvestigationType Table
+CREATE TABLE InvestigationType (
+    InvestigationTypeID INT PRIMARY KEY IDENTITY(1,1),
+    InvestigationType NVARCHAR(20) NOT NULL
+);
+INSERT INTO InvestigationType (InvestigationType)
+VALUES ('Standard'), ('Renewed'), ('Further'), ('Emergency');
+
+-- ReportStatus Table
+CREATE TABLE ReportStatus (
+    ReportStatusID INT PRIMARY KEY IDENTITY(1,1),
+    ReportStatus NVARCHAR(20) NOT NULL
+);
+INSERT INTO ReportStatus (ReportStatus)
+VALUES ('Open'), ('Under Review'), ('Made Safe'), ('Closed');
+
+-- TriggerSource Table
+CREATE TABLE TriggerSource (
+    TriggerSourceID INT PRIMARY KEY IDENTITY(1,1),
+    TriggerSource NVARCHAR(20) NOT NULL
+);
+INSERT INTO TriggerSource (TriggerSource)
+VALUES ('Tenant Report'), ('Routine Check'), ('Environmental Sensor'), ('Staff Report');
+
+-- EscalationStatus Table
+CREATE TABLE EscalationStatus (
+    EscalationStatusID INT PRIMARY KEY IDENTITY(1,1),
+    EscalationStatus NVARCHAR(20) NOT NULL
+);
+INSERT INTO EscalationStatus (EscalationStatus)
+VALUES ('None'), ('In Progress'), ('Escalated');
+
+-- NotificationType Table
+CREATE TABLE NotificationType (
+    NotificationTypeID INT PRIMARY KEY IDENTITY(1,1),
+    NotificationType NVARCHAR(20) NOT NULL
+);
+INSERT INTO NotificationType (NotificationType)
+VALUES ('Scheduled'), ('Result'), ('Advice'), ('Delay');
+
+-- EscalationStage Table
+CREATE TABLE EscalationStage (
+    EscalationStageID INT PRIMARY KEY IDENTITY(1,1),
+    EscalationStage NVARCHAR(20) NOT NULL
+);
+INSERT INTO EscalationStage (EscalationStage)
+VALUES ('Open'), ('In Progress'), ('Resolved'), ('Rejected');
+
+-- NotificationMethod Table
+CREATE TABLE NotificationMethod (
+    NotificationMethodID INT PRIMARY KEY IDENTITY(1,1),
+    NotificationMethod NVARCHAR(20) NOT NULL
+); 
+INSERT INTO NotificationMethod (NotificationMethod)
+VALUES ('Email'), ('SMS'), ('Letter');
+
+-- EscalationType Table
+CREATE TABLE EscalationType (
+    EscalationTypeID INT PRIMARY KEY IDENTITY(1,1),
+    EscalationType NVARCHAR(30) NOT NULL
+);
+INSERT INTO EscalationType (EscalationType)
+VALUES ('Senior Review'), ('Legal Action'), ('Compensation'), ('Alternative Accommodation');
