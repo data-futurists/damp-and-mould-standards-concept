@@ -1,5 +1,5 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://example.org/schemas/WorkOrderComponent.schema.json",
   "title": "WorkOrderComponent",
   "description": "Schema for managing damp and mould work orders in compliance with Awaab's Law and HACT UK Housing Data Standards.",
@@ -10,156 +10,175 @@
   "$defs": {
     "WorkOrder": {
       "type": "object",
-      "description": "Primary entity representing a damp or mould-related work order.",
+      "description": "Details of the work to be done (including the location) that can be used to determine the resources required when establishing available appointments. This Work Order may have one or more Work Elements, and available appointments must be provided for each Work Element included.",
       "properties": {
-        "WorkOrderID": { "type": "integer", "description": "Unique identifier for the work order." },
-        "WorkElementID": { "$ref": "#/$defs/WorkElement" },
-        "AddressID": { "type": "integer", "description": "Identifier of the address where the issue is reported." },
-        "InspectionID": { "type": "integer", "description": "Identifier for the associated inspection." },
-        "EscalationID": { "type": "integer", "description": "Optional identifier for any escalation linked to this work order." },
-        "TenancyID": { "type": "integer", "description": "Identifier for the associated tenancy." },
-        "TenantID": { "type": "integer", "description": "Identifier for the tenant affected." },
-        "HazardReportID": { "type": "integer", "description": "Identifier for the related hazard report." },
-        "DateRaised": { "type": "string", "format": "date", "description": "Date the work order was raised." },
-        "DateReported": { "type": "string", "format": "date", "description": "Date the issue was reported by the tenant or inspector." },
-        "PlannedStartDate": { "type": "string", "format": "date" },
-        "PlannedFinishDate": { "type": "string", "format": "date" },
-        "ActualCompletionDateTime": { "type": "string", "format": "date-time" },
-        "DescriptionOfWork": { "type": "string" },
-        "EstimatedCost": { "type": "number" },
-        "EstimatedLabourHours": { "type": "number" },
-        "LocationOfRepair": { "type": "string" },
-        "JobStatusUpdate": { "type": "string" },
-        "SpatialLocation": { "type": "string" },
-        "LocationAlert": { "$ref": "#/$defs/AlertRegardingLocation" },
-        "PersonAlert": { "$ref": "#/$defs/AlertRegardingPerson" },
-        "RepairSLABreachFlag": { "type": "string" }
+        "WorkOrderID": { "type": "string", "description": "Unique identifier for the work order." },
+        "WorkElementID": { "type": "string", "description": "Unique identifier for the work element." },
+        "AddressID": { "type": "string", "description": "Identifier of the address where the issue is reported." },
+        "InspectionID": { "type": "string", "description": "Identifier for the associated inspection." },
+        "EscalationID": { "type": "string", "description": "Optional identifier for any escalation linked to this work order." },
+        "TenancyID": { "type": "string", "description": "Identifier for the associated tenancy." },
+        "TenantID": { "type": "string", "description": "Identifier for the tenant affected." },
+        "HazardReportID": { "type": "string", "description": "Identifier for the related hazard report." },
+        "WorkClassID": { "type": "string", "description": "Identifier for the work class." },
+        "WorkPriorityID": { "type": "string", "description": "Identifier for the work priority." },
+        "ContractorOrganisationID": { "type": "string", "description": "Identifier for the contractor organisation." },
+        "LocationAlertID": { "type": "string", "description": "Identifier for the location alert." },
+        "PersonAlertID": { "type": "str", "description": "Identifier for the person alert." },
+        "DateRaised": { "type": "string", "format": "date", "description": "The date and time this work order was raised, which may be earlier than an issued/approved date if it is being raised by a party without authority to approve." },
+        "DateReported": { "type": "string", "format": "date", "description": "The date and time the service request was made by the customer that gave rise to this work order, which may be earlier than the date raised if there was any delay between the customer report and issuing this work order (for example if there was a backlog processing emails)." },
+        "PlannedStartDate": { "type": "string", "format": "date", "description": "The date and time the work is planned to start." },
+        "PlannedFinishDate": { "type": "string", "format": "date", "description": "The date and time the work is planned to finish." },
+        "ActualStartDateTime": { "type": "string", "format": "date-time", "description": "The date and time the work actually started." },
+        "ActualCompletionDateTime": { "type": "string", "format": "date-time", "description": "The date and time the work was actually completed." },
+        "DescriptionOfWork": { "type": "string", "description": "A written or verbal account, representation, or explanation of the problem, incident or situation to be corrected or resolved. Description of work either from SOR standard coding or private code." },
+        "EstimatedCost": { "type": "number", "description": "Projected total expense of labor, material etc to complete the work." },
+        "EstimatedLabourHours": { "type": "number", "description": "Projected time in effort to complete the work, expressed in hours." },
+        "LocationOfRepair": { "type": "string", "description": "Description of where in the unit the work is to be undertaken." },
+        "JobStatusUpdate": { "type": "string", "description": "The status of the job at the time of the update." },
+        "RepairSLABreachFlag": { "type": "string", "description": "Flag indicating if the repair is a breach of the Service Level Agreement (SLA)." },
       }
     },
 
     "WorkElement": {
       "type": "object",
-      "description": "Describes a component of work related to damp and mould intervention.",
+      "description": "Details of a specific work element or task to be performed, often specific to a single trade. In UK housing, this may also include a more specific Schedule of Rates code.",
       "properties": {
-        "WorkElementID": { "type": "string" },
-        "RateScheduleItem": { "$ref": "#/$defs/RateScheduleItem" },
-        "ImpactedAssetReference": { "type": "string" },
+        "WorkElementID": { "type": "string", "description": "Unique identifier for the work element." },
+        "WorkOrderID": { "type": "string", "description": "Identifier for the associated work order." },
+        "RateScheduleItemID": {"type": "string",  "description": "Identifier for the rate schedule item."},
         "Trade": { "$ref": "#/$defs/TradeCode" },
-        "ServiceChargeSubject": { "type": "string" },
+        "ServiceChargeSubject": { "type": "string", "description": "The classification of this work element according to the underlying service charge type that the associated costs will be attributed to (prior to any apportionment to tenants)." },
         "DependsOn": { "$ref": "#/$defs/WorkElementDependency" }
       }
     },
 
     "WorkElementDependency": {
       "type": "object",
-      "description": "Defines dependency between work elements.",
+      "description": "Describes the relationship between work elements in a project, where one work element's execution is dependent on the completion or timing of another.",
       "properties": {
-        "WorkElementID": { "type": "string" },
-        "DependsOnWorkElement": { "type": "string" },
-        "Type": { "type": "string" },
-        "Timing": { "type": "string" }
+        "WorkElementID": { "type": "string", "description": "Identifier for the work element." },
+        "DependsOnWorkElementID": { "type": "string", "description": "Identifier for the work element that this one depends on." },
+        "Type": { "type": "string", "description": "Specifies the nature of the dependency between items - for example the dependent item cannot start until the item it depends on is complete." },
+        "Timing": { "type": "string", "description": "Specifies the minimum time between the dependent item and the item it depends upon. For example, a plastered wall might require 7 days to dry out before it can be painted, or a referral may not be alllowed until 3 months after a registration is made." }
       }
     },
 
     "WorkPriority": {
       "type": "object",
-      "description": "Defines the priority assigned to a work order.",
+      "description": "The information relevant to the urgency of the Service Request or Work Order.",
       "properties": {
-        "ID": { "type": "string" },
-        "PriorityCode": { "type": "string" },
-        "PriorityDescription": { "type": "string" },
-        "EffectiveDateTime": { "type": "integer" },
-        "NumberOfDays": { "type": "integer" },
-        "Comments": { "type": "string" },
-        "RequiredStartDateTime": { "type": "string" },
-        "RequiredCompletionDateTime": { "type": "string" }
+        "WorkPriorityID": { "type": "string", "description": "Unique identifier for the work priority." },
+        "PriorityCode": { "type": "string", "description": "Specific code describing the importance or urgency of the work request or work order." },
+        "PriorityDescription": { "type": "string", "description": "Text description of the Priority Code - for example 'Medium in this organization means within 5 days'." },
+        "EffectiveDateTime": { "type": "integer", "description": "Time, Day, Month and Year of when the request status code became applicable." },
+        "NumberOfDays": { "type": "integer", "description": "Numeric value defining the expected maximum number of days for completion of the work order." },
+        "Comments": { "type": "string", "description": "Narrative, free-form text for comments associated with the priority assigned to a work order, which might explain specific variations to the standard time associated with this priority - for example the work order was not raised immediately when the customer reported the issue and therefore the time remaining to resolve the issue is reduced."},
+        "RequiredStartDateTime": { "type": "string", "description": "Time, Day, Month and Year of when the work activity specified in the work order is to begin." },
+        "RequiredCompletionDateTime": { "type": "string", "description": "Time, Day, Month and Year of when the work activity specified in the work order is to be completed." }
       }
     },
 
     "WorkClass": {
       "type": "object",
+      "description": "Defines the work class assigned to a work order.",
       "properties": {
-        "ID": { "type": "string" },
-        "WorkClassCode": { "type": "string" },
-        "WorkClassDescription": { "type": "string" }
+        "WorkClassID": { "type": "string", "description": "Unique identifier for the work class." },
+        "WorkClassCode": { "type": "string", "description": "Specific code describing the type of work to be performed." },
+        "WorkClassDescription": { "type": "string", "description": "Text description of the Work Class Code." }
       }
     },
 
     "ContractorOrganisation": {
       "type": "object",
+      "description": "Represents a company or entity that provides goods or services under a contract. This entity includes various attributes that detail the organization's name, references, subcontractors, and online presence, among other relevant information.",
       "properties": {
-        "ID": { "type": "string" },
-        "Name": { "type": "string" },
-        "ContractorPortal": { "type": "string" },
-        "Subcontractors": { "type": "string" }
+        "ContractorOrganisationID": { "type": "string", "description": "Unique identifier for the contractor organisation." },
+        "Name": { "type": "string", "description": "Name of the contractor organisation." },
+        "ContractorPortal": { "type": "string", "description": "URL of the contractor's portal." },
+        "Subcontractors": { "type": "string", "description": "List of subcontractors associated with the contractor organisation." }
       }
     },
 
     "TradeCode": {
       "type": "object",
+      "description": "The trade or trades that are required for a particular work element or that an operative is skilled in.",
       "properties": {
-        "Code": { "type": "string" },
-        "CustomCode": { "type": "string" },
-        "CustomName": { "type": "string" }
+        "Code": { "type": "string", "description": "The code representing the trade." },
+        "CustomCode": { "type": "string", "description": "In addition to the standard code, a custom code may also be included where more detail than is available in the standard codes is required." },
+        "CustomName": { "type": "string", "description": "Where a custom code is provided, the name of the trade may also be specified." }
       }
     },
-
+ 
     "RateScheduleItem": {
       "type": "object",
+      "description": "An item from a standard or agreed schedule of rates, for example the M3/NHF standard Schedule of Rates.",
       "properties": {
-        "ID": { "type": "string" },
-        "M3NHFSORCode": { "type": "string" },
-        "CustomCode": { "type": "string" },
-        "CustomName": { "type": "string" }
+        "RateScheduleItemID": { "type": "string", "description": "Unique identifier for the rate schedule item." },
+        "M3NHFSORCode": { "type": "string", "description": "A standard SOR code from the M3/NHF Schedule of Rates." },
+        "CustomCode": { "type": "string", "description": "If this is not a standard code (e.g. from a schedule), provide the custom code here." },
+        "CustomName": { "type": "string", "description": "If this is not a standard code (e.g. from a schedule), provide the name for this custom code here." },
+        "Quantity": { "type": "number", "description": "The quantity of the specified SOR code required." }
       }
     },
 
     "AlertRegardingLocation": {
       "type": "object",
+      "description": "Alerts or cautions relating to a location - for example specific known dangers that are present like asbestos or other hazards.",
       "properties": {
-        "Type": { "type": "string" },
-        "Attachment": { "type": "string" },
-        "Comments": { "type": "string" }
+        "LocationAlertID": { "type": "string", "description": "Unique identifier for the location alert." },
+        "Type": { "type": "string", "description": "Type of alert regarding the location, eg - asbestos" },
+        "Attachment": { "type": "string", "description": "File attachment relating to this alert, for example a report or photograph." },
+        "Comments": { "type": "string", "description": "Specific details related to this alert - for example what specifically to be aware of, sensible precautions to take, or what the specific restrictions are." }
       }
     },
 
     "AlertRegardingPerson": {
       "type": "object",
+      "description": "Alerts or cautions relating to an individual who is or may be present in a particular context - for example when an operative is attending to conduct a repair.",
       "properties": {
-        "Type": { "type": "string" },
-        "Comments": { "type": "string" }
+        "PersonAlertID": { "type": "string", "description": "Unique identifier for the person alert." },
+        "Type": { "type": "string", "description": "This provides the specific type of alert that is being flagged, e.g. 'don't visit alone'. NOTE: These alert types and associated comments must not be repeated verbatim on an operatives work order for privacy reasons. Only the information that is essential to the performance of the operatives work should be included, which may be  abstracted or summarized from the details found in the AlertRegardingPerson entity." },
+        "Comments": { "type": "string", "description": "Specific details related to this alert - for example what specifically to be aware of, or sensible precautions to take." }
       }
     },
 
     "WorkOrderStatusHistory": {
       "type": "object",
+      "description": "This subcomponent is used to record how the status of the Work Order changed over time",
       "properties": {
-        "WorkOrderID": { "type": "integer" },
-        "Status": { "type": "string" },
-        "UpdatedBy": { "type": "string" },
-        "Timestamp": { "type": "string", "format": "date-time" },
-        "Comments": { "type": "string" }
+        "WorkOrderID": { "type": "integer",  "description": "Unique identifier for the work order." },
+        "StatusCode": { "type": "string", "description": "The status code associated with this entry." },
+        "UpdatedBy": { "type": "string", "description": "Name of the person or system that updated the status." },
+        "Reason": { "type": "string", "description": "The descriptive reason that the entry was made, correponding to why there was a change in status." },
+        "ReasonCode": { "type": "string", "description": "The code associated with the reason for the status change." },
+        "CreatedDateTime": { "type": "string", "format": "date-time", "description": "Date and time this entry was created. This may be after the status was technically entered if there was a delay between the status change taking place and it being recorded." },
+        "EnteredDateTime": { "type": "string", "format": "date-time", "description": "The time that the work order entered this status." },
+        "ExitedDateTime": { "type": "string", "format": "date-time", "description": "The time that this entry's status stopped applying, for example the work order moved to a new status." },
+        "Comments": { "type": "string", "description": "Free-form text for comments associated with the status change." },
       }
     },
 
     "WorkOrderComplete": {
       "type": "object",
+      "description": "Represents a completed work order within a project. This entity tracks the individual work elements that were finished, the operatives involved, the materials used, and any subsequent work orders or updates related to the job.",
       "properties": {
-        "WorkOrderID": { "type": "string" },
-        "BillOfMaterialItem": { "type": "string" },
-        "CompletedWorkElements": { "type": "string" },
-        "OperativesUsed": { "type": "string" },
-        "JobStatusUpdate": { "type": "string" },
-        "FollowOnWork": { "type": "string" }
+        "WorkOrderID": { "type": "string", "description": "Unique identifier for the completed work order." },
+        "BillOfMaterialItem": { "type": "string", "description": "The individual rate schedule items (including any custom items) that were use/consumed during the performance of this Work Order. Where Completed Work Elements are listed, the Bill Of Material Items should *not* duplicate the Rate Schedule Items in the Complete Work Elements. Rather, only Rate Schedule Items that are *not* already included in a Completed Work Element should be included here." },
+        "CompletedWorkElements": { "type": "string", "description": "The work elements that were actually completed as part of this work order." },
+        "OperativesUsed": { "type": "string", "description": "The operative(s) who carried out the work. These operatives may also be linked to work elements they were invovled with by specifying one or more work element references on each operative. However, only work element references that are included in the list of Completed Work Elements above should be used." },
+        "JobStatusUpdate": { "type": "string", "description": "The job status updates issued during the execution of this work order." },
+        "FollowOnWork": { "type": "string", "description": "Any follow-on works arising from this work order." },
       }
     },
 
     "WorkOrderAccessInformation": {
       "type": "object",
+      "description": "This work order relates to communal areas of the property",
       "properties": {
-        "WorkOrderID": { "type": "string" },
-        "KeySafe": { "type": "string" },
-        "Description": { "type": "string" }
+        "WorkOrderID": { "type": "string", "description": "Unique identifier for the work order." },
+        "KeySafe": { "type": "string", "description": "Details of any keysafe location and access code that may be required to complete work." },
+        "Description": { "type": "string", "description": "Narrative description of how to access the relevant parts of the site, property and/or unit." },
       }
     }
   }
