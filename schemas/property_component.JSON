@@ -1,28 +1,28 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Social Housing Property Management Schema for Awaab's Law",
   "description": "A comprehensive data model for managing social housing properties, ensuring compliance with Awaab's Law requirements for damp and mould prevention.",
   "type": "object",
   "properties": {
     "sites": {
-    "type": "array",
-    "description": "List of housing sites or estates",
-    "items": { "$ref": "#/$defs/Site" }
+      "type": "array",
+      "description": "List of housing sites or estates",
+      "items": { "$ref": "#/$defs/Site" }
     },
     "properties": {
-    "type": "array",
-    "description": "List of individual properties within sites",
-    "items": { "$ref": "#/$defs/Property" }
+      "type": "array",
+      "description": "List of individual properties within sites",
+      "items": { "$ref": "#/$defs/Property" }
     },
     "units": {
-    "type": "array",
-    "description": "Individual housing units or apartments within properties",
-    "items": { "$ref": "#/$defs/Unit" }
+      "type": "array",
+      "description": "Individual housing units or apartments within properties",
+      "items": { "$ref": "#/$defs/Unit" }
     },
     "addresses": {
-    "type": "array",
-    "description": "Physical addresses for properties and units",
-    "items": { "$ref": "#/$defs/Address" }
+      "type": "array",
+      "description": "Physical addresses for properties and units",
+      "items": { "$ref": "#/$defs/Address" }
     }
   },
   "required": ["sites", "properties", "units", "addresses"],
@@ -30,128 +30,381 @@
   
   "$defs": {
     "Site": {
-    "$id": "#Site",
-    "type": "object",
-    "description": "Represents a housing site or estate",
-    "properties": {
-      "siteID": {
-      "type": "integer",
-      "description": "Unique identifier for the site"
+      "$id": "#Site",
+      "type": "object",
+      "description": "Represents a housing site or estate",
+      "properties": {
+        "siteID": {
+          "type": "integer",
+          "description": "Unique identifier for the site"
+        },
+        "siteName": {
+          "type": "string",
+          "description": "Official name of the housing site"
+        }
       },
-      "siteName": {
-      "type": "string",
-      "description": "Official name of the housing site"
-      },
-      "propertyID": {
-      "type": "integer",
-      "description": "Reference to the main property record"
-      }
-    },
-    "required": ["siteID", "siteName", "propertyID"],
-    "additionalProperties": false
+      "required": ["siteID", "siteName"],
+      "additionalProperties": false
     },
   
     "Property": {
-    "$id": "#Property",
-    "type": "object",
-    "description": "Represents a physical building or structure within a site. A property belongs to one site and can contain multiple floors. Properties can be either connected to adjacent properties or standalone, with boundaries typically defined by building names, floor arrangements, and containment spaces.",
-    "properties": {
-      "propertyID": {
-      "type": "integer",
-      "description": "Unique identifier for the property"
+      "$id": "#Property",
+      "type": "object",
+      "description": "Represents a social housing building within a site, containing multiple units and defined by its physical structure and layout.",
+      "properties": {
+        "propertyID": {
+          "type": "integer",
+          "description": "Unique identifier for the property"
+        },
+        "siteID": {
+          "type": "integer",
+          "description": "Reference to the site this property belongs to"
+        },
+        "HierarchyElementID": {
+          "type": "integer",
+          "description": "Reference ID for the hierarchy element this property belongs to"
+        },
+        "propertyName": {
+          "type": "string",
+          "description": "Official name of the property"
+        }
       },
-      "siteID": {
-      "type": "integer",
-      "description": "Reference to the site this property belongs to"
-      },
-      "HierarchyElementID": {
-      "type": "integer",
-      "description": "Reference ID for the hierarchy element this property belongs to"
-      },
-      "geographicalLocationID": {
-      "type": "string",
-      "description": "Geographic location reference for the property"
-      },
-      "propertyName": {
-      "type": "string",
-      "description": "Official name of the property"
-      },
-      "epcCertificationID":{
-      "type": "string",
-      "description": "Energy Performance Certification ID for the property"
-      }
-    },
-    "required": ["propertyID", "siteID", "geographicalLocationID", "epcCertificationID", "propertyName"],
-    "additionalProperties": false
+      "required": ["propertyID", "siteID", "HierarchyElementID", "propertyName"],
+      "additionalProperties": false
     },
   
     "Unit": {
-    "$id": "#Unit",
-    "type": "object",
-    "description": "Represents an individual housing unit or apartment",
-    "properties": {
-      "unitID": {
-      "type": "integer",
-      "description": "Unique identifier for the housing unit"
+      "$id": "#Unit",
+      "type": "object",
+      "description": "Represents an individual housing unit or apartment",
+      "properties": {
+        "unitID": {
+          "type": "integer",
+          "description": "Unique identifier for the housing unit"
+        },
+        "propertyID": {
+          "type": "integer",
+          "description": "Reference to the property this unit belongs to"
+        },
+        "UnitNumber": {
+          "type": "string",
+          "description": "The number of the unit within the corresponding property"
+        },
+        "lease": {
+          "type": "string",
+          "description": "Details of the lease agreement for this unit"
+        }
       },
-      "propertyID": {
-      "type": "integer",
-      "description": "Reference to the property this unit belongs to"
-      },
-      "alertRegardingLocationID": {
-      "type": "integer",
-      "description": "Reference ID for any location-specific alerts or warnings"
-      },
-      "lease": {
-      "type": "string",
-      "description": "Details of the lease agreement for this unit"
-      }
-    },
-    "required": ["unitID", "propertyID", "alertRegardingLocationID", "lease"],
-    "additionalProperties": false
+      "required": ["unitID", "propertyID", "UnitNumber", "lease"],
+      "additionalProperties": false
     },
     
     "Address": {
-    "$id": "#Address",
-    "type": "object",
-    "description": "Provides various common ways of describing a place. This is a base entity from which several other more specific types of address are derived.",
-    "properties": {
-      "addressID": {
-      "type": "integer",
-      "description": "Unique identifier for the address"
+      "$id": "#Address",
+      "type": "object",
+      "description": "Provides various common ways of describing a place. This is a base entity from which several other more specific types of address are derived.",
+      "properties": {
+        "addressID": {
+          "type": "integer",
+          "description": "Unique identifier for the address"
+        },
+        "unitID": {
+          "type": "integer",
+          "description": "Reference to the unit this address belongs to"
+        },
+        "propertyID": {
+          "type": "integer",
+          "description": "Reference to the property this address belongs to"
+        },
+        "AddressLine": {
+          "type": "string",
+          "description": "First line of the address"
+        },
+        "BuildingName": {
+          "type": "string",
+          "description": "The name of the building or house on a street of this address"
+        },
+        "BuildingNumber": {
+          "type": "string",
+          "description": "The number of a building or house on a street of this address."
+        },
+        "StreetName": {
+          "type": "string",
+          "description": "Name of a street or thoroughfare"
+        },
+        "CityName": {
+          "type": "string",
+          "description": "Name of the city or town"
+        },
+        "PostCode": {
+          "type": ["string", null],
+          "description": "The identifier for one or more properties according to the postal service of that country; a group of letters and/or numbers added to the postal address to assist in the sorting of mail. E.g. UK postcode or US zip code"
+        }
       },
-      "unitID": {
-      "type": "integer",
-      "description": "Reference to the unit this address belongs to"
-      },
-      "propertyID": {
-      "type": "integer",
-      "description": "Reference to the property this address belongs to"
-      },
-      "AddressLine": {
-      "type": "string",
-      "description": "First line of the address"
-      },
-      "BuildingName": {
-      "type": "string",
-      "description": "The name of the building or house on a street of this address"
-      },
-      "BuildingNumber": {
-      "type": "string",
-      "description": "The number of a building or house on a street of this address."
-      },
-      "StreetName": {
-      "type": "string",
-      "description": "Name of a street or thoroughfare"
-      },
-      "PostCode": {
-      "type": ["string", null],
-      "description": "The identifier for one or more properties according to the postal service of that country; a group of letters and/or numbers added to the postal address to assist in the sorting of mail. E.g. UK postcode or US zip code"
-      }
+      "required": ["addressID", "unitID", "propertyID", "AddressLine", "StreetName", "PostCode"],
+      "additionalProperties": false
     },
-    "required": ["addressID", "unitID", "propertyID", "AddressLine", "StreetName", "PostCode"],
-    "additionalProperties": false
+    "PhysicalCharacteristics": {
+      "$id": "#PhysicalCharacteristics",
+      "type": "object",
+      "description": "Physical characteristics of the property, including its structure and materials.",
+      "properties": {
+        "PhysicalCharacteristicsID": {
+          "type": "string",
+          "description": "The unique identifier for the physical characteristics of the property."
+        },
+        "PropertyID": {
+          "type": "string",
+          "description": "The unique identifier for the property to which these characteristics belong."
+        },
+        "PrincipalWallInsulation": {
+          "type": "string",
+          "description": "Summary information about whether or not the main, principal or majority of the walls have a cavity and, if so, how it is filled."
+        },
+        "PrincipalRoofInsulation": {
+          "type": "string",
+          "description": "Summary information about the insulation type and average depth used in the roof."
+        },
+        "ventillationType": {
+          "type": "string",
+          "description": "The type of ventilation system used in the property."
+        },
+        "BuiltYear": {
+          "type": "integer",
+          "description": "The year the property was built."
+        },
+        "ConstructionType": {
+          "type": "string",
+          "description": "The type of construction used for the property."
+        },
+        "GlazingType": {
+          "type": "string",
+          "description": "Provides a summary of the type of glazing (windows and doors made of glass), particularly with respect to its environmental performance (e.g. double glazed)."
+        },
+        "LastUpdatedDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The date and time when the physical characteristics were last updated."
+        }
+      },
+      "required": ["PhysicalCharacteristicsID", "PropertyID", "PrincipalWallInsulation", "PrincipalRoofInsulation", "ventillationType", "BuiltYear", "ConstructionType"]
+    },
+    "ThermalTransmittance": {
+      "$id": "#ThermalTransmittance",
+      "type": "object",
+      "description": "Describes the thermal transmittance (also known as the U-value) or a building or element of a building (e.g. the roof).",
+      "properties": {
+        "ThermalTransmittanceID": {
+          "type": "string",
+          "description": "The unique identifier for the thermal transmittance characteristics of the property."
+        },
+        "PhysicalCharacteristicsID": {
+          "type": "string",
+          "description": "The unique identifier for the physical characteristics of the property."
+        },
+        "UValue": {
+          "type": ["number", null],
+          "description": "The U-value measured in watts per square metre-kelvin (W/m2K) of the given element."
+        },
+        "EnergyEfficiencyRating": {
+          "type": ["string", null],
+          "description": "The energy efficiency rating of the property, indicating its overall energy performance."
+        },
+        "Element": {
+          "type": "string",
+          "description": "Element Identifies the element of a building that is considered for a thermal transmittance calculation, for example the walls or windows."
+        },
+        "MeasurementDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The date when the thermal transmittance was measured."
+        },
+        "Notes": {
+          "type": "string",
+          "description": "Any additional notes or comments regarding the thermal transmittance."
+        }
+      },
+      "required": ["ThermalTransmittanceID", "PropertyID"]
+    },
+    "HeatingSystemType": {
+      "$id": "#HeatingSystemType",
+      "type": "object",
+      "description": "A type of building system used to convert a fuel into heat, usually for the purposes of heating either water or space.",
+      "properties": {
+        "HeatingSystemTypeID": {
+          "type": "integer",
+          "description": "Unique identifier for the heating system type"
+        },
+        "PropertyID": {
+          "type": "integer",
+          "description": "Reference to the property this heating system belongs to"
+        },
+        "EnergyUseControl": {
+          "type": "string",
+          "description": "What methods are used to control the power consumed by the device using the fuel."
+        },
+        "HeatConversionMethod": {
+          "type": "string",
+          "description": "Specifies how fuel is converted into heat, for example gas fired boiler (gas to heat) or air source heat pump (electricity to heat)."
+        },
+        "For": {
+          "type": "string",
+          "description": "Optionally specify what this fuel is used for. This can be space heating, water heating or some other purpose."
+        },
+        "SmartSystem": {
+          "type": "integer",
+          "description": "Does the system using the fuel have the ability to report current system state and some level of condition, usage and diagnostics?"
+        },
+        "InstallationDate": {
+          "type": "integer",
+          "description": "Date when system was installed"
+        },
+        "Manufacturer": {
+          "type": "string",
+          "description": "Manufacturer of the heating system"
+        },
+        "ModelNumber": {
+          "type": "string",
+          "description": "Model number of the heating system"
+        },
+        "LastServicedDate": {
+          "type": "string",
+          "format": "date",
+          "description": "Date of last service"
+        },
+        "Notes": {
+          "type": "string",
+          "description": "Additional notes about the heating system"
+        }
+      },
+      "required": ["HeatingSystemTypeID", "PropertyID", "EnergyUseControl", "HeatConversionMethod"]
+    }
+    ,
+    "EnergyPerformanceCertification": {
+      "$id": "#EnergyPerformanceCertification",
+      "type": "object",
+      "description": "A UK statutory certification for the energy and envrionmental performance of buildings/dwellings",
+      "properties": {
+        "EPCID": {
+          "type": "integer",
+          "description": "Unique identifier for the EPC certification"
+        },
+        "UnitID": {
+          "type": "string",
+          "description": "Reference to the unit this EPC belongs to"
+        },
+        "CertificateNumber": {
+          "type": "integer",
+          "description": "Official certificate number of the EPC"
+        },
+        "CurrentEnergyEfficiencyRating": {
+          "type": "string",
+          "description": "The current energy efficiency numerical rating, as calculated using the Standard Assessment Procedure (SAP)"
+        },
+        "CurrentEnergyEfficiencyBand": {
+          "type": "string",
+          "description": "The current energy efficiency rating band (based on the energy efficiency rating)"
+        },
+        "PotentialEnergyEfficiencyRating": {
+          "type": "string",
+          "description": "The potential energy efficiency numerical rating, as calculated using the Standard Assessment Procedure (SAP)"
+        },
+        "PotentialEnergyEfficiencyBand": {
+          "type": "string",
+          "description": "The potential energy efficiency rating band (based on the energy efficiency rating)"
+        },
+        "CurrentEnvironmentalImpactRating": {
+          "type": "string",
+          "description": "The current environmental impact numerical rating, as calculated using the Standard Assessment Procedure (SAP)"
+        },
+        "CurrentEnvironmentalImpactBand": {
+          "type": "string",
+          "description": "The current environmental impact rating band (based on the environmental impact rating)"
+        },
+        "PotentialEnvironmentalImpactRating": {
+          "type": "string",
+          "description": "The potential environmental impact numerical rating, as calculated using the Standard Assessment Procedure (SAP)"
+        },
+        "PotentialEnvironmentalImpactBand": {
+          "type": "string",
+          "description": "The potential environmental impact rating band (based on the environmental impact rating)"
+        },
+        "CO2PerYear": {
+          "type": "integer",
+          "description": "The tonnes of carbon dioxide currently produced by this property each year"
+        },
+        "SpaceHeatingCostPerYear": {
+          "type": "number",
+          "description": "The current cost of heating the space per year"
+        },
+        "WaterHeatingCostPerYear": {
+          "type": "number",
+          "description": "The current cost of heating the water per year"
+        },
+        "LightingCostPerYear": {
+          "type": "number",
+          "description": "The current cost of lighting per year"
+        },
+        "TotalEstimatedEnergyCostPerYear": {
+          "type": "number",
+          "description": "Total estimated annual energy cost"
+        },
+        "EnergyUsePerSquareMeterPerYear": {
+          "type": "integer",
+          "description": "The energy use per year measured in kWh/sqm"
+        },
+        "RecommendationSummary": {
+          "type": "string",
+          "description": "Summary of energy improvement recommendations"
+        }
+      },
+      "required": ["EPCID", "CertificateNumber", "TotalEstimatedEnergyCostPerYear", "RecommendationSummary"],
+      "additionalProperties": false
+    }
+    ,
+    "Certification": {
+      "$id": "#Certification",
+      "type": "object",
+      "description": "A record describing an official certification for some entity (an asset, property, person etc.) including informaiton about the type and validity of the ceritifcation and a copy of the certificate itself.",
+      "properties": {
+        "CertificationID": {
+          "type": "integer",
+          "description": "The unique certificate number or reference, if appropriate including the organization that issued the number."
+        },
+        "UnitID": {
+          "type": "integer",
+          "description": "Reference to the unit this certification belongs to"
+        },
+        "CertificationType": {
+          "type": "string",
+          "description": "The type of certificate - for example 'Gas Safety Certificate'"
+        },
+        "DateIssued": {
+          "type": "string",
+          "format": "date",
+          "description": "The date that this safety certificate was issued (i.e. the date of the inspection). This may before the Valid From date in situations where the regulation permits inspections to be carried out in advance of the anniversary of the preceeding inspection."
+        },
+        "ExpiryDate": {
+          "type": "string",
+          "format": "date",
+          "description": "When the certification is valid to or expires/requires renewal"
+        },
+        "IssuedBy": {
+          "type": "string",
+          "description": "The party (which may be the organization or a specific operative within the organization) who issued the certificate."
+        },
+        "Status": {
+          "type": "string",
+          "description": "Current status of the certification"
+        },
+        "AttachmentURL": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL to the certification document attachment"
+        }
+      },
+      "required": ["CertificationID", "UnitID", "CertificationType", "IssueDate", "Status"],
+      "additionalProperties": false
     }
   }
 }
-        
