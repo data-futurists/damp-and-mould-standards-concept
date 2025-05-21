@@ -12,7 +12,7 @@ def init_page_config():
     """Initialize Streamlit page configuration."""
     st.set_page_config(page_title=PAGE_TITLE, page_icon=PAGE_ICON, layout="wide")
     st.title(PAGE_TITLE)
-    st.subheader("Housing Quality Standards Evaluation Tool")
+    st.subheader("Awaab's Law")
     st.write("Welcome to the damp and mould data model. This model is designed to enable sufficient data capture to assess the risk of damp and mould in housing. The model is based on the HACT UK Housing Data Standards and OSCRE Industry Data Model.")
 
 def create_sidebar():
@@ -60,7 +60,7 @@ def load_file_content(path: Path, file_type: str = 'text'):
         return json.loads(path.read_text())
     return path.read_text()
 
-def display_erd(svg_path = Path("propert-component-erd.svg")):
+def display_erd(svg_path = Path("erd/property_component.svg")):
     """Display Entity Relationship Diagram."""
     svg_content = load_file_content(svg_path)
     # Add CSS for responsive SVG with centered alignment
