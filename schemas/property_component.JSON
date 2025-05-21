@@ -1,7 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://example.com/schemas/full-data-model.json",
-  "title": "Full Data Model",
+  "title": "Property Compoennt Data Model",
   "description": "A comprehensive data model for managing social housing properties, ensuring compliance with Awaab's Law requirements for damp and mould prevention.",
   "type": "object",
   "properties": {

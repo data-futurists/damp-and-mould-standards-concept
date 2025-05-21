@@ -3,163 +3,132 @@ import re
 from pathlib import Path
 import streamlit as st
 
-# Constants
-PAGE_TITLE = "Damp & Mould Standards"
-PAGE_ICON = "💧"
-NAVIGATION_OPTIONS = ["About", "Hazard Inspection Module", "Property Hierarchy Module", "Work Order Module"]
-
-def init_page_config():
-    """Initialize Streamlit page configuration."""
-    st.set_page_config(page_title=PAGE_TITLE, page_icon=PAGE_ICON, layout="wide")
-    st.title(PAGE_TITLE)
-    st.subheader("Awaab's Law")
-    st.write("Welcome to the damp and mould data model. This model is designed to enable sufficient data capture to assess the risk of damp and mould in housing. The model is based on the HACT UK Housing Data Standards and OSCRE Industry Data Model.")
-
-def create_sidebar():
-    """Create and return the top navigation toolbar."""
-    st.markdown("""
-        <style>
-            .stButton button {
-                width: 100%;
-                background-color: white;
-                color: #000000;
-                border: 1px solid #cccccc;
-                border-radius: 4px;
-                padding: 0.5rem;
-                font-weight: 500;
-            }
-            .stButton button:hover {
-                background-color: #f0f2f6;
-                border-color: #666666;
-            }
-            div.row-widget.stHorizontal {
-                background-color: white;
-                padding: 1rem 0;
-                border-bottom: 1px solid #e6e6e6;
-            }
-        </style>
-    """, unsafe_allow_html=True)
-    
-    cols = st.columns(len(NAVIGATION_OPTIONS))
-    for idx, option in enumerate(NAVIGATION_OPTIONS):
-        with cols[idx]:
-            if st.button(option):
-                return option
-    
-    # Default to first page if no button clicked
-    return NAVIGATION_OPTIONS[0]
-
-@st.cache_data
-def load_file_content(path: Path, file_type: str = 'text'):
-    """Load file content with error handling."""
-    if not path.exists():
-        st.error(f"Couldn't find {path.name}")
-        st.stop()
-    
-    if file_type == 'json':
-        return json.loads(path.read_text())
-    return path.read_text()
-
-def display_erd(svg_path = Path("erd/property_component.svg")):
-    """Display Entity Relationship Diagram."""
-    svg_content = load_file_content(svg_path)
-    # Add CSS for responsive SVG with centered alignment
-    st.markdown("""
-        <style>
-            .erd-container {
-                width: 100%;
-                height: 80vh;
-                overflow: auto;
-                border: 1px solid #ddd;
-                border-radius: 4px;
-                margin: 20px auto;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            }
-            .erd-content {
-                max-width: 90%;
-                margin: auto;
-                text-align: center;
-            }
-            .erd-content svg {
-                width: 100%;
-                height: auto;
-                max-height: 75vh;
-                object-fit: contain;
-            }
-        </style>
-        <div class="erd-container">
-            <div class="erd-content">
-                {svg_content}
-            </div>
-        </div>
-    """, unsafe_allow_html=True)
-
-def display_data_dictionary(schema: dict):
-    """Display data dictionary from schema."""
-    defs = schema.get("$defs", {})
-    st.subheader("Data Dictionary")
-    
-    for def_name, def_schema in defs.items():
-        with st.expander(def_name, expanded=False):
-            st.markdown(f"### {def_name}")
-            if desc := def_schema.get("description"):
-                st.markdown(f"_{desc}_")
-            st.markdown("---")
-            display_entity_properties(def_schema)
-
-def display_entity_properties(schema: dict):
-    """Display entity properties in a simple list format."""
-    if properties := schema.get("properties"):
-        required = schema.get("required", [])
-        
-        for prop_name, prop_schema in properties.items():
-            prop_type = prop_schema.get('type', '—')
-            desc = prop_schema.get('description', '—')
-            req_marker = "*" if prop_name in required else ""
-            
-            st.markdown(f"**{prop_name}{req_marker}**")
-            st.markdown(f"- Type: `{prop_type}`")
-            st.markdown(f"- {desc}")
-            st.markdown("---")
-
-def display_property_hierarchy_module():
-    """Display Property Hierarchy Module content."""
-    st.header("Property Hierarchy Module")
-    st.write("This module captures property information including building, block, floor, unit, and room data to establish the location hierarchy where damp and mould issues are identified. This module also encompasses data relating to energy certification and thermal transmittance data which are related to damp and mould risk.")
-    
-    base_path = Path(__file__).parent
-    sql_path = base_path / "ddl/property_component.sql"
-    json_path = base_path / "schemas/property_component.json"
-    svg_path = base_path / "propert-component-erd.svg"
-    
-    st.subheader("Entity Relationship Diagram (ERD)")
-    st.write("The Entity Relationship Diagram (ERD) visually represents the structure of the database and the relationships between different entities. The diagram is generated from the SQL DDL (Data Definition Language) statements for the property component.")
-    display_erd(svg_path)
-    
-    schema = load_file_content(json_path, 'json')
-    display_data_dictionary(schema)
-    
-    st.subheader("Creating the SQL DDL")
-    st.write("The SQL DDL (Data Definition Language) statements are generated based on the JSON schema. The SQL statements define the structure of the database tables that will store the data captured by this module.")
-    sql_content = load_file_content(sql_path)
-    st.code(sql_content, language="sql")
-    
-    st.download_button(
-        label="Download SQL DDL",
-        data=sql_content,
-        file_name="property_hierarchy.sql",
-        mime="text/plain"
-    )
-
 def main():
-    """Main application entry point."""
-    init_page_config()
-    page = create_sidebar()
+    st.set_page_config(page_title="Damp and Mould Standards", layout="wide")
     
-    if page == "Property Hierarchy Module":
-        display_property_hierarchy_module()
+    # Sidebar for navigation
+    st.sidebar.title("Navigation")
+    page = st.sidebar.radio(
+        "Go to",
+        ["Overview", "Inspection", "Property", "Work Order"]
+    )
+    
+    # Page routing
+    if page == "Overview":
+        overview_page()
+    elif page == "Inspection":
+        inspection_page()
+    elif page == "Property":
+        property_page()
+    elif page == "Work Order":
+        work_order_page()
+
+def overview_page():
+    st.title("Overview")
+    st.write("Welcome to the Damp and Mould Standards System")
+
+def inspection_page():
+    st.title("Inspection")
+    st.write("Inspection details will be shown here")
+
+def property_page():
+    st.title("Property Component")
+    st.write("This page provides an overview of the property component of the data model. This refers to the data model that is used to manage properties, including their attributes and relationships.\n This component is crucial for understanding how properties are represented in the system and how they relate to other components, such as inspections and work orders.\n\n")
+    st.write("The property component includes various attributes such as property ID, address, type, and status. It also defines the relationships between properties and other entities in the system, such as tenants and inspections.\n\n")
+    
+    # Create a container for the ERD
+    st.subheader("Entity Relationship Diagram (ERD)")
+    st.write("This diagram shows the relationships between different entities in the property component of the data model.")
+    erd_container = st.container()
+    
+    with erd_container:
+        # Load and display the ERD SVG
+        try:
+            svg_path = Path("erd/property-component.svg")  # Adjust path as needed
+            with open(svg_path, "r") as f:
+                svg_content = f.read()
+            
+            # Add custom styling to make SVG responsive
+            svg_content = f'<div style="width: 100%; height: auto;">{svg_content}</div>'
+            st.markdown(svg_content, unsafe_allow_html=True)
+        except FileNotFoundError:
+            st.error("ERD SVG file not found. Please ensure the file exists in the assets directory.")
+
+    # Add Data Dictionary section
+    st.subheader("Data Dictionary")
+    st.write("Expand each entity to view its attributes and descriptions.")
+
+    try:
+        # Load JSON schema
+        schema_path = Path("schemas/property_component.json")
+        with open(schema_path, 'r', encoding='utf-8') as f:
+            schema = json.load(f)
+        
+        # Create a cleaner display of the schema structure
+        if "definitions" in schema:
+            for entity, details in schema["definitions"].items():
+                with st.expander(f"📋 {entity}"):
+                    if "description" in details:
+                        st.markdown(f"**Entity Description:** {details['description']}")
+                        st.markdown("---")
+                    
+                    st.markdown("**Attributes:**")
+                    
+                    # Create a more structured view using columns
+                    cols = st.columns([2, 1, 3])
+                    with cols[0]:
+                        st.markdown("**Name**")
+                    with cols[1]:
+                        st.markdown("**Type**")
+                    with cols[2]:
+                        st.markdown("**Description**")
+                    
+                    # Handle both regular properties and array items
+                    properties = details.get("properties", {})
+                    if not properties and "items" in details:
+                        properties = details["items"].get("properties", {})
+                    
+                    for attr, attr_details in properties.items():
+                        with cols[0]:
+                            st.markdown(f"`{attr}`")
+                        with cols[1]:
+                            type_info = attr_details.get('type', 'N/A')
+                            st.markdown(f"`{type_info}`")
+                        with cols[2]:
+                            description = attr_details.get('description', 'No description available')
+                            st.markdown(description)
+                    
+                    # Show required fields if specified
+                    if "required" in details:
+                        st.markdown("---")
+                        st.markdown("**Required Fields:**")
+                        st.markdown(", ".join(f"`{field}`" for field in details["required"]))
+
+    except FileNotFoundError:
+        st.error("Schema file not found. Please check if 'schemas/property_component.json' exists.")
+    except json.JSONDecodeError:
+        st.error("Invalid JSON schema file. Please verify the JSON format.")
+    except Exception as e:
+        st.error(f"An error occurred: {str(e)}")
+    
+    # Add DDL section
+    st.subheader("Data Description Language (DDL) code")
+
+    try:
+        # Load SQL file
+        sql_path = Path("ddl/property_component.sql")
+        with open(sql_path) as f:
+            sql_content = f.read()
+        
+        # Display the SQL code
+        st.code(sql_content, language='sql')
+
+    except FileNotFoundError:
+        st.error("DDL SQL file not found. Please ensure the file exists in the ddl directory.")
+
+def work_order_page():
+    st.title("Work Order")
+    st.write("Work order details will be shown here")
 
 if __name__ == "__main__":
     main()
