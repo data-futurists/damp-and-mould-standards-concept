@@ -47,7 +47,7 @@
         "WorkElementID": { "type": "string", "description": "Unique identifier for the work element." },
         "WorkOrderID": { "type": "string", "description": "Identifier for the associated work order." },
         "RateScheduleItemID": {"type": "string",  "description": "Identifier for the rate schedule item."},
-        "Trade": { "$ref": "#/$defs/TradeCode" },
+        "TradeCode": { "$ref": "#/$defs/TradeCode" },
         "ServiceChargeSubject": { "type": "string", "description": "The classification of this work element according to the underlying service charge type that the associated costs will be attributed to (prior to any apportionment to tenants)." },
         "DependsOn": { "$ref": "#/$defs/WorkElementDependency" }
       }
