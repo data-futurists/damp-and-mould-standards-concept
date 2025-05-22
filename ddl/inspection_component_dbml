@@ -1,0 +1,179 @@
+// DBML script for Inspection Module schema
+// Author: George Foster (TPXImpact)
+// Email: george.foster@tpximpact.com
+
+// Script created for use with dbdiagram.io
+// Links to Property, Tenant and Tenancy tables commented out
+
+// --------------------------------------
+// Code List Tables
+// --------------------------------------
+
+Table HealthRiskRating {
+  HealthRiskRatingID int [pk, increment]
+  HealthRiskRating nvarchar(20)
+
+  Note: 'Defines levels of health risk (e.g., High, Medium, Low).'
+}
+
+Table Severity {
+  SeverityID int [pk, increment]
+  Severity nvarchar(20)
+
+  Note: 'Defines severity levels used in hazard reporting.'
+}
+
+Table InvestigationType {
+  InvestigationTypeID int [pk, increment]
+  InvestigationType nvarchar(20)
+
+  Note: 'Defines types of investigations conducted.'
+}
+
+Table ReportStatus {
+  ReportStatusID int [pk, increment]
+  ReportStatus nvarchar(20)
+
+  Note: 'Defines statuses for hazard reports.'
+}
+
+Table TriggerSource {
+  TriggerSourceID int [pk, increment]
+  TriggerSource nvarchar(20)
+
+  Note: 'Defines what triggered an inspection.'
+}
+
+Table EscalationStatus {
+  EscalationStatusID int [pk, increment]
+  EscalationStatus nvarchar(20)
+
+  Note: 'Defines the status of an escalation.'
+}
+
+Table NotificationType {
+  NotificationTypeID int [pk, increment]
+  NotificationType nvarchar(20)
+
+  Note: 'Defines types of notifications sent.'
+}
+
+Table NotificationMethod {
+  NotificationMethodID int [pk, increment]
+  NotificationMethod nvarchar(20)
+
+  Note: 'Defines methods of delivering notifications.'
+}
+
+Table EscalationStage {
+  EscalationStageID int [pk, increment]
+  EscalationStage nvarchar(20)
+
+  Note: 'Defines stages of the escalation process.'
+}
+
+Table EscalationType {
+  EscalationTypeID int [pk, increment]
+  EscalationType nvarchar(30)
+
+  Note: 'Defines types of escalation actions taken.'
+}
+
+// --------------------------------------
+// Main Tables
+// --------------------------------------
+
+Table HazardType {
+  HazardTypeID int [pk, increment]
+  HazardType nvarchar(100)
+  HealthRiskRatingID int [ref: > HealthRiskRating.HealthRiskRatingID]
+  Category nvarchar(500)
+
+  Note: 'Stores types of hazards and their associated health risk ratings.'
+}
+
+Table InspectionHazard {
+  InspectionHazardID int [pk, increment]
+  HazardTypeID int [ref: > HazardType.HazardTypeID]
+  InspectionID int [ref: > Inspection.InspectionID]
+  HazardReportID int [ref: > HazardReport.HazardReportID]
+  SeverityID int [ref: > Severity.SeverityID]
+  Notes nvarchar(500)
+
+  Note: 'Links inspections with reported hazards including severity and notes.'
+}
+
+Table HazardReport {
+  HazardReportID int [pk, increment]
+  PropertyID int //[ref: > Property.PropertyID]
+  TenantID int //[ref: > Tenant.TenantID]
+  DateReported date
+  ReportedBy nvarchar(100)
+  Description nvarchar(500)
+  PhotoEvidence nvarchar(500)
+  LocationDetails nvarchar(500)
+  InvestigationTypeID int [ref: > InvestigationType.InvestigationTypeID]
+  InvestigationDueDate date
+  EmergencyActionTaken bit
+  MadeSafeDate date
+  FurtherWorkRequired bit
+  FurtherWorkDueDate date
+  ReportStatusID int [ref: > ReportStatus.ReportStatusID]
+
+  Note: 'Captures reported hazards including details and status.'
+}
+
+Table Inspection {
+  InspectionID int [pk, increment]
+  PropertyID int //[ref: > Property.PropertyID]
+  TenantID int //[ref: > Tenant.TenantID]
+  TenancyID int //[ref: > Tenancy.TenancyID]
+  TriggerSourceID int [ref: > TriggerSource.TriggerSourceID]
+  HazardReportedDate date
+  InspectionScheduledDate date
+  InspectionCompletedDate date
+  InspectorName nvarchar(100)
+  HazardConfirmed bit
+  RepairRequired bit
+  RepairScheduledDate date
+  RepairCompletedDate date
+  SLABreachFlag bit
+  EscalationStatusID int [ref: > EscalationStatus.EscalationStatusID]
+  NotificationSentToTenant bit
+  InspectionNotes nvarchar(500)
+
+  Note: 'Details inspections including schedule, status, and outcomes.'
+}
+
+Table Notification {
+  NotificationID int [pk, increment]
+  InspectionID int [ref: > Inspection.InspectionID]
+  TenantID int //[ref: > Tenant.TenantID]
+  WorkOrderID int //[ref: > WorkOrder.WorkOrderID]
+  NotificationTypeID int [ref: > NotificationType.NotificationTypeID]
+  DateSent date
+  NotificationMethodID int [ref: > NotificationMethod.NotificationMethodID]
+  ContentSummary nvarchar(500)
+
+  Note: 'Records notifications sent to tenants about inspections or repairs.'
+}
+
+Table Escalation {
+  EscalationID int [pk, increment]
+  InspectionID int [ref: > Inspection.InspectionID]
+  EscalationReason nvarchar(100)
+  EscalationStageID int [ref: > EscalationStage.EscalationStageID]
+  EscalationTypeID int [ref: > EscalationType.EscalationTypeID]
+  EscalatedTo nvarchar(100)
+  EscalationStartDate date
+  EscalationEndDate date
+  ActionTaken nvarchar(500)
+  CompensationOffered bit
+  CompensationAmount decimal(10,2)
+  AlternativeAccommodationOffered bit
+  AlternativeAccommodationDetails nvarchar(500)
+  TenantAcceptance bit
+  EscalationNotes nvarchar(500)
+
+  Note: 'Tracks escalations made during the inspection or repair process.'
+}
