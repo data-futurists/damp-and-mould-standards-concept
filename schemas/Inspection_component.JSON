@@ -3,67 +3,67 @@
   "title": "Inspection Module Data Model",
   "type": "object",
   "properties": {
-    "HazardTypes": {
+    "HazardType": {
       "type": "array",
       "items": { "$ref": "#/definitions/HazardType" }
     },
-    "InspectionHazards": {
+    "InspectionHazard": {
       "type": "array",
       "items": { "$ref": "#/definitions/InspectionHazard" }
     },
-    "HazardReports": {
+    "HazardReport": {
       "type": "array",
       "items": { "$ref": "#/definitions/HazardReport" }
     },
-    "Inspections": {
+    "Inspection": {
       "type": "array",
       "items": { "$ref": "#/definitions/Inspection" }
     },
-    "Notifications": {
+    "Notification": {
       "type": "array",
       "items": { "$ref": "#/definitions/Notification" }
     },
-    "Escalations": {
+    "Escalation": {
       "type": "array",
       "items": { "$ref": "#/definitions/Escalation" }
     },
-    "HealthRiskRatings": {
+    "HealthRiskRating": {
       "type": "array",
       "items": { "$ref": "#/definitions/HealthRiskRating" }
     },
-    "Severities": {
+    "Severity": {
       "type": "array",
       "items": { "$ref": "#/definitions/Severity" }
     },
-    "InvestigationTypes": {
+    "InvestigationType": {
       "type": "array",
       "items": { "$ref": "#/definitions/InvestigationType" }
     },
-    "ReportStatuses": {
+    "ReportStatus": {
       "type": "array",
       "items": { "$ref": "#/definitions/ReportStatus" }
     },
-    "TriggerSources": {
+    "TriggerSource": {
       "type": "array",
       "items": { "$ref": "#/definitions/TriggerSource" }
     },
-    "EscalationStatuses": {
+    "EscalationStatus": {
       "type": "array",
       "items": { "$ref": "#/definitions/EscalationStatus" }
     },
-    "NotificationTypes": {
+    "NotificationType": {
       "type": "array",
       "items": { "$ref": "#/definitions/NotificationType" }
     },
-    "NotificationMethods": {
+    "NotificationMethod": {
       "type": "array",
       "items": { "$ref": "#/definitions/NotificationMethod" }
     },
-    "EscalationStages": {
+    "EscalationStage": {
       "type": "array",
       "items": { "$ref": "#/definitions/EscalationStage" }
     },
-    "EscalationTypes": {
+    "EscalationType": {
       "type": "array",
       "items": { "$ref": "#/definitions/EscalationType" }
     }
