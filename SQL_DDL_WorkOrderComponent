@@ -1,0 +1,138 @@
+-- Table: ContractorOrganisation
+CREATE TABLE ContractorOrganisation (
+    ContractorOrganisationID VARCHAR(255) PRIMARY KEY, -- Unique identifier for the contractor
+    Name VARCHAR(255), -- Name of the contractor
+    ContractorPortal VARCHAR(255), -- URL or system name of contractor portal
+    Subcontractors TEXT -- List or notes about subcontractors
+);
+
+-- Table: WorkClass
+CREATE TABLE WorkClass (
+    WorkClassID VARCHAR(255) PRIMARY KEY, -- Unique identifier for the work class
+    WorkClassCode VARCHAR(100), -- Code used for categorising work class
+    WorkClassDescription TEXT -- Description of the type of work class
+);
+
+-- Table: WorkPriority
+CREATE TABLE WorkPriority (
+    WorkPriorityID VARCHAR(255) PRIMARY KEY, -- Unique identifier for the work priority
+    PriorityCode VARCHAR(100), -- Code representing priority level
+    PriorityDescription TEXT, -- Description of priority level
+    EffectiveDateTime TIMESTAMP, -- When the priority level became effective
+    NumberOfDays INTEGER, -- Target number of days to complete
+    Comments TEXT, -- Any additional information
+    RequiredStartDateTime DATE, -- Start date based on priority
+    RequiredCompletionDateTime DATE -- Deadline based on priority
+);
+
+-- Table: TradeCode
+CREATE TABLE TradeCode (
+    Code VARCHAR(100) PRIMARY KEY, -- Unique trade code
+    CustomCode VARCHAR(100), -- Optional custom code
+    CustomName VARCHAR(255) -- Optional custom trade name
+);
+
+-- Table: RateScheduleItem
+CREATE TABLE RateScheduleItem (
+    RateScheduleItemID VARCHAR(255) PRIMARY KEY, -- Unique ID for the item
+    Description TEXT, -- Description of the scheduled work item
+    Quantity DECIMAL(10, 2), -- Quantity of items
+    UnitOfMeasure VARCHAR(100), -- Unit used (e.g., hours, pieces)
+    UnitCost DECIMAL(10, 2), -- Cost per unit
+    TotalCost DECIMAL(10, 2), -- Total calculated cost
+    Comments TEXT -- Additional notes
+);
+
+-- Table: WorkElement
+CREATE TABLE WorkElement (
+    WorkElementID VARCHAR(255) PRIMARY KEY, -- Unique identifier for the element of work
+    WorkOrderID VARCHAR(255), -- References the associated work order
+    RateScheduleItemID VARCHAR(255), -- FK to RateScheduleItem
+    TradeCode VARCHAR(100), -- FK to TradeCode
+    ServiceChargeSubject VARCHAR(255), -- Subject to service charge or not
+    FOREIGN KEY (RateScheduleItemID) REFERENCES RateScheduleItem(RateScheduleItemID),
+    FOREIGN KEY (TradeCode) REFERENCES TradeCode(Code)
+);
+
+-- Table: WorkElementDependency
+CREATE TABLE WorkElementDependency (
+    WorkElementID VARCHAR(255), -- FK to dependent WorkElement
+    DependsOnWorkElementID VARCHAR(255), -- FK to prerequisite WorkElement
+    Type VARCHAR(100), -- Type of dependency
+    Timing VARCHAR(255), -- Timing instructions
+    PRIMARY KEY (WorkElementID, DependsOnWorkElementID),
+    FOREIGN KEY (WorkElementID) REFERENCES WorkElement(WorkElementID),
+    FOREIGN KEY (DependsOnWorkElementID) REFERENCES WorkElement(WorkElementID)
+);
+
+-- Table: WorkOrder
+CREATE TABLE WorkOrder (
+    WorkOrderID VARCHAR(255) PRIMARY KEY, -- Unique identifier for the work order
+    WorkClassID VARCHAR(255), -- FK to WorkClass
+    WorkPriorityID VARCHAR(255), -- FK to WorkPriority
+    ContractorOrganisationID VARCHAR(255), -- FK to ContractorOrganisation
+    DateRaised DATE, -- Date the work order was created
+    DateReported DATE, -- Date the issue was reported
+    PlannedStartDate DATE, -- Planned start date
+    PlannedFinishDate DATE, -- Planned completion date
+    ActualStartDateTime TIMESTAMP, -- Actual start datetime
+    ActualCompletionDateTime TIMESTAMP, -- Actual completion datetime
+    DescriptionOfWork TEXT, -- Detailed work description
+    EstimatedCost DECIMAL(10, 2), -- Estimated cost
+    EstimatedLabourHours DECIMAL(5, 2), -- Estimated hours of labour
+    LocationOfRepair VARCHAR(255), -- Where the repair takes place
+    JobStatusUpdate VARCHAR(255), -- Status updates
+    RepairSLABreachFlag VARCHAR(10), -- SLA breach indicator (Yes/No)
+    FOREIGN KEY (WorkClassID) REFERENCES WorkClass(WorkClassID),
+    FOREIGN KEY (WorkPriorityID) REFERENCES WorkPriority(WorkPriorityID),
+    FOREIGN KEY (ContractorOrganisationID) REFERENCES ContractorOrganisation(ContractorOrganisationID)
+);
+
+-- Table: WorkOrderStatusHistory
+CREATE TABLE WorkOrderStatusHistory (
+    WorkOrderStatusHistoryID VARCHAR(255) PRIMARY KEY, -- Unique ID for the status change
+    WorkOrderID VARCHAR(255), -- FK to WorkOrder
+    Status VARCHAR(100), -- Status name
+    StatusDate TIMESTAMP, -- Date of the status change
+    Notes TEXT, -- Additional information
+    FOREIGN KEY (WorkOrderID) REFERENCES WorkOrder(WorkOrderID)
+);
+
+-- Table: WorkOrderComplete
+CREATE TABLE WorkOrderComplete (
+    WorkOrderID VARCHAR(255) PRIMARY KEY, -- FK and unique identifier for completed work order
+    CompletionDate DATE, -- Date work was completed
+    Notes TEXT, -- Any notes at completion
+    FOREIGN KEY (WorkOrderID) REFERENCES WorkOrder(WorkOrderID)
+);
+
+-- Table: WorkOrderAccessInformation
+CREATE TABLE WorkOrderAccessInformation (
+    AccessInformationID VARCHAR(255) PRIMARY KEY, -- Unique ID for access info
+    WorkOrderID VARCHAR(255), -- FK to WorkOrder
+    AccessType VARCHAR(100), -- e.g., key required, caretaker present
+    AccessDetails TEXT, -- Further access details
+    AccessDateTime TIMESTAMP, -- When access was provided
+    FOREIGN KEY (WorkOrderID) REFERENCES WorkOrder(WorkOrderID)
+);
+
+-- Table: AlertRegardingLocation
+CREATE TABLE AlertRegardingLocation (
+    AlertID VARCHAR(255) PRIMARY KEY, -- Unique alert ID
+    WorkOrderID VARCHAR(255), -- FK to WorkOrder
+    AlertType VARCHAR(100), -- Type of alert (e.g., asbestos)
+    Description TEXT, -- Details of the alert
+    AlertDate TIMESTAMP, -- Date alert was logged
+    FOREIGN KEY (WorkOrderID) REFERENCES WorkOrder(WorkOrderID)
+);
+
+-- Table: AlertRegardingPerson
+CREATE TABLE AlertRegardingPerson (
+    AlertID VARCHAR(255) PRIMARY KEY, -- Unique alert ID
+    WorkOrderID VARCHAR(255), -- FK to WorkOrder
+    PersonID VARCHAR(255), -- ID of the person the alert concerns
+    AlertType VARCHAR(100), -- Type of alert (e.g., aggression)
+    Description TEXT, -- Alert details
+    AlertDate TIMESTAMP, -- Date alert was logged
+    FOREIGN KEY (WorkOrderID) REFERENCES WorkOrder(WorkOrderID)
+);
