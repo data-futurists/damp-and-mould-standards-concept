@@ -1,0 +1,134 @@
+// Lookup Tables
+Table energy_efficiency_band_code {
+  band_id integer [pk]
+  code char [unique, not null]
+}
+
+Table location_alert_type_code {
+  alert_type_id integer [pk]
+  code varchar(50) [unique, not null]
+}
+
+Table glazing_layer_type_code {
+  glazing_type_id integer [pk]
+  code varchar(50) [unique, not null]
+}
+
+Table roof_insulation_type_code {
+  insulation_type_id integer [pk]
+  code varchar(50) [unique, not null]
+}
+
+Table wall_insulation_type_code {
+  insulation_type_id integer [pk]
+  code varchar(50) [unique, not null]
+}
+
+Table construction_type_code {
+  construction_type_id integer [pk]
+  code varchar(50) [unique, not null]
+}
+
+Table certification_type_code {
+  certification_type_id integer [pk]
+  code varchar(50) [unique, not null]
+}
+
+// Core Tables
+Table site {
+  site_id integer [pk]
+  site_name varchar(255) [not null]
+}
+
+Table property {
+  property_id integer [pk]
+  property_name varchar(255) [not null]
+  site_id integer [ref: > site.site_id, not null]
+}
+
+Table unit {
+  unit_id integer [pk]
+  property_id integer [ref: > property.property_id, not null]
+  alert_type_id integer [ref: > location_alert_type_code.alert_type_id]
+  lease varchar(255)
+}
+
+Table address {
+  address_id integer [pk]
+  unit_id integer [ref: > unit.unit_id, not null]
+  address_line varchar(255)
+  building_name varchar(255)
+  street_name varchar(255)
+  building_number varchar(50)
+  floor integer
+  city_name varchar(100) [not null]
+  country varchar(100) [not null]
+  post_code varchar(20) [not null]
+}
+
+Table physical_characteristics {
+  physical_char_id integer [pk]
+  property_id integer [ref: > property.property_id, not null]
+  window_glazing_type_id integer [ref: > glazing_layer_type_code.glazing_type_id]
+  wall_insulation_type_id integer [ref: > wall_insulation_type_code.insulation_type_id]
+  roof_insulation_type_id integer [ref: > roof_insulation_type_code.insulation_type_id]
+  ventilation_type varchar(100)
+  built_year integer
+  construction_type_id integer [ref: > construction_type_code.construction_type_id]
+  last_updated_date date [not null]
+}
+
+Table heating_system {
+  heating_system_id integer [pk]
+  property_id integer [ref: > property.property_id, not null]
+  energy_control varchar(100)
+  heat_conversion_method varchar(100)
+  purpose varchar(100)
+  is_smart_system boolean [default: false]
+  installation_date date
+  manufacturer varchar(255)
+  model_number varchar(100)
+  last_serviced_date date
+  notes text
+}
+
+Table thermal_transmittance {
+  thermal_trans_id integer [pk]
+  physical_char_id integer [ref: > physical_characteristics.physical_char_id, not null]
+  u_value numeric(5,3) [not null]
+  element varchar(100) [not null]
+  measurement_date date [not null]
+  notes text
+}
+
+Table energy_performance_certification {
+  epc_id integer [pk]
+  unit_id integer [ref: > unit.unit_id, not null]
+  certificate_number varchar(50) [unique, not null]
+  current_energy_rating integer [not null]
+  current_energy_band char [ref: > energy_efficiency_band_code.band_id, not null]
+  potential_energy_rating integer [not null]
+  potential_energy_band char [ref: > energy_efficiency_band_code.band_id, not null]
+  current_env_impact_rating integer [not null]
+  current_env_impact_band char [ref: > energy_efficiency_band_code.band_id, not null]
+  potential_env_impact_rating integer [not null]
+  potential_env_impact_band char [ref: > energy_efficiency_band_code.band_id, not null]
+  co2_per_year integer [not null]
+  space_heating_cost_year numeric(10,2) [not null]
+  water_heating_cost_year numeric(10,2) [not null]
+  lighting_cost_year numeric(10,2) [not null]
+  total_energy_cost_year numeric(12,2) [not null]
+  energy_use_per_sqm_year integer [not null]
+  recommendation_summary text
+}
+
+Table certification {
+  certification_id integer [pk]
+  unit_id integer [ref: > unit.unit_id, not null]
+  certification_type_id integer [ref: > certification_type_code.certification_type_id, not null]
+  issue_date date [not null]
+  expiry_date date [not null]
+  issued_by varchar(255) [not null]
+  status varchar(50) [not null]
+  attachment_url varchar(2048)
+}
