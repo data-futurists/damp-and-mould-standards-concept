@@ -44,7 +44,10 @@ CREATE TABLE HazardReport (
     CONSTRAINT FK_HazardReport_Property FOREIGN KEY (PropertyID) REFERENCES Property(PropertyID),
     CONSTRAINT FK_HazardReport_Tenant FOREIGN KEY (TenantID) REFERENCES Tenant(TenantID),
     CONSTRAINT FK_HazardReport_InvestigationType FOREIGN KEY (InvestigationTypeID) REFERENCES InvestigationType(InvestigationTypeID),
-    CONSTRAINT FK_HazardReport_ReportStatus FOREIGN KEY (ReportStatusID) REFERENCES ReportStatus(ReportStatusID)
+    CONSTRAINT FK_HazardReport_ReportStatus FOREIGN KEY (ReportStatusID) REFERENCES ReportStatus(ReportStatusID),
+    CHECK (EmergencyActionTaken IN (0, 1)),
+    CHECK (FurtherWorkRequired IN (0, 1)),
+    CHECK (FurtherWorkDueDate IS NULL OR FurtherWorkDueDate >= InvestigationDueDate)
 );
 
 -- Create Inspection table
@@ -70,7 +73,12 @@ CREATE TABLE Inspection (
     CONSTRAINT FK_Inspection_Tenant FOREIGN KEY (TenantID) REFERENCES Tenant(TenantID),
     CONSTRAINT FK_Inspection_Tenancy FOREIGN KEY (TenancyID) REFERENCES Tenancy(TenancyID),
     CONSTRAINT FK_Inspection_TriggerSource FOREIGN KEY (TriggerSourceID) REFERENCES TriggerSource(TriggerSourceID),
-    CONSTRAINT FK_Inspection_EscalationStatus FOREIGN KEY (EscalationStatusID) REFERENCES EscalationStatus(EscalationStatusID)
+    CONSTRAINT FK_Inspection_EscalationStatus FOREIGN KEY (EscalationStatusID) REFERENCES EscalationStatus(EscalationStatusID),
+    CHECK (HazardConfirmed IN (0, 1)),
+    CHECK (RepairRequired IN (0, 1)),
+    CHECK (SLABreachFlag IN (0, 1)),
+    CHECK (NotificationSentToTenant IN (0, 1)),
+    CHECK (RepairCompletedDate IS NULL OR RepairScheduledDate IS NULL OR RepairCompletedDate >= RepairScheduledDate)
 );
 
 -- Create InspectionHazard table
@@ -123,7 +131,12 @@ CREATE TABLE Escalation (
     EscalationNotes NVARCHAR(500) NULL,
     CONSTRAINT FK_Escalation_Inspection FOREIGN KEY (InspectionID) REFERENCES Inspection(InspectionID),
     CONSTRAINT FK_Escalation_EscalationStage FOREIGN KEY (EscalationStageID) REFERENCES EscalationStage(EscalationStageID),
-    CONSTRAINT FK_Escalation_EscalationType FOREIGN KEY (EscalationTypeID) REFERENCES EscalationType(EscalationTypeID)
+    CONSTRAINT FK_Escalation_EscalationType FOREIGN KEY (EscalationTypeID) REFERENCES EscalationType(EscalationTypeID),
+    CHECK (CompensationOffered IN (0, 1)),
+    CHECK (AlternativeAccommodationOffered IN (0, 1)),
+    CHECK (TenantAcceptance IN (0, 1)),
+    CHECK (CompensationAmount IS NULL OR CompensationAmount >= 0),
+    CHECK (EscalationEndDate IS NULL OR EscalationEndDate >= EscalationStartDate)
 );
 
 
