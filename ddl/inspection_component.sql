@@ -19,46 +19,41 @@
 CREATE TABLE HazardType (
     HazardTypeID INT PRIMARY KEY IDENTITY(1,1),
     HazardType NVARCHAR(100) NOT NULL,
-    HealthRiskRatingID INT NOT NULL FOREIGN KEY REFERENCES HealthRiskRating(HealthRiskRatingID),
-    Category NVARCHAR(500) NULL
-);
-
--- Create InspectionHazard table
-CREATE TABLE InspectionHazard (
-    InspectionHazardID INT PRIMARY KEY IDENTITY(1,1),
-    HazardTypeID INT NOT NULL FOREIGN KEY REFERENCES HazardType(HazardTypeID),
-    InspectionID INT NOT NULL FOREIGN KEY REFERENCES Inspection(InspectionID),
-    HazardReportID INT NOT NULL FOREIGN KEY REFERENCES HazardReport(HazardReportID),
-    SeverityID INT NOT NULL FOREIGN KEY REFERENCES Severity(SeverityID),
-    Notes NVARCHAR(500) NULL
+    HealthRiskRatingID INT NOT NULL,
+    Category NVARCHAR(500) NULL,
+    CONSTRAINT FK_HazardType_HealthRiskRating FOREIGN KEY (HealthRiskRatingID) REFERENCES HealthRiskRating(HealthRiskRatingID)
 );
 
 -- Create HazardReport table
 CREATE TABLE HazardReport (
     HazardReportID INT PRIMARY KEY IDENTITY(1,1),
-    PropertyID INT NOT NULL FOREIGN KEY REFERENCES Property(PropertyID), 
-    TenantID INT NOT NULL FOREIGN KEY REFERENCES Tenant(TenantID),
+    PropertyID INT NOT NULL,
+    TenantID INT NOT NULL,
     DateReported DATE NOT NULL,
-    ReportedBy NVARCHAR(100) NOT NULL, --TenantID,StaffID,etc field length will need checking
+    ReportedBy NVARCHAR(100) NOT NULL,
     Description NVARCHAR(500) NULL,
     PhotoEvidence NVARCHAR(500) NULL,
     LocationDetails NVARCHAR(500) NULL,
-    InvestigationTypeID INT NOT NULL FOREIGN KEY REFERENCES InvestigationType(InvestigationTypeID), 
+    InvestigationTypeID INT NOT NULL,
     InvestigationDueDate DATE NOT NULL,
     EmergencyActionTaken BIT NOT NULL DEFAULT 0,
     MadeSafeDate DATE NULL,
     FurtherWorkRequired BIT NOT NULL DEFAULT 0,
     FurtherWorkDueDate DATE NULL,
-    ReportStatusID INT NOT NULL FOREIGN KEY REFERENCES ReportStatus(ReportStatusID)
+    ReportStatusID INT NOT NULL,
+    CONSTRAINT FK_HazardReport_Property FOREIGN KEY (PropertyID) REFERENCES Property(PropertyID),
+    CONSTRAINT FK_HazardReport_Tenant FOREIGN KEY (TenantID) REFERENCES Tenant(TenantID),
+    CONSTRAINT FK_HazardReport_InvestigationType FOREIGN KEY (InvestigationTypeID) REFERENCES InvestigationType(InvestigationTypeID),
+    CONSTRAINT FK_HazardReport_ReportStatus FOREIGN KEY (ReportStatusID) REFERENCES ReportStatus(ReportStatusID)
 );
 
 -- Create Inspection table
 CREATE TABLE Inspection (
     InspectionID INT PRIMARY KEY IDENTITY(1,1),
-    PropertyID INT NOT NULL FOREIGN KEY REFERENCES Property(PropertyID),
-    TenantID INT NOT NULL FOREIGN KEY REFERENCES Tenant(TenantID),
-    TenancyID INT NOT NULL FOREIGN KEY REFERENCES Tenancy(TenancyID),
-    TriggerSourceID INT NOT NULL FOREIGN KEY REFERENCES TriggerSource(TriggerSourceID),
+    PropertyID INT NOT NULL,
+    TenantID INT NOT NULL,
+    TenancyID INT NOT NULL,
+    TriggerSourceID INT NOT NULL,
     HazardReportedDate DATE NOT NULL,
     InspectionScheduledDate DATE NULL,
     InspectionCompletedDate DATE NULL,
@@ -68,41 +63,69 @@ CREATE TABLE Inspection (
     RepairScheduledDate DATE NULL,
     RepairCompletedDate DATE NULL,
     SLABreachFlag BIT NOT NULL DEFAULT 0,
-    EscalationStatusID INT NOT NULL FOREIGN KEY REFERENCES EscalationStatus(EscalationStatusID),
+    EscalationStatusID INT NOT NULL,
     NotificationSentToTenant BIT NOT NULL DEFAULT 0,
-    InspectionNotes NVARCHAR(500) NULL
+    InspectionNotes NVARCHAR(500) NULL,
+    CONSTRAINT FK_Inspection_Property FOREIGN KEY (PropertyID) REFERENCES Property(PropertyID),
+    CONSTRAINT FK_Inspection_Tenant FOREIGN KEY (TenantID) REFERENCES Tenant(TenantID),
+    CONSTRAINT FK_Inspection_Tenancy FOREIGN KEY (TenancyID) REFERENCES Tenancy(TenancyID),
+    CONSTRAINT FK_Inspection_TriggerSource FOREIGN KEY (TriggerSourceID) REFERENCES TriggerSource(TriggerSourceID),
+    CONSTRAINT FK_Inspection_EscalationStatus FOREIGN KEY (EscalationStatusID) REFERENCES EscalationStatus(EscalationStatusID)
+);
+
+-- Create InspectionHazard table
+CREATE TABLE InspectionHazard (
+    InspectionHazardID INT PRIMARY KEY IDENTITY(1,1),
+    HazardTypeID INT NOT NULL,
+    InspectionID INT NOT NULL,
+    HazardReportID INT NOT NULL,
+    SeverityID INT NOT NULL,
+    Notes NVARCHAR(500) NULL,
+    CONSTRAINT FK_InspectionHazard_HazardType FOREIGN KEY (HazardTypeID) REFERENCES HazardType(HazardTypeID),
+    CONSTRAINT FK_InspectionHazard_Inspection FOREIGN KEY (InspectionID) REFERENCES Inspection(InspectionID),
+    CONSTRAINT FK_InspectionHazard_HazardReport FOREIGN KEY (HazardReportID) REFERENCES HazardReport(HazardReportID),
+    CONSTRAINT FK_InspectionHazard_Severity FOREIGN KEY (SeverityID) REFERENCES Severity(SeverityID)
 );
 
 -- Create Notification table
 CREATE TABLE Notification (
     NotificationID INT PRIMARY KEY IDENTITY(1,1),
-    InspectionID INT NOT NULL FOREIGN KEY REFERENCES Inspection(InspectionID),
-    TenantID INT NOT NULL FOREIGN KEY REFERENCES Tenant(TenantID),
-    WorkOrderID INT NOT NULL FOREIGN KEY REFERENCES WorkOrder(WorkOrderID),
-    NotificationTypeID INT NOT NULL FOREIGN KEY REFERENCES NotificationType(NotificationTypeID), 
+    InspectionID INT NOT NULL,
+    TenantID INT NOT NULL,
+    WorkOrderID INT NOT NULL,
+    NotificationTypeID INT NOT NULL,
     DateSent DATE NOT NULL,
-    NotificationMethodID INT NOT NULL FOREIGN KEY REFERENCES NotificationMethod(NotificationMethodID),
-    ContentSummary NVARCHAR(500) NULL
+    NotificationMethodID INT NOT NULL,
+    ContentSummary NVARCHAR(500) NULL,
+    CONSTRAINT FK_Notification_Inspection FOREIGN KEY (InspectionID) REFERENCES Inspection(InspectionID),
+    CONSTRAINT FK_Notification_Tenant FOREIGN KEY (TenantID) REFERENCES Tenant(TenantID),
+    CONSTRAINT FK_Notification_WorkOrder FOREIGN KEY (WorkOrderID) REFERENCES WorkOrder(WorkOrderID),
+    CONSTRAINT FK_Notification_NotificationType FOREIGN KEY (NotificationTypeID) REFERENCES NotificationType(NotificationTypeID),
+    CONSTRAINT FK_Notification_NotificationMethod FOREIGN KEY (NotificationMethodID) REFERENCES NotificationMethod(NotificationMethodID)
 );
 
 -- Create Escalation table
 CREATE TABLE Escalation (
     EscalationID INT PRIMARY KEY IDENTITY(1,1),
-    InspectionID INT NOT NULL FOREIGN KEY REFERENCES Inspection(InspectionID),
+    InspectionID INT NOT NULL,
     EscalationReason NVARCHAR(100) NULL,
-    EscalationStageID INT NOT NULL FOREIGN KEY REFERENCES EscalationStage(EscalationStageID),
-    EscalationTypeID INT NOT NULL FOREIGN KEY REFERENCES EscalationType(EscalationTypeID),
+    EscalationStageID INT NOT NULL,
+    EscalationTypeID INT NOT NULL,
     EscalatedTo NVARCHAR(100) NOT NULL,
     EscalationStartDate DATE NOT NULL,
     EscalationEndDate DATE NULL,
     ActionTaken NVARCHAR(500) NULL,
     CompensationOffered BIT NOT NULL DEFAULT 0,
-    CompensationAmount DECIMAL(10,2) NULL, --May need updating to reflect potential compensation amounts
+    CompensationAmount DECIMAL(10,2) NULL,
     AlternativeAccommodationOffered BIT NOT NULL DEFAULT 0,
     AlternativeAccommodationDetails NVARCHAR(500) NULL,
     TenantAcceptance BIT NOT NULL DEFAULT 0,
-    EscalationNotes NVARCHAR(500) NULL
+    EscalationNotes NVARCHAR(500) NULL,
+    CONSTRAINT FK_Escalation_Inspection FOREIGN KEY (InspectionID) REFERENCES Inspection(InspectionID),
+    CONSTRAINT FK_Escalation_EscalationStage FOREIGN KEY (EscalationStageID) REFERENCES EscalationStage(EscalationStageID),
+    CONSTRAINT FK_Escalation_EscalationType FOREIGN KEY (EscalationTypeID) REFERENCES EscalationType(EscalationTypeID)
 );
+
 
 ----------------------------------------------------------------------------------------
 -- Code lists
