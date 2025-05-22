@@ -21,7 +21,7 @@ CREATE TABLE HazardType (
     HazardType NVARCHAR(100) NOT NULL,
     HealthRiskRatingID INT NOT NULL,
     Category NVARCHAR(500) NULL,
-    CONSTRAINT FK_HazardType_HealthRiskRating FOREIGN KEY (HealthRiskRatingID) REFERENCES HealthRiskRating(HealthRiskRatingID)
+    CONSTRAINT fk_hazardtype_healthriskrating FOREIGN KEY (HealthRiskRatingID) REFERENCES HealthRiskRating(HealthRiskRatingID)
 );
 
 -- Create HazardReport table
@@ -41,13 +41,14 @@ CREATE TABLE HazardReport (
     FurtherWorkRequired BIT NOT NULL DEFAULT 0,
     FurtherWorkDueDate DATE NULL,
     ReportStatusID INT NOT NULL,
-    CONSTRAINT FK_HazardReport_Property FOREIGN KEY (PropertyID) REFERENCES Property(PropertyID),
-    CONSTRAINT FK_HazardReport_Tenant FOREIGN KEY (TenantID) REFERENCES Tenant(TenantID),
-    CONSTRAINT FK_HazardReport_InvestigationType FOREIGN KEY (InvestigationTypeID) REFERENCES InvestigationType(InvestigationTypeID),
-    CONSTRAINT FK_HazardReport_ReportStatus FOREIGN KEY (ReportStatusID) REFERENCES ReportStatus(ReportStatusID),
-    CHECK (EmergencyActionTaken IN (0, 1)),
-    CHECK (FurtherWorkRequired IN (0, 1)),
-    CHECK (FurtherWorkDueDate IS NULL OR FurtherWorkDueDate >= InvestigationDueDate)
+    CONSTRAINT fk_hazardreport_property FOREIGN KEY (PropertyID) REFERENCES Property(PropertyID),
+    CONSTRAINT fk_hazardreport_tenant FOREIGN KEY (TenantID) REFERENCES Tenant(TenantID),
+    CONSTRAINT fk_hazardreport_investigationtype FOREIGN KEY (InvestigationTypeID) REFERENCES InvestigationType(InvestigationTypeID),
+    CONSTRAINT fk_hazardreport_reportstatus FOREIGN KEY (ReportStatusID) REFERENCES ReportStatus(ReportStatusID),
+    CONSTRAINT chk_emergency_action CHECK (EmergencyActionTaken IN (0, 1)),
+    CONSTRAINT chk_further_work_required CHECK (FurtherWorkRequired IN (0, 1)),
+    CONSTRAINT chk_further_work_due_date CHECK (FurtherWorkDueDate IS NULL OR FurtherWorkDueDate >= InvestigationDueDate),
+    CONSTRAINT chk_made_safe_date CHECK (MadeSafeDate IS NULL OR MadeSafeDate >= DateReported)
 );
 
 -- Create Inspection table
@@ -69,16 +70,18 @@ CREATE TABLE Inspection (
     EscalationStatusID INT NOT NULL,
     NotificationSentToTenant BIT NOT NULL DEFAULT 0,
     InspectionNotes NVARCHAR(500) NULL,
-    CONSTRAINT FK_Inspection_Property FOREIGN KEY (PropertyID) REFERENCES Property(PropertyID),
-    CONSTRAINT FK_Inspection_Tenant FOREIGN KEY (TenantID) REFERENCES Tenant(TenantID),
-    CONSTRAINT FK_Inspection_Tenancy FOREIGN KEY (TenancyID) REFERENCES Tenancy(TenancyID),
-    CONSTRAINT FK_Inspection_TriggerSource FOREIGN KEY (TriggerSourceID) REFERENCES TriggerSource(TriggerSourceID),
-    CONSTRAINT FK_Inspection_EscalationStatus FOREIGN KEY (EscalationStatusID) REFERENCES EscalationStatus(EscalationStatusID),
-    CHECK (HazardConfirmed IN (0, 1)),
-    CHECK (RepairRequired IN (0, 1)),
-    CHECK (SLABreachFlag IN (0, 1)),
-    CHECK (NotificationSentToTenant IN (0, 1)),
-    CHECK (RepairCompletedDate IS NULL OR RepairScheduledDate IS NULL OR RepairCompletedDate >= RepairScheduledDate)
+    CONSTRAINT fk_inspection_property FOREIGN KEY (PropertyID) REFERENCES Property(PropertyID),
+    CONSTRAINT fk_inspection_tenant FOREIGN KEY (TenantID) REFERENCES Tenant(TenantID),
+    CONSTRAINT fk_inspection_tenancy FOREIGN KEY (TenancyID) REFERENCES Tenancy(TenancyID),
+    CONSTRAINT fk_inspection_triggersource FOREIGN KEY (TriggerSourceID) REFERENCES TriggerSource(TriggerSourceID),
+    CONSTRAINT fk_inspection_escalationstatus FOREIGN KEY (EscalationStatusID) REFERENCES EscalationStatus(EscalationStatusID),
+    CONSTRAINT chk_hazard_confirmed CHECK (HazardConfirmed IN (0, 1)),
+    CONSTRAINT chk_repair_required CHECK (RepairRequired IN (0, 1)),
+    CONSTRAINT chk_sla_breach CHECK (SLABreachFlag IN (0, 1)),
+    CONSTRAINT chk_notification_sent_tenant CHECK (NotificationSentToTenant IN (0, 1)),
+    CONSTRAINT chk_repair_completed_date CHECK (RepairCompletedDate IS NULL OR RepairScheduledDate IS NULL OR RepairCompletedDate >= RepairScheduledDate),
+    CONSTRAINT chk_inspection_scheduled_date CHECK (InspectionScheduledDate IS NULL OR InspectionScheduledDate >= HazardReportedDate),
+    CONSTRAINT chk_inspection_completed_date CHECK (InspectionCompletedDate IS NULL OR InspectionScheduledDate IS NULL OR InspectionCompletedDate >= InspectionScheduledDate)
 );
 
 -- Create InspectionHazard table
@@ -89,10 +92,10 @@ CREATE TABLE InspectionHazard (
     HazardReportID INT NOT NULL,
     SeverityID INT NOT NULL,
     Notes NVARCHAR(500) NULL,
-    CONSTRAINT FK_InspectionHazard_HazardType FOREIGN KEY (HazardTypeID) REFERENCES HazardType(HazardTypeID),
-    CONSTRAINT FK_InspectionHazard_Inspection FOREIGN KEY (InspectionID) REFERENCES Inspection(InspectionID),
-    CONSTRAINT FK_InspectionHazard_HazardReport FOREIGN KEY (HazardReportID) REFERENCES HazardReport(HazardReportID),
-    CONSTRAINT FK_InspectionHazard_Severity FOREIGN KEY (SeverityID) REFERENCES Severity(SeverityID)
+    CONSTRAINT fk_inspectionhazard_hazardtype FOREIGN KEY (HazardTypeID) REFERENCES HazardType(HazardTypeID),
+    CONSTRAINT fk_inspectionhazard_inspection FOREIGN KEY (InspectionID) REFERENCES Inspection(InspectionID),
+    CONSTRAINT fk_inspectionhazard_hazardreport FOREIGN KEY (HazardReportID) REFERENCES HazardReport(HazardReportID),
+    CONSTRAINT fk_inspectionhazard_severity FOREIGN KEY (SeverityID) REFERENCES Severity(SeverityID)
 );
 
 -- Create Notification table
@@ -105,11 +108,11 @@ CREATE TABLE Notification (
     DateSent DATE NOT NULL,
     NotificationMethodID INT NOT NULL,
     ContentSummary NVARCHAR(500) NULL,
-    CONSTRAINT FK_Notification_Inspection FOREIGN KEY (InspectionID) REFERENCES Inspection(InspectionID),
-    CONSTRAINT FK_Notification_Tenant FOREIGN KEY (TenantID) REFERENCES Tenant(TenantID),
-    CONSTRAINT FK_Notification_WorkOrder FOREIGN KEY (WorkOrderID) REFERENCES WorkOrder(WorkOrderID),
-    CONSTRAINT FK_Notification_NotificationType FOREIGN KEY (NotificationTypeID) REFERENCES NotificationType(NotificationTypeID),
-    CONSTRAINT FK_Notification_NotificationMethod FOREIGN KEY (NotificationMethodID) REFERENCES NotificationMethod(NotificationMethodID)
+    CONSTRAINT fk_notification_inspection FOREIGN KEY (InspectionID) REFERENCES Inspection(InspectionID),
+    CONSTRAINT fk_notification_tenant FOREIGN KEY (TenantID) REFERENCES Tenant(TenantID),
+    CONSTRAINT fk_notification_workorder FOREIGN KEY (WorkOrderID) REFERENCES WorkOrder(WorkOrderID),
+    CONSTRAINT fk_notification_notificationtype FOREIGN KEY (NotificationTypeID) REFERENCES NotificationType(NotificationTypeID),
+    CONSTRAINT fk_notification_notificationmethod FOREIGN KEY (NotificationMethodID) REFERENCES NotificationMethod(NotificationMethodID)
 );
 
 -- Create Escalation table
@@ -129,14 +132,16 @@ CREATE TABLE Escalation (
     AlternativeAccommodationDetails NVARCHAR(500) NULL,
     TenantAcceptance BIT NOT NULL DEFAULT 0,
     EscalationNotes NVARCHAR(500) NULL,
-    CONSTRAINT FK_Escalation_Inspection FOREIGN KEY (InspectionID) REFERENCES Inspection(InspectionID),
-    CONSTRAINT FK_Escalation_EscalationStage FOREIGN KEY (EscalationStageID) REFERENCES EscalationStage(EscalationStageID),
-    CONSTRAINT FK_Escalation_EscalationType FOREIGN KEY (EscalationTypeID) REFERENCES EscalationType(EscalationTypeID),
-    CHECK (CompensationOffered IN (0, 1)),
-    CHECK (AlternativeAccommodationOffered IN (0, 1)),
-    CHECK (TenantAcceptance IN (0, 1)),
-    CHECK (CompensationAmount IS NULL OR CompensationAmount >= 0),
-    CHECK (EscalationEndDate IS NULL OR EscalationEndDate >= EscalationStartDate)
+    CONSTRAINT fk_escalation_inspection FOREIGN KEY (InspectionID) REFERENCES Inspection(InspectionID),
+    CONSTRAINT fk_escalation_escalationstage FOREIGN KEY (EscalationStageID) REFERENCES EscalationStage(EscalationStageID),
+    CONSTRAINT fk_escalation_escalationtype FOREIGN KEY (EscalationTypeID) REFERENCES EscalationType(EscalationTypeID),
+    CONSTRAINT chk_compensation_offered CHECK (CompensationOffered IN (0, 1)),
+    CONSTRAINT chk_alternative_accomodation CHECK (AlternativeAccommodationOffered IN (0, 1)),
+    CONSTRAINT chk_tenant_acceptance CHECK (TenantAcceptance IN (0, 1)),
+    CONSTRAINT chk_compensation_amount CHECK (CompensationAmount IS NULL OR CompensationAmount >= 0),
+    CONSTRAINT chk_escalation_end_date CHECK (EscalationEndDate IS NULL OR EscalationEndDate >= EscalationStartDate),
+    CONSTRAINT chk_compensation_amount_offered CHECK ((CompensationOffered = 0 AND CompensationAmount IS NULL) OR (CompensationOffered = 1 AND CompensationAmount IS NOT NULL)),
+    CONSTRAINT chk_alternative_accomodation_offered CHECK ((AlternativeAccommodationOffered = 0 AND AlternativeAccommodationDetails IS NULL) OR (AlternativeAccommodationOffered = 1 AND AlternativeAccommodationDetails IS NOT NULL))
 );
 
 
