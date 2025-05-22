@@ -205,7 +205,7 @@
 
     "HealthRiskRating": {
       "type": "object",
-      "description": "Code list for health risk ratings.",
+      "description": "Code list for health risk rating levels.",
       "properties": {
         "HealthRiskRatingID": { "type": "integer", "description": "ID of the health risk rating." },
         "HealthRiskRating": { "type": "string", "description": "Health risk rating level." }
@@ -265,7 +265,7 @@
 
     "NotificationType": {
       "type": "object",
-      "description": "Code list for types of notifications sent to tenants.",
+      "description": "Code list for types of notifications.",
       "properties": {
         "NotificationTypeID": { "type": "integer", "description": "ID of the notification type." },
         "NotificationType": { "type": "string", "description": "Type of notification." }
@@ -285,7 +285,7 @@
 
     "NotificationMethod": {
       "type": "object",
-      "description": "Code list for communication methods.",
+      "description": "Code list for notification methods.",
       "properties": {
         "NotificationMethodID": { "type": "integer", "description": "ID of the notification method." },
         "NotificationMethod": { "type": "string", "description": "Type of notification method." }
