@@ -79,7 +79,7 @@
   "definitions": {
     "HazardType": {
       "type": "object",
-      "description": "",
+      "description": "Stores types of hazards and their associated health risk ratings.",
       "properties": {
         "HazardTypeID": { "type": "integer" },
         "HazardType": { "type": "string" },
@@ -90,7 +90,7 @@
     },
     "InspectionHazard": {
       "type": "object",
-      "description": "",
+      "description": "Links inspections with reported hazards including severity and notes.",
       "properties": {
         "InspectionHazardID": { "type": "integer" },
         "HazardTypeID": { "type": "integer" },
@@ -103,7 +103,7 @@
     },
     "HazardReport": {
       "type": "object",
-      "description": "",
+      "description": "Captures reported hazards including details and status.",
       "properties": {
         "HazardReportID": { "type": "integer" },
         "PropertyID": { "type": "integer" },
@@ -129,7 +129,7 @@
     },
     "Inspection": {
       "type": "object",
-      "description": "",
+      "description": "Details inspections including schedule, status, and outcomes.",
       "properties": {
         "InspectionID": { "type": "integer" },
         "PropertyID": { "type": "integer" },
@@ -157,7 +157,7 @@
     },
     "Notification": {
       "type": "object",
-      "description": "",
+      "description": "Records notifications sent to tenants about inspections or repairs.",
       "properties": {
         "NotificationID": { "type": "integer" },
         "InspectionID": { "type": "integer" },
@@ -175,7 +175,7 @@
     },
     "Escalation": {
       "type": "object",
-      "description": "",
+      "description": "Tracks escalations made during the inspection or repair process.",
       "properties": {
         "EscalationID": { "type": "integer" },
         "InspectionID": { "type": "integer" },
@@ -202,7 +202,7 @@
 
     "HealthRiskRating": {
       "type": "object",
-      "description": "Code list for Health Risk Rating including High, Medium and Low",
+      "description": "Defines levels of health risk (e.g., High, Medium, Low).",
       "properties": {
         "HealthRiskRatingID": { "type": "integer" },
         "HealthRiskRating": { "type": "string" }
@@ -211,7 +211,7 @@
     },
     "Severity": {
       "type": "object",
-      "description": "Code list for Severity including High, Medium and Low",
+      "description": "Defines severity levels used in hazard reporting.",
       "properties": {
         "SeverityID": { "type": "integer" },
         "Severity": { "type": "string" }
@@ -220,7 +220,7 @@
     },
     "InvestigationType": {
       "type": "object",
-      "description": "Code list for Invesigation Type including Standard, Renewed, Further and Emergency",
+      "description": "Defines types of investigations conducted.",
       "properties": {
         "InvestigationTypeID": { "type": "integer" },
         "InvestigationType": { "type": "string" }
@@ -229,7 +229,7 @@
     },
     "ReportStatus": {
       "type": "object",
-      "description": "Code list for Report Status including Open, Under Review, Made Safe and Closed",
+      "description": "Defines statuses for hazard reports.",
       "properties": {
         "ReportStatusID": { "type": "integer" },
         "ReportStatus": { "type": "string" }
@@ -238,7 +238,7 @@
     },
     "TriggerSource": {
       "type": "object",
-      "description": "Code list for Trigger Source including Tenant Report, Routine Check, Environmental Sensor and Staff Report",
+      "description": "Defines what triggered an inspection.",
       "properties": {
         "TriggerSourceID": { "type": "integer" },
         "TriggerSource": { "type": "string" }
@@ -247,7 +247,7 @@
     },
     "EscalationStatus": {
       "type": "object",
-      "description": "Code list for for Escalation Status including None, In Progress and Escalated",
+      "description": "Defines the status of an escalation.",
       "properties": {
         "EscalationStatusID": { "type": "integer" },
         "EscalationStatus": { "type": "string" }
@@ -256,7 +256,7 @@
     },
     "NotificationType": {
       "type": "object",
-      "description": "Code list for Notification Type including Scheduled, Result, Advice and Delay",
+      "description": "Defines types of notifications sent.",
       "properties": {
         "NotificationTypeID": { "type": "integer" },
         "NotificationType": { "type": "string" }
@@ -265,7 +265,7 @@
     },
     "NotificationMethod": {
       "type": "object",
-      "description": "Code list for Notification Method including Email, SMS and Letter",
+      "description": "Defines methods of delivering notifications.",
       "properties": {
         "NotificationMethodID": { "type": "integer" },
         "NotificationMethod": { "type": "string" }
@@ -274,7 +274,7 @@
     },
     "EscalationStage": {
       "type": "object",
-      "description": "Code list for Escalation Stage including Open, In Progress, Resolved and Rejected",
+      "description": "Defines stages of the escalation process.",
       "properties": {
         "EscalationStageID": { "type": "integer" },
         "EscalationStage": { "type": "string" }
@@ -283,7 +283,7 @@
     },
     "EscalationType": {
       "type": "object",
-      "description": "Code list for Escalation Type including Senior Review, Legal Action, Compensation and Alternative Accommodation",
+      "description": "Defines types of escalation actions taken.",
       "properties": {
         "EscalationTypeID": { "type": "integer" },
         "EscalationType": { "type": "string" }
