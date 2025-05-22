@@ -1,0 +1,322 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Property Compoennt Data Model",
+  "description": "A comprehensive data model for managing social housing properties, ensuring compliance with Awaab's Law requirements for damp and mould prevention.",
+  "type": "object",
+  "properties": {
+    "energy_efficiency_band_codes": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/energy_efficiency_band_code" }
+    },
+    "location_alert_type_codes": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/location_alert_type_code" }
+    },
+    "glazing_layer_type_codes": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/glazing_layer_type_code" }
+    },
+    "roof_insulation_type_codes": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/roof_insulation_type_code" }
+    },
+    "wall_insulation_type_codes": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/wall_insulation_type_code" }
+    },
+    "construction_type_codes": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/construction_type_code" }
+    },
+    "certification_type_codes": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/certification_type_code" }
+    },
+    "sites": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/site" }
+    },
+    "properties": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/property" }
+    },
+    "units": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/unit" }
+    },
+    "addresses": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/address" }
+    },
+    "physical_characteristics": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/physical_characteristics" }
+    },
+    "heating_systems": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/heating_system" }
+    },
+    "thermal_transmittances": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/thermal_transmittance" }
+    },
+    "energy_performance_certifications": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/energy_performance_certification" }
+    },
+    "certifications": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/certification" }
+    }
+  },
+  "required": [
+    "energy_efficiency_band_codes",
+    "location_alert_type_codes",
+    "glazing_layer_type_codes",
+    "roof_insulation_type_codes",
+    "wall_insulation_type_codes",
+    "construction_type_codes",
+    "certification_type_codes",
+    "sites",
+    "properties",
+    "units",
+    "addresses",
+    "physical_characteristics",
+    "heating_systems",
+    "thermal_transmittances",
+    "energy_performance_certifications",
+    "certifications"
+  ],
+  "additionalProperties": false,
+  "definitions": {
+    "energy_efficiency_band_code": {
+      "type": "object",
+      "properties": {
+        "band_id": { "type": "integer", "description": "Unique identifier for the energy rating band" },
+        "code": { "type": "string", "maxLength": 1, "description": "The energy rating band for a given unit within a property" }
+      },
+      "required": ["band_id", "code"],
+      "additionalProperties": false
+    },
+    "location_alert_type_code": {
+      "type": "object",
+      "description": "Any alerts the contractor needs to be aware of that affect this work order and relate to the location (site/property/unit)",
+      "properties": {
+        "alert_type_id": { "type": "integer", "description": "Unique identifier for the location alert type" },
+        "code": { "type": "string", "description": "The code representing the alert type for a specific location within a property" }
+      },
+      "required": ["alert_type_id", "code"],
+      "additionalProperties": false
+    },
+    "glazing_layer_type_code": {
+      "type": "object",
+      "description": "The type of glazing used in the windows of a property",
+      "properties": {
+        "glazing_type_id": { "type": "integer", "description": "Unique identifier for the glazing type" },
+        "code": { "type": "string", "description": "The code representing the glazing type for a specific window in a property" }
+      },
+      "required": ["glazing_type_id", "code"],
+      "additionalProperties": false
+    },
+    "roof_insulation_type_code": {
+      "type": "object",
+      "description": "The type of insulation used in the roof of a property",
+      "properties": {
+        "insulation_type_id": { "type": "integer", "description": "Unique identifier for the roof insulation type" },
+        "code": { "type": "string", "description": "The code representing the roof insulation type for a specific property" }
+      },
+      "required": ["insulation_type_id", "code"],
+      "additionalProperties": false
+    },
+    "wall_insulation_type_code": {
+      "type": "object",
+      "description": "The type of insulation used in the walls of a property",
+      "properties": {
+        "insulation_type_id": { "type": "integer", "description": "Unique identifier for the wall insulation type" },
+        "code": { "type": "string", "description": "The code representing the wall insulation type for a specific property" }
+      },
+      "required": ["insulation_type_id", "code"],
+      "additionalProperties": false
+    },
+    "construction_type_code": {
+      "type": "object",
+      "description": "The type of construction used for a property",
+      "properties": {
+        "construction_type_id": { "type": "integer", "description": "Unique identifier for the construction type" },
+        "code": { "type": "string", "description": "The code representing the construction type for a specific property" }
+      },
+      "required": ["construction_type_id", "code"],
+      "additionalProperties": false
+    },
+    "certification_type_code": {
+      "type": "object",
+      "description": "The type of certification (compliance and safety) associated with a property or unit",
+      "properties": {
+        "certification_type_id": { "type": "integer", "description": "Unique identifier for the certification type" },
+        "code": { "type": "string", "description": "The code representing the certification type for a specific property or unit" }
+      },
+      "required": ["certification_type_id", "code"],
+      "additionalProperties": false
+    },
+    "site": {
+      "type": "object",
+      "description": "Part of the spatial hierarchy that describes a physical parcel of land and the buildings and facilities on, under or above that land parcel. Sites are assumed to be continuous, that it so say not divided by other parcels or features (for example roads) that are not part of the site. However, particularly in residential sites, the concept of an 'estate' can also be represented as a site, notwithstanding the presence of (adopted) roads subdividing the site in to discontinuous parts.",
+      "properties": {
+        "site_id": { "type": "integer", "description": "A unique identification reference for the Site." },
+        "site_name": { "type": "string", "description": "Formal Name. Eg Corporate Headquarters site" }
+      },
+      "required": ["site_id", "site_name"],
+      "additionalProperties": false
+    },
+    "property": {
+      "type": "object",
+      "description": "Part of the spatial hierarchy that describes a physical building or structure. Properties have a strict relationship with both Sites and Floors: a Property can be within one and only one Site, and wholly contains zero or more Floors. Properties may be contiguous with adjacent properties (whether or not they belong to the same Site) or discrete (separated by  land or other features). For contiguous/connected buildings, identification of where Property boundaries lie can be determined by considering the following: (i) if the users of the building have a specific name for it - for example 'North Tower', then it should be considered a separate Property even if it is physically connected to another Property at lower levels (and the low-level connecting structures are likely to be considered their own, separate Property); (ii) a Property is a physical description of space that is composed of a number of floors that - for the most part - are arranged one on top of the other (i.e. each floor is completely or largely overlapping the floor below). Properties also usually allow containment to be determined - someone or something should be either 'in' or 'out' of the Property. This can be particularly helpful when understanding Properties that represent outside structures like surface parking, play areas or sports fields.",
+      "properties": {
+        "property_id": { "type": "integer", "description": "A unique reference for the Property (which may be a 'UPRN', or a land registration title number)." },
+        "property_name": { "type": "string", "description": "This name this building is known as in the context. This may be the actual building name (which can also be provided in the Address entity) or it may be a name for this building in some other context." },
+        "site_id": { "type": "integer", "description": "A unique identification reference for the Site."}
+      },
+      "required": ["property_id", "property_name", "site_id"],
+      "additionalProperties": false
+    },
+    "unit": {
+      "type": "object",
+      "description": "A logical portion of one or more Properties - possibly including the entirety of a Property - that share some common attribute(s), for example (and most commonly) are part of a particular lease demise. A Unit may or may not specify specific Spaces that it is composed of, but irrespective of  this specificity, can nonetheless contain information about the implied physical space - for example its measured area.",
+      "properties": {
+        "unit_id": { "type": "integer", "description": "Unique reference for this Unit that distinguishes it from other Units." },
+        "property_id": { "type": "integer", "description": "A unique reference for the Property (which may be a 'UPRN', or a land registration title number)."},
+        "alert_type_id": { "type": "integer", "description": "Unique identifier for the location alert type" },
+        "lease": { "type": "string", "description": "Links the Lease to a Unit. The unit that this lease relates to"}
+      },
+      "required": ["unit_id", "property_id", "lease"],
+      "additionalProperties": false
+    },
+    "address": {
+      "type": "object",
+      "description": "Provides various common ways of describing a place. This is a base entity from which several other more specific types of address are derived.",
+      "properties": {
+        "address_id": { "type": "integer", "description": "Unique identifier for the address" },
+        "unit_id": { "type": "integer", "description": "Unique reference for this Unit that distinguishes it from other Units." },
+        "address_line": { "type": "string", "description": "Where the address cannot be separated into the explicit fields, use this as the generic 'address lines' for the address" },
+        "building_name": { "type": "string", "description": "The name of the building or house on a street of this address" },
+        "street_name": { "type": "string", "description":"Name of a street or thoroughfare" },
+        "building_number": { "type": "string", "description": "The number of a building or house on a street of this address." },
+        "floor": { "type": "integer", "description": "To identify, by name or number, of the floor in a building, as part of an address." },
+        "country": { "type": "string", "description": "To provide country information related to this address. The country of the address (not the country code)" },
+        "city_name": { "type": "string", "description": "The name of the city, town or village of this address." },
+        "post_code": { "type": "string", "description": "The identifier for one or more properties according to the postal service of that country; a group of letters and/or numbers added to the postal address to assist in the sorting of mail. E.g. UK postcode or US zip code" }
+      },
+      "required": ["address_id", "unit_id", "country", "postal_code"],
+      "additionalProperties": false
+    },
+    "physical_characteristics": {
+      "type": "object",
+      "description": "Physical characteristics of a property, including insulation types and construction details.",
+      "properties": {
+        "physical_char_id": { "type": "integer", "description": "Unique identifier for the physical characteristics record" },
+        "property_id": { "type": "integer", "description": "A unique reference for the Property (which may be a 'UPRN', or a land registration title number)." },
+        "wall_insulation_type_id": { "type": "integer", "description": "Summary information about whether or not the main, principal or majority of the walls have a cavity and, if so, how it is filled." },
+        "roof_insulation_type_id": { "type": "integer", "description": "Summary information about the insulation type and average depth used in the roof." },
+        "ventilation_type": { "type": "string", "description": "Summary information about the type of ventilation used in the property." },
+        "built_year": { "type": "integer", "description": "The year the property was built." },
+        "construction_type_id": { "type": "integer", "description": "Unique identifier for the construction type" },
+        "last_updated_date": { "type": "string", "format": "date", "description": "The date when the physical characteristics were last updated." }
+      },
+      "required": ["physical_char_id", "property_id", "last_updated_date"],
+      "additionalProperties": false
+    },
+    "heating_system": {
+      "type": "object",
+      "description": "A type of building system used to convert a fuel into heat, usually for the purposes of heating either water or space.",
+      "properties": {
+        "heating_system_id": { "type": "integer", "description": "Unique identifier for the heating system" },
+        "property_id": { "type": "integer", "description": "A unique reference for the Property (which may be a 'UPRN', or a land registration title number)." },
+        "energy_control": { "type": "string", "description": "What methods are used to control the power consumed by the device using the fuel." },
+        "heat_conversion_method": { "type": "string", "description": "The method used to convert the fuel into heat." },
+        "purpose": { "type": "string", "description": "Optionally specify what this fuel is used for. This can be space heating, water heating or some other purpose." },
+        "is_smart_system": { "type": "boolean", "description": "Does the system using the fuel have the ability to report current system state and some level of condition, usage and diagnostics?" },
+        "installation_date": { "type": "string", "format": "date", "description": "The date when the heating system was installed." },
+        "manufacturer": { "type": "string", "description": "The name of the manufacturer of the heating system." },
+        "model_number": { "type": "string", "description": "The model number of the heating system." },
+        "last_serviced_date": { "type": "string", "format": "date",  "description": "The date when the heating system was last serviced." },
+        "notes": { "type": "string", "description": "Any additional notes or comments about the heating system." }
+      },
+      "required": ["heating_system_id", "property_id"],
+      "additionalProperties": false
+    },
+    "thermal_transmittance": {
+      "type": "object",
+      "description": "Describes the thermal transmittance (also known as the U-value) or a building or element of a building (e.g. the roof).",
+      "properties": {
+        "thermal_trans_id": { "type": "integer", "description": "Unique identifier for the thermal transmittance record" },
+        "physical_char_id": { "type": "integer", "description": "Unique identifier for the physical characteristics record" },
+        "u_value": { "type": "number", "description": "The U-value measured in watts per square metre-kelvin (W/m2K) of the given element." },
+        "element": { "type": "string", "description": "Identifies the element of a building that is considered for a thermal transmittance calculation, for example the walls or windows." },
+        "measurement_date": { "type": "string", "format": "date" , "description": "The date when the U-value was measured." },
+        "notes": { "type": "string", "description": "Any additional notes or comments about the thermal transmittance." }
+      },
+      "required": ["thermal_trans_id", "physical_char_id", "u_value", "element", "measurement_date"],
+      "additionalProperties": false
+    },
+    "energy_performance_certification": {
+      "type": "object",
+      "description": "A UK statutory certification for the energy and envrionmental performance of buildings/dwellings.",
+      "properties": {
+        "epc_id": { "type": "integer", "description": "Unique identifier for the energy performance certification" },
+        "unit_id": { "type": "integer", "description": "Unique reference for this Unit that distinguishes it from other Units." },
+        "certificate_number": { "type": "string", "description": "The unique number assigned to the energy performance certificate." },
+        "current_energy_rating": { "type": "integer", "description": "The current energy efficiency numerical rating, as calculated using the Standard Assessment Procedure (SAP)" },
+        "current_energy_band": { "type": "string", "maxLength": 1, "description": "The current energy efficiency rating band (based on the energy efficiency rating)" },
+        "potential_energy_rating": { "type": "integer", "description": "The potential energy efficiency numerical rating, as calculated using the Standard Assessment Procedure (SAP)" },
+        "potential_energy_band": { "type": "string", "maxLength": 1, "description": "The potential energy efficiency rating band (based on the energy efficiency rating)" },
+        "current_env_impact_rating": { "type": "integer", "description": "The current environmental impact numerical rating, as calculated using the Standard Assessment Procedure (SAP)" },
+        "current_env_impact_band": { "type": "string", "maxLength": 1, "description": "The current environmental impact rating band (based on the environmental impact rating)" },
+        "potential_env_impact_rating": { "type": "integer", "description": "The potential environmental impact numerical rating, as calculated using the Standard Assessment Procedure (SAP)" },
+        "potential_env_impact_band": { "type": "string", "maxLength": 1, "description": "The potential environmental impact rating band (based on the environmental impact rating)" },
+        "co2_per_year": { "type": "integer", "description": "The tonnes of carbon dioxide currently produced by this property each year" },
+        "space_heating_cost_year": { "type": "number", "description": "The current cost of heating the space per year" },
+        "water_heating_cost_year": { "type": "number", "description": "The current cost of heating the water per year" },
+        "lighting_cost_year": { "type": "number", "description": "The current cost of lighting per year" },
+        "total_energy_cost_year": { "type": "number", "description": "The energy use per year measured in kWh/sqm" },
+        "energy_use_per_sqm_year": { "type": "integer", "description": "The energy use per year measured in kWh/sqm" },
+        "recommendation_summary": { "type": "string", "description": "Summary of recommendations for improving the energy efficiency of the property" }
+      },
+      "required": [
+        "epc_id",
+        "unit_id",
+        "certificate_number",
+        "current_energy_rating",
+        "current_energy_band",
+        "potential_energy_rating",
+        "potential_energy_band",
+        "current_env_impact_rating",
+        "current_env_impact_band",
+        "potential_env_impact_rating",
+        "potential_env_impact_band",
+        "co2_per_year",
+        "space_heating_cost_year",
+        "water_heating_cost_year",
+        "lighting_cost_year",
+        "total_energy_cost_year",
+        "energy_use_per_sqm_year"
+      ],
+      "additionalProperties": false
+    },
+    "certification": {
+      "type": "object",
+      "description": "A record describing an official certification for some entity (an asset, property, person etc.) including informaiton about the type and validity of the ceritifcation and a copy of the certificate itself.",
+      "properties": {
+        "certification_id": { "type": "integer", "description": "Unique identifier for the certification" },
+        "unit_id": { "type": "integer", "description": "Unique reference for this Unit that distinguishes it from other Units." },
+        "certification_type_id": { "type": "integer", "description": "Unique identifier for the certification type" },
+        "issue_date": { "type": "string", "format": "date", "description": "The date that this safety certificate was issued (i.e. the date of the inspection). This may before the Valid From date in situations where the regulation permits inspections to be carried out in advance of the anniversary of the preceeding inspection." },
+        "expiry_date": { "type": "string", "format": "date", "description": "When the certification is valid to or expires/requires renewal" },
+        "issued_by": { "type": "string", "description": "The party (which may be the organization or a specific operative within the organization) who issued the certificate." },
+        "status": { "type": "string", "description": "The status of the certification (e.g. valid, expired, pending)" },
+        "attachment_url": { "type": "string", "format": "uri", "description": "URL to the attachment of the certification document" }
+      },
+      "required": ["certification_id", "unit_id", "certification_type_id", "issue_date", "expiry_date", "issued_by", "status"],
+      "additionalProperties": false
+    }
+  }
+}
