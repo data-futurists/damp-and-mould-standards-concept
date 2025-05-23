@@ -1,0 +1,32 @@
+Table TenantPerson {
+    TenantID varchar(50) [pk]
+    FullName varchar(255) [not null]
+    DateOfBirth date
+    ContactDetails text
+    VulnerabilityFlag boolean [default: false]
+    PersonAlertCode varchar(50)
+}
+
+Table Tenancy {
+    TenancyID varchar(50) [pk]
+    TenantID varchar(50) [not null, ref: > TenantPerson.TenantID]
+    AddressID varchar(50) [not null]
+    StartDate date [not null]
+    EndDate date
+    TenancyType varchar(100)
+    TenancyStatus varchar(100)
+}
+
+Table HouseholdMemberPerson {
+    HouseholdMemberID varchar(50) [pk]
+    TenantID varchar(50) [not null, ref: > TenantPerson.TenantID]
+    TenancyID varchar(50) [not null, ref: > Tenancy.TenancyID]
+    FullName varchar(255) [not null]
+    DateOfBirth date
+    RelationshipToTenant varchar(100)
+    IsContractHolder boolean [default: false]
+    VulnerabilityDetails text
+    PersonAlertCode varchar(50)
+    RiskAssessmentStatus varchar(100)
+    RiskAssessmentDate date
+}
