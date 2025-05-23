@@ -194,7 +194,7 @@
         "WorkOrderAccessInformationID": { "type": "string", "description": "Unique identifier for the work order access information." },
         "WorkOrderID": { "type": "string", "description": "Unique identifier for the work order." },
         "Description": { "type": "string", "description": "Narrative description of how to access the relevant parts of the site, property and/or unit." },
-        "KeySafe": { "type": "string", "description": "Details of any keysafe location and access code that may be required to complete work." },
+        "KeySafe": { "type": "string", "description": "Details of any keysafe location and access code that may be required to complete work." }
 
       },
       "required": ["WorkOrderID", "KeySafe", "Description"]
