@@ -1,0 +1,54 @@
+{
+  "Tenancy": {
+    "description": "Records details about the tenancy agreement between a housing provider and a tenant.",
+    "primaryKey": ["TenancyID"],
+    "properties": {
+      "TenancyID": { "type": "string", "description": "Unique identifier for the tenancy." },
+      "TenantID": { "type": "string", "description": "Foreign key referencing the primary tenant." },
+      "AddressID": { "type": "string", "description": "Identifier of the property address linked to the tenancy." },
+      "StartDate": { "type": "string", "format": "date", "description": "The start date of the tenancy." },
+      "EndDate": { "type": "string", "format": "date", "description": "The end date of the tenancy, if applicable." },
+      "TenancyType": { "type": "string", "description": "Type of tenancy (e.g., fixed-term, assured, introductory)." },
+      "TenancyStatus": { "type": "string", "description": "Current status of the tenancy (e.g., active, ended, paused)." }
+    },
+    "foreignKeys": [
+      { "columns": ["TenantID"], "reference": { "table": "TenantPerson", "columns": ["TenantID"] } }
+    ],
+    "required": ["TenancyID", "TenantID", "AddressID", "StartDate", "TenancyType", "TenancyStatus"]
+  },
+  "TenantPerson": {
+    "description": "Information about the tenant, typically the primary person named on the tenancy agreement.",
+    "primaryKey": ["TenantID"],
+    "properties": {
+      "TenantID": { "type": "string", "description": "Unique identifier for the tenant." },
+      "FullName": { "type": "string", "description": "Full name of the tenant." },
+      "DateOfBirth": { "type": "string", "format": "date", "description": "Tenant's date of birth." },
+      "ContactDetails": { "type": "string", "description": "Contact information such as phone or email." },
+      "VulnerabilityFlag": { "type": "boolean", "description": "Indicates whether the tenant is considered vulnerable." },
+      "PersonAlertCode": { "type": "string", "description": "Code representing a person-level alert related to the tenant." }
+    }, 
+    "required": ["TenantID", "FullName", "DateOfBirth", "ContactDetails", "PersonAlertCode"]
+  },
+  "HouseholdMemberPerson": {
+    "description": "Details of individuals living in the household who are not the primary tenant.",
+    "primaryKey": ["HouseholdMemberID"],
+    "properties": {
+      "HouseholdMemberID": { "type": "string", "description": "Unique identifier for the household member." },
+      "TenantID": { "type": "string", "description": "Tenant this household member is associated with." },
+      "TenancyID": { "type": "string", "description": "Tenancy this household member belongs to." },
+      "FullName": { "type": "string", "description": "Full name of the household member." },
+      "DateOfBirth": { "type": "string", "format": "date", "description": "Date of birth of the household member." },
+      "RelationshipToTenant": { "type": "string", "description": "Describes how this person is related to the tenant." },
+      "IsContractHolder": { "type": "boolean", "description": "Indicates whether this person is a contract holder." },
+      "VulnerabilityDetails": { "type": "string", "description": "Additional vulnerability details if applicable." },
+      "PersonAlertCode": { "type": "string", "description": "Alert code linked to the household member." },
+      "RiskAssessmentStatus": { "type": "string", "description": "Status of any risk assessment conducted." },
+      "RiskAssessmentDate": { "type": "string", "format": "date", "description": "Date when the risk assessment was conducted." }
+    },
+    "foreignKeys": [
+      { "columns": ["TenantID"], "reference": { "table": "TenantPerson", "columns": ["TenantID"] } },
+      { "columns": ["TenancyID"], "reference": { "table": "Tenancy", "columns": ["TenancyID"] } }
+    ],
+    "required": ["HouseholdMemberID","TenancyID", "TenantID", "FullName", "StartDate", "RelationshipToTenant", "PersonAlertCode"]
+  }
+}
