@@ -220,7 +220,7 @@
         "ventilation_type": { "type": "string", "description": "Summary information about the type of ventilation used in the property." },
         "built_year": { "type": "integer", "description": "The year the property was built." },
         "construction_type_id": { "type": "integer", "description": "Unique identifier for the construction type" },
-        "last_updated_date": { "type": "string", "format": "date", "description": "The date when the physical characteristics were last updated." },
+        "last_updated_date": { "type": "string", "format": "date", "description": "The date when the physical characteristics were last updated." }
       },
       "required": ["physical_char_id", "property_id", "last_updated_date"],
       "additionalProperties": false
@@ -279,7 +279,7 @@
         "lighting_cost_year": { "type": "number", "description": "The current cost of lighting per year" },
         "total_energy_cost_year": { "type": "number", "description": "The energy use per year measured in kWh/sqm" },
         "energy_use_per_sqm_year": { "type": "integer", "description": "The energy use per year measured in kWh/sqm" },
-        "recommendation_summary": { "type": "string", "description": "Summary of recommendations for improving the energy efficiency of the property" },
+        "recommendation_summary": { "type": "string", "description": "Summary of recommendations for improving the energy efficiency of the property" }
       },
       "required": [
         "epc_id",
@@ -313,7 +313,7 @@
         "expiry_date": { "type": "string", "format": "date", "description": "When the certification is valid to or expires/requires renewal" },
         "issued_by": { "type": "string", "description": "The party (which may be the organization or a specific operative within the organization) who issued the certificate." },
         "status": { "type": "string", "description": "The status of the certification (e.g. valid, expired, pending)" },
-        "attachment_url": { "type": "string", "format": "uri", "description": "URL to the attachment of the certification document" },
+        "attachment_url": { "type": "string", "format": "uri", "description": "URL to the attachment of the certification document" }
       },
       "required": ["certification_id", "unit_id", "certification_type_id", "issue_date", "expiry_date", "issued_by", "status"],
       "additionalProperties": false

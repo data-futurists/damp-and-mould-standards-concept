@@ -1,52 +1,112 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Inspection Component Schema",
-  "description": "A comprehensive data model for managing social housing properties, ensuring compliance with Awaab's Law requirements for damp and mould prevention.",
+  "title": "Inspection Module Data Model",
   "type": "object",
+  "properties": {
+    "HazardType": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/HazardType" }
+    },
+    "InspectionHazard": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/InspectionHazard" }
+    },
+    "HazardReport": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/HazardReport" }
+    },
+    "Inspection": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/Inspection" }
+    },
+    "Notification": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/Notification" }
+    },
+    "Escalation": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/Escalation" }
+    },
+    "HealthRiskRating": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/HealthRiskRating" }
+    },
+    "Severity": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/Severity" }
+    },
+    "InvestigationType": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/InvestigationType" }
+    },
+    "ReportStatus": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/ReportStatus" }
+    },
+    "TriggerSource": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/TriggerSource" }
+    },
+    "EscalationStatus": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/EscalationStatus" }
+    },
+    "NotificationType": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/NotificationType" }
+    },
+    "NotificationMethod": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/NotificationMethod" }
+    },
+    "EscalationStage": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/EscalationStage" }
+    },
+    "EscalationType": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/EscalationType" }
+    }
+  },
+  "required": [
+    "HazardType",
+    "InspectionHazard",
+    "HazardReport",
+    "Inspection",
+    "Notification",
+    "Escalation"
+  ],
   "definitions": {
     "HazardType": {
       "type": "object",
-      "description": "",
+      "description": "Table storing types of hazards.",
       "properties": {
-        "HazardTypeID": { "type": "integer" },
-        "HazardType": { "type": "string" },
-        "HealthRiskRatingID": { "type": "integer" },
-        "Category": { "type": ["string", "null"] }
+        "HazardTypeID": { "type": "integer", "description": "Unique identifier for the hazard type." },
+        "HazardType": { "type": "string", "description": "Name of the hazard type." },
+        "HealthRiskRatingID": { "type": "integer", "description": "Reference to the health risk rating." },
+        "Category": { "type": "string", "description": "Category or grouping for the hazard type." }
       },
       "required": ["HazardType", "HealthRiskRatingID"]
     },
-    "InspectionHazard": {
-      "type": "object",
-      "description": "",
-      "properties": {
-        "InspectionHazardID": { "type": "integer" },
-        "HazardTypeID": { "type": "integer" },
-        "InspectionID": { "type": "integer" },
-        "HazardReportID": { "type": "integer" },
-        "SeverityID": { "type": "integer" },
-        "Notes": { "type": ["string", "null"] }
-      },
-      "required": ["HazardTypeID", "InspectionID", "HazardReportID", "SeverityID"]
-    },
     "HazardReport": {
       "type": "object",
-      "description": "",
+      "description": "Table storing hazard reports submitted.",
       "properties": {
-        "HazardReportID": { "type": "integer" },
-        "PropertyID": { "type": "integer" },
-        "TenantID": { "type": "integer" },
-        "DateReported": { "type": "string", "format": "date" },
-        "ReportedBy": { "type": "string" },
-        "Description": { "type": ["string", "null"] },
-        "PhotoEvidence": { "type": ["string", "null"] },
-        "LocationDetails": { "type": ["string", "null"] },
-        "InvestigationTypeID": { "type": "integer" },
-        "InvestigationDueDate": { "type": "string", "format": "date" },
-        "EmergencyActionTaken": { "type": "boolean" },
-        "MadeSafeDate": { "type": ["string", "null"], "format": "date" },
-        "FurtherWorkRequired": { "type": "boolean" },
-        "FurtherWorkDueDate": { "type": ["string", "null"], "format": "date" },
-        "ReportStatusID": { "type": "integer" }
+        "HazardReportID": { "type": "integer", "description": "Unique identifier for the hazard report." },
+        "PropertyID": { "type": "integer", "description": "Reference to the property." },
+        "TenantID": { "type": "integer", "description": "Reference to the tenant." },
+        "DateReported": { "type": "string", "format": "date", "description": "Date the hazard was reported." },
+        "ReportedBy": { "type": "string", "description": "ID of the person who reported the hazard." },
+        "Description": { "type": "string", "description": "Detailed description of the reported hazard." },
+        "PhotoEvidence": { "type": "string", "description": "URL or path to photo evidence." },
+        "LocationDetails": { "type": "string", "description": "Details about the location of the hazard." },
+        "InvestigationTypeID": { "type": "integer", "description": "Reference to type of investigation." },
+        "InvestigationDueDate": { "type": "string", "format": "date", "description": "Due date for investigation to be completed." },
+        "EmergencyActionTaken": { "type": "boolean", "description": "Whether emergency action was taken." },
+        "MadeSafeDate": { "type": "string", "format": "date", "description": "Date hazard was made safe." },
+        "FurtherWorkRequired": { "type": "boolean", "description": "Whether further work is required." },
+        "FurtherWorkDueDate": { "type": "string", "format": "date", "description": "Due date for further work to be completed." },
+        "ReportStatusID": { "type": "integer", "description": "Reference to the status of the report." }
       },
       "required": [
         "PropertyID", "TenantID", "DateReported", "ReportedBy",
@@ -56,25 +116,25 @@
     },
     "Inspection": {
       "type": "object",
-      "description": "",
+      "description": "Table storing inspection details.",
       "properties": {
-        "InspectionID": { "type": "integer" },
-        "PropertyID": { "type": "integer" },
-        "TenantID": { "type": "integer" },
-        "TenancyID": { "type": "integer" },
-        "TriggerSourceID": { "type": "integer" },
-        "HazardReportedDate": { "type": "string", "format": "date" },
-        "InspectionScheduledDate": { "type": ["string", "null"], "format": "date" },
-        "InspectionCompletedDate": { "type": ["string", "null"], "format": "date" },
-        "InspectorName": { "type": ["string", "null"] },
-        "HazardConfirmed": { "type": "boolean" },
-        "RepairRequired": { "type": "boolean" },
-        "RepairScheduledDate": { "type": ["string", "null"], "format": "date" },
-        "RepairCompletedDate": { "type": ["string", "null"], "format": "date" },
-        "SLABreachFlag": { "type": "boolean" },
-        "EscalationStatusID": { "type": "integer" },
-        "NotificationSentToTenant": { "type": "boolean" },
-        "InspectionNotes": { "type": ["string", "null"] }
+        "InspectionID": { "type": "integer", "description": "Unique identifier for the inspection." },
+        "PropertyID": { "type": "integer", "description": "Reference to the property being inspected." },
+        "TenantID": { "type": "integer", "description": "Reference to the tenant." },
+        "TenancyID": { "type": "integer", "description": "Reference to the tenancy." },
+        "TriggerSourceID": { "type": "integer", "description": "Reference to what triggered the inspection." },
+        "HazardReportedDate": { "type": "string", "format": "date", "description": "Date the hazard was reported." },
+        "InspectionScheduledDate": { "type": "string", "format": "date", "description": "Scheduled date for inspection." },
+        "InspectionCompletedDate": { "type": "string", "format": "date", "description": "Date inspection was completed." },
+        "InspectorName": { "type": "string", "description": "Name of the inspector." },
+        "HazardConfirmed": { "type": "boolean", "description": "Whether a hazard was confirmed." },
+        "RepairRequired": { "type": "boolean", "description": "Whether repair is required." },
+        "RepairScheduledDate": { "type": "string", "format": "date", "description": "Scheduled date for repair." },
+        "RepairCompletedDate": { "type": "string", "format": "date", "description": "Date repair was completed." },
+        "SLABreachFlag": { "type": "boolean", "description": "Whether the SLA was breached." },
+        "EscalationStatusID": { "type": "integer", "description": "Reference to escalation status." },
+        "NotificationSentToTenant": { "type": "boolean", "description": "Whether tenant was notified." },
+        "InspectionNotes": { "type": "string", "description": "Additional notes from inspection." }
       },
       "required": [
         "PropertyID", "TenantID", "TenancyID", "TriggerSourceID",
@@ -82,43 +142,59 @@
         "SLABreachFlag", "EscalationStatusID", "NotificationSentToTenant"
       ]
     },
+
+    "InspectionHazard": {
+      "type": "object",
+      "description": "Table mapping inspections to hazards found.",
+      "properties": {
+        "InspectionHazardID": { "type": "integer", "description": "Unique identifier for the inspection hazard." },
+        "HazardTypeID": { "type": "integer", "description": "Reference to the hazard type." },
+        "InspectionID": { "type": "integer", "description": "Reference to the inspection." },
+        "HazardReportID": { "type": "integer", "description": "Reference to the original hazard report." },
+        "SeverityID": { "type": "integer", "description": "Reference to the severity level." },
+        "Notes": { "type": "string", "description": "Additional notes about the hazard." }
+      },
+      "required": ["HazardTypeID", "InspectionID", "HazardReportID", "SeverityID"]
+    },
+
     "Notification": {
       "type": "object",
-      "description": "",
+      "description": "Table storing notifications related to inspections.",
       "properties": {
-        "NotificationID": { "type": "integer" },
-        "InspectionID": { "type": "integer" },
-        "TenantID": { "type": "integer" },
-        "WorkOrderID": { "type": "integer" },
-        "NotificationTypeID": { "type": "integer" },
-        "DateSent": { "type": "string", "format": "date" },
-        "NotificationMethodID": { "type": "integer" },
-        "ContentSummary": { "type": ["string", "null"] }
+        "NotificationID": { "type": "integer", "description": "Unique identifier for the notification." },
+        "InspectionID": { "type": "integer", "description": "Reference to the inspection." },
+        "TenantID": { "type": "integer", "description": "Reference to the tenant." },
+        "WorkOrderID": { "type": "integer", "description": "Reference to the work order." },
+        "NotificationTypeID": { "type": "integer", "description": "Type of notification." },
+        "DateSent": { "type": "string", "format": "date", "description": "Date the notification was sent." },
+        "NotificationMethodID": { "type": "integer", "description": "Method used to send the notification." },
+        "ContentSummary": { "type": "string", "description": "Summary of the notification content." }
       },
       "required": [
-        "InspectionID", "TenantID", "WorkOrderID", "NotificationTypeID",
-        "DateSent", "NotificationMethodID"
+        "InspectionID", "TenantID", "WorkOrderID",
+        "NotificationTypeID", "DateSent", "NotificationMethodID"
       ]
     },
+
     "Escalation": {
       "type": "object",
-      "description": "",
+      "description": "Table storing escalation actions and tracking.",
       "properties": {
-        "EscalationID": { "type": "integer" },
-        "InspectionID": { "type": "integer" },
-        "EscalationReason": { "type": ["string", "null"] },
-        "EscalationStageID": { "type": "integer" },
-        "EscalationTypeID": { "type": "integer" },
-        "EscalatedTo": { "type": "string" },
-        "EscalationStartDate": { "type": "string", "format": "date" },
-        "EscalationEndDate": { "type": ["string", "null"], "format": "date" },
-        "ActionTaken": { "type": ["string", "null"] },
-        "CompensationOffered": { "type": "boolean" },
-        "CompensationAmount": { "type": ["number", "null"] },
-        "AlternativeAccommodationOffered": { "type": "boolean" },
-        "AlternativeAccommodationDetails": { "type": ["string", "null"] },
-        "TenantAcceptance": { "type": "boolean" },
-        "EscalationNotes": { "type": ["string", "null"] }
+        "EscalationID": { "type": "integer", "description": "Unique identifier for the escalation." },
+        "InspectionID": { "type": "integer", "description": "Reference to the related inspection." },
+        "EscalationReason": { "type": "string", "description": "Reason for escalation." },
+        "EscalationStageID": { "type": "integer", "description": "Stage of the escalation." },
+        "EscalationTypeID": { "type": "integer", "description": "Type of escalation." },
+        "EscalatedTo": { "type": "string", "description": "Person or team escalated to." },
+        "EscalationStartDate": { "type": "string", "format": "date", "description": "Start date of escalation." },
+        "EscalationEndDate": { "type": "string", "format": "date", "description": "End date of escalation (if any)." },
+        "ActionTaken": { "type": "string", "description": "Actions taken in response to escalation." },
+        "CompensationOffered": { "type": "boolean", "description": "Whether compensation was offered." },
+        "CompensationAmount": { "type": "number", "description": "Amount of compensation offered (if any)." },
+        "AlternativeAccommodationOffered": { "type": "boolean", "description": "If alternative accommodation was offered." },
+        "AlternativeAccommodationDetails": { "type": "string", "description": "Details of the accommodation offered." },
+        "TenantAcceptance": { "type": "boolean", "description": "Whether the tenant accepted the escalation outcome." },
+        "EscalationNotes": { "type": "string", "description": "Additional notes about the escalation." }
       },
       "required": [
         "InspectionID", "EscalationStageID", "EscalationTypeID",
@@ -129,91 +205,100 @@
 
     "HealthRiskRating": {
       "type": "object",
-      "description": "",
+      "description": "Code list for health risk rating levels.",
       "properties": {
-        "HealthRiskRatingID": { "type": "integer" },
-        "HealthRiskRating": { "type": "string" }
+        "HealthRiskRatingID": { "type": "integer", "description": "ID of the health risk rating." },
+        "HealthRiskRating": { "type": "string", "description": "Health risk rating level." }
       },
       "required": ["HealthRiskRating"]
     },
+
     "Severity": {
       "type": "object",
-      "description": "",
+      "description": "Code list for hazard severity levels.",
       "properties": {
-        "SeverityID": { "type": "integer" },
-        "Severity": { "type": "string" }
+        "SeverityID": { "type": "integer", "description": "ID of the severity level." },
+        "Severity": { "type": "string", "description": "Severity level description." }
       },
       "required": ["Severity"]
     },
+
     "InvestigationType": {
       "type": "object",
-      "description": "",
+      "description": "Code list for types of investigation.",
       "properties": {
-        "InvestigationTypeID": { "type": "integer" },
-        "InvestigationType": { "type": "string" }
+        "InvestigationTypeID": { "type": "integer", "description": "ID of the investigation type." },
+        "InvestigationType": { "type": "string", "description": "Description of the investigation type." }
       },
       "required": ["InvestigationType"]
     },
+
     "ReportStatus": {
       "type": "object",
-      "description": "",
+      "description": "Code list for report statuses.",
       "properties": {
-        "ReportStatusID": { "type": "integer" },
-        "ReportStatus": { "type": "string" }
+        "ReportStatusID": { "type": "integer", "description": "ID of the report status." },
+        "ReportStatus": { "type": "string", "description": "Name of the report status." }
       },
       "required": ["ReportStatus"]
     },
+
     "TriggerSource": {
       "type": "object",
-      "description": "",
+      "description": "Code list for what triggered inspections.",
       "properties": {
-        "TriggerSourceID": { "type": "integer" },
-        "TriggerSource": { "type": "string" }
+        "TriggerSourceID": { "type": "integer", "description": "ID of the trigger source." },
+        "TriggerSource": { "type": "string", "description": "Source that triggered the inspection." }
       },
       "required": ["TriggerSource"]
     },
+
     "EscalationStatus": {
       "type": "object",
-      "description": "",
+      "description": "Code list for escalation statuses.",
       "properties": {
-        "EscalationStatusID": { "type": "integer" },
-        "EscalationStatus": { "type": "string" }
+        "EscalationStatusID": { "type": "integer", "description": "ID of the escalation status." },
+        "EscalationStatus": { "type": "string", "description": "Description of escalation status." }
       },
       "required": ["EscalationStatus"]
     },
+
     "NotificationType": {
       "type": "object",
-      "description": "",
+      "description": "Code list for types of notifications.",
       "properties": {
-        "NotificationTypeID": { "type": "integer" },
-        "NotificationType": { "type": "string" }
+        "NotificationTypeID": { "type": "integer", "description": "ID of the notification type." },
+        "NotificationType": { "type": "string", "description": "Type of notification." }
       },
       "required": ["NotificationType"]
     },
-    "NotificationMethod": {
-      "type": "object",
-      "description": "",
-      "properties": {
-        "NotificationMethodID": { "type": "integer" },
-        "NotificationMethod": { "type": "string" }
-      },
-      "required": ["NotificationMethod"]
-    },
+
     "EscalationStage": {
       "type": "object",
-      "description": "",
+      "description": "Code list for stages in escalation lifecycle.",
       "properties": {
-        "EscalationStageID": { "type": "integer" },
-        "EscalationStage": { "type": "string" }
+        "EscalationStageID": { "type": "integer", "description": "ID of the escalation stage." },
+        "EscalationStage": { "type": "string", "description": "Stage name." }
       },
       "required": ["EscalationStage"]
     },
+
+    "NotificationMethod": {
+      "type": "object",
+      "description": "Code list for notification methods.",
+      "properties": {
+        "NotificationMethodID": { "type": "integer", "description": "ID of the notification method." },
+        "NotificationMethod": { "type": "string", "description": "Type of notification method." }
+      },
+      "required": ["NotificationMethod"]
+    },
+
     "EscalationType": {
       "type": "object",
-      "description": "",
+      "description": "Code list for types of escalations.",
       "properties": {
-        "EscalationTypeID": { "type": "integer" },
-        "EscalationType": { "type": "string" }
+        "EscalationTypeID": { "type": "integer", "description": "ID of the escalation type." },
+        "EscalationType": { "type": "string", "description": "Type of escalation." }
       },
       "required": ["EscalationType"]
     }

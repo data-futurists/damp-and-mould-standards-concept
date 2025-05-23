@@ -23,13 +23,14 @@ CREATE TABLE location_alert_type_code (
 
 INSERT INTO location_alert_type_code (alert_type_id, code, display_name)
 VALUES
-  ('OtherContactDetails'),
-  ('OtherSeeComments'),
-  ('Asbestos'),
-  ('Warranty'),
-  ('HeritageListedBuilding'),
-  ('SewageNotToMains'),
-  ('OperativeGender');
+  (1, 'OtherContactDetails'),
+  (2, 'OtherSeeComments'),
+  (3, 'Asbestos'),
+  (4, 'Warranty'),
+  (5, 'HeritageListedBuilding'),
+  (6, 'SewageNotToMains'),
+  (7, 'Operative Gender'),
+  (8, 'DampAndMould**');
 
 CREATE TABLE glazing_layer_type_code (
   glazing_type_id INTEGER PRIMARY KEY,

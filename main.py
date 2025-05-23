@@ -60,56 +60,41 @@ def property_page():
 
     try:
         # Load JSON schema
-        schema_path = Path("schemas/property_component.json")
-        with open(schema_path, 'r', encoding='utf-8') as f:
-            schema = json.load(f)
-        
-        # Create a cleaner display of the schema structure
-        if "definitions" in schema:
-            for entity, details in schema["definitions"].items():
-                with st.expander(f"📋 {entity}"):
-                    if "description" in details:
-                        st.markdown(f"**Entity Description:** {details['description']}")
-                        st.markdown("---")
-                    
-                    st.markdown("**Attributes:**")
-                    
-                    # Create a more structured view using columns
-                    cols = st.columns([2, 1, 3])
-                    with cols[0]:
-                        st.markdown("**Name**")
-                    with cols[1]:
-                        st.markdown("**Type**")
-                    with cols[2]:
-                        st.markdown("**Description**")
-                    
-                    # Handle both regular properties and array items
-                    properties = details.get("properties", {})
-                    if not properties and "items" in details:
-                        properties = details["items"].get("properties", {})
-                    
-                    for attr, attr_details in properties.items():
-                        with cols[0]:
-                            st.markdown(f"`{attr}`")
-                        with cols[1]:
-                            type_info = attr_details.get('type', 'N/A')
-                            st.markdown(f"`{type_info}`")
-                        with cols[2]:
-                            description = attr_details.get('description', 'No description available')
-                            st.markdown(description)
-                    
-                    # Show required fields if specified
-                    if "required" in details:
-                        st.markdown("---")
-                        st.markdown("**Required Fields:**")
-                        st.markdown(", ".join(f"`{field}`" for field in details["required"]))
+        schema_path = Path("schemas/property_component.JSON")
+        with open(schema_path, 'r') as file:
+            schema = json.load(file)
 
+        # Access the "definitions" section
+        definitions = schema.get("definitions", {})
+        for name, definition in definitions.items():
+            with st.expander(f"# {name}", expanded=False):
+            # Show description if present
+                desc = definition.get("description")
+                if desc:
+                    st.markdown(f"**Description:** {desc}")
+                # Show required fields list
+                required = set(definition.get("required", []))
+                # List properties
+                props = definition.get("properties", {})
+                st.markdown("**Attributes:**")
+                for prop_name, prop_schema in props.items():
+                    p_type = prop_schema.get("type", "—")
+                    p_format = prop_schema.get("format")
+                    p_desc = prop_schema.get("description", "")
+                    # build type+format string
+                    type_str = f"`{p_type}`"
+                    if p_format:
+                        type_str = f"`{p_type}` _(format: {p_format})_"
+                    # mark if required
+                    req_mark = " **(required)**" if prop_name in required else ""
+                    st.markdown(f"- **{prop_name}** {type_str}{req_mark}: {p_desc}")
+        
     except FileNotFoundError:
-        st.error("Schema file not found. Please check if 'schemas/property_component.json' exists.")
+        st.error("JSON schema file not found. Please ensure the file exists in the schemas directory.")
     except json.JSONDecodeError:
-        st.error("Invalid JSON schema file. Please verify the JSON format.")
-    except Exception as e:
-        st.error(f"An error occurred: {str(e)}")
+        st.error("Invalid JSON schema format. Please check the file content.")
+    except KeyError:
+        st.error("Error accessing definitions in JSON schema. Please ensure the schema is structured correctly.")   
     
     # Add DDL section
     st.subheader("Data Description Language (DDL) code")
