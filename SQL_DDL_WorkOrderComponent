@@ -125,31 +125,26 @@ CREATE TABLE WorkOrderComplete (
 
 -- Table: WorkOrderAccessInformation
 CREATE TABLE WorkOrderAccessInformation (
-    AccessInformationID VARCHAR(255) PRIMARY KEY,      -- Unique ID for access record
+    WorkOrderAccessInformationID VARCHAR(255) PRIMARY KEY,      -- Unique ID for access record
     WorkOrderID VARCHAR(255),                          -- FK to work order
-    AccessType VARCHAR(100),                           -- Type of access (e.g. key, presence)
-    AccessDetails TEXT,                                -- Detailed access info
-    AccessDateTime TIMESTAMP,                          -- When access was made
+    Description VARCHAR(100),                           -- Type of access (e.g. key, presence)
+    KeySafe TEXT,                                -- Detailed access info
     CONSTRAINT FK_WorkOrderAccess_WorkOrder FOREIGN KEY (WorkOrderID) REFERENCES WorkOrder(WorkOrderID)
 );
 
 -- Table: AlertRegardingLocation
 CREATE TABLE AlertRegardingLocation (
-    AlertID VARCHAR(255) PRIMARY KEY,                  -- Unique alert ID
-    WorkOrderID VARCHAR(255),                          -- FK to work order
+    LocationAlertID VARCHAR(255) PRIMARY KEY,                  -- Unique alert ID
     AlertType VARCHAR(100),                            -- Type of location alert
-    Description TEXT,                                  -- Description of the alert
-    AlertDate TIMESTAMP,                               -- When alert was raised
+    Attachments TEXT,                                 -- Attachments related to the alert
+    Comments TEXT,                                  -- Description of the alert
     CONSTRAINT FK_AlertLocation_WorkOrder FOREIGN KEY (WorkOrderID) REFERENCES WorkOrder(WorkOrderID)
 );
 
 -- Table: AlertRegardingPerson
 CREATE TABLE AlertRegardingPerson (
-    AlertID VARCHAR(255) PRIMARY KEY,                  -- Unique alert ID
-    WorkOrderID VARCHAR(255),                          -- FK to work order
-    PersonID VARCHAR(255),                             -- FK to person being alerted on
+    PersonAlertID VARCHAR(255) PRIMARY KEY,                  -- Unique alert ID
     AlertType VARCHAR(100),                            -- Type of person alert
-    Description TEXT,                                  -- Description of the alert
-    AlertDate TIMESTAMP,                               -- When alert was raised
+    Comments TEXT,                                  -- Description of the alert
     CONSTRAINT FK_AlertPerson_WorkOrder FOREIGN KEY (WorkOrderID) REFERENCES WorkOrder(WorkOrderID)
 );
