@@ -7,7 +7,7 @@
   "properties": {
     "WorkOrder": { "$ref": "#/$defs/WorkOrder" }
   },
-  "$defs": {
+  "definitions": {
     "WorkOrder": {
       "type": "object",
       "description": "Details of the work to be done (including the location) that can be used to determine the resources required when establishing available appointments. This Work Order may have one or more Work Elements, and available appointments must be provided for each Work Element included.",
