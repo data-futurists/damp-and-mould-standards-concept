@@ -1,10 +1,3 @@
-// DBML script for Inspection Module schema
-// Author: Elena Iurco (Data Futurists)
-// Email: elena.iurco@datafuturists.com
-
-// Script created for use with dbdiagram.io
-
-
 Table ContractorOrganisation {
   ContractorOrganisationID varchar PK
   Name varchar
@@ -81,7 +74,7 @@ Table WorkElement {
 
 Table WorkElementDependency {
   WorkElementID varchar PK
-  DependsOnWorkElementID varchar PK
+  DependsOnWorkElementID varchar
   Type varchar
   Timing varchar
 }
@@ -142,3 +135,5 @@ Ref: WorkOrderComplete.WorkOrderID > WorkOrder.WorkOrderID
 Ref: WorkOrderAccessInformation.WorkOrderID > WorkOrder.WorkOrderID
 Ref: WorkOrder.LocationAlertID > AlertRegardingLocation.LocationAlertID
 Ref: WorkOrder.PersonAlertID > AlertRegardingPerson.PersonAlertID
+
+
