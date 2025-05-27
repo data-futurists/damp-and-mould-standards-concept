@@ -42,7 +42,7 @@ CREATE TABLE HazardReport (
   FurtherWorkDueDate DATE NULL, 
   ReportStatusID INT NOT NULL, 
   CONSTRAINT fk_hazardreport_property FOREIGN KEY (PropertyID) REFERENCES Property(PropertyID), 
-  CONSTRAINT fk_hazardreport_tenant FOREIGN KEY (TenantID) REFERENCES Tenant(TenantID), 
+  CONSTRAINT fk_hazardreport_tenant FOREIGN KEY (TenantID) REFERENCES TenantPerson(TenantID), 
   CONSTRAINT fk_hazardreport_investigationtype FOREIGN KEY (InvestigationTypeID) REFERENCES InvestigationType(InvestigationTypeID), 
   CONSTRAINT fk_hazardreport_reportstatus FOREIGN KEY (ReportStatusID) REFERENCES ReportStatus(ReportStatusID), 
   CONSTRAINT chk_emergency_action CHECK (
@@ -81,7 +81,7 @@ CREATE TABLE Inspection (
   NotificationSentToTenant BIT NOT NULL DEFAULT 0, 
   InspectionNotes NVARCHAR(500) NULL, 
   CONSTRAINT fk_inspection_property FOREIGN KEY (PropertyID) REFERENCES Property(PropertyID), 
-  CONSTRAINT fk_inspection_tenant FOREIGN KEY (TenantID) REFERENCES Tenant(TenantID), 
+  CONSTRAINT fk_inspection_tenant FOREIGN KEY (TenantID) REFERENCES TenantPerson(TenantID), 
   CONSTRAINT fk_inspection_tenancy FOREIGN KEY (TenancyID) REFERENCES Tenancy(TenancyID), 
   CONSTRAINT fk_inspection_triggersource FOREIGN KEY (TriggerSourceID) REFERENCES TriggerSource(TriggerSourceID), 
   CONSTRAINT fk_inspection_escalationstatus FOREIGN KEY (EscalationStatusID) REFERENCES EscalationStatus(EscalationStatusID), 
@@ -138,7 +138,7 @@ CREATE TABLE Notification (
   NotificationMethodID INT NOT NULL, 
   ContentSummary NVARCHAR(500) NULL, 
   CONSTRAINT fk_notification_inspection FOREIGN KEY (InspectionID) REFERENCES Inspection(InspectionID), 
-  CONSTRAINT fk_notification_tenant FOREIGN KEY (TenantID) REFERENCES Tenant(TenantID), 
+  CONSTRAINT fk_notification_tenant FOREIGN KEY (TenantID) REFERENCES TenantPerson(TenantID), 
   CONSTRAINT fk_notification_workorder FOREIGN KEY (WorkOrderID) REFERENCES WorkOrder(WorkOrderID), 
   CONSTRAINT fk_notification_notificationtype FOREIGN KEY (NotificationTypeID) REFERENCES NotificationType(NotificationTypeID), 
   CONSTRAINT fk_notification_notificationmethod FOREIGN KEY (NotificationMethodID) REFERENCES NotificationMethod(NotificationMethodID)
