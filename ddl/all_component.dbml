@@ -1,13 +1,111 @@
 // DBML script for Inspection Module schema
-// Author: George Foster (TPXImpact)
-// Email: george.foster@tpximpact.com
+// Author(s): George Foster (TPXImpact), Rizwan Nobeebux (Data Futurists), Elena Iurco (Data Futurists)
+// Email(s): george.foster@tpximpact.com, rizwan.nobeebux@datafuturists.com, elena.iurco@datafuturists.com
 
-// Script created for use with dbdiagram.io
-// Links to Property, Tenant and Tenancy tables commented out
+// Script created for use with dbdiagram.io for ERD
 
 // --------------------------------------
-// Code List Tables
+// Inspection Component
 // --------------------------------------
+
+// Main Tables
+
+Table HazardType {
+  HazardTypeID int [pk, increment]
+  HazardType nvarchar(100)
+  HealthRiskRatingID int
+  Category nvarchar(500)
+
+  Note: 'Stores types of hazards and their associated health risk ratings.'
+}
+
+Table InspectionHazard {
+  InspectionHazardID int [pk, increment]
+  HazardTypeID int
+  InspectionID int
+  HazardReportID int
+  SeverityID int
+  Notes nvarchar(500)
+
+  Note: 'Links inspections with reported hazards including severity and notes.'
+}
+
+Table HazardReport {
+  HazardReportID int [pk, increment]
+  PropertyID int
+  TenantID int
+  DateReported date
+  ReportedBy nvarchar(100)
+  Description nvarchar(500)
+  PhotoEvidence nvarchar(500)
+  LocationDetails nvarchar(500)
+  InvestigationTypeID int
+  InvestigationDueDate date
+  EmergencyActionTaken bit
+  MadeSafeDate date
+  FurtherWorkRequired bit
+  FurtherWorkDueDate date
+  ReportStatusID int
+
+  Note: 'Captures reported hazards including details and status.'
+}
+
+Table Inspection {
+  InspectionID int [pk, increment]
+  PropertyID int
+  TenantID int
+  TenancyID int
+  TriggerSourceID int 
+  HazardReportedDate date
+  InspectionScheduledDate date
+  InspectionCompletedDate date
+  InspectorName nvarchar(100)
+  HazardConfirmed bit
+  RepairRequired bit
+  RepairScheduledDate date
+  RepairCompletedDate date
+  SLABreachFlag bit
+  EscalationStatusID int
+  NotificationSentToTenant bit
+  InspectionNotes nvarchar(500)
+
+  Note: 'Details inspections including schedule, status, and outcomes.'
+}
+
+Table Notification {
+  NotificationID int [pk, increment]
+  InspectionID int
+  TenantID int
+  WorkOrderID int
+  NotificationTypeID int
+  DateSent date
+  NotificationMethodID int
+  ContentSummary nvarchar(500)
+
+  Note: 'Records notifications sent to tenants about inspections or repairs.'
+}
+
+Table Escalation {
+  EscalationID int [pk, increment]
+  InspectionID int
+  EscalationReason nvarchar(100)
+  EscalationStageID int
+  EscalationTypeID int
+  EscalatedTo nvarchar(100)
+  EscalationStartDate date
+  EscalationEndDate date
+  ActionTaken nvarchar(500)
+  CompensationOffered bit
+  CompensationAmount decimal(10,2)
+  AlternativeAccommodationOffered bit
+  AlternativeAccommodationDetails nvarchar(500)
+  TenantAcceptance bit
+  EscalationNotes nvarchar(500)
+
+  Note: 'Tracks escalations made during the inspection or repair process.'
+}
+
+// Codelists/lookup Tables
 
 Table HealthRiskRating {
   HealthRiskRatingID int [pk, increment]
@@ -79,7 +177,137 @@ Table EscalationType {
   Note: 'Defines types of escalation actions taken.'
 }
 
-// Lookup Tables
+// Relationships
+
+Ref: HazardType.HealthRiskRatingID > HealthRiskRating.HealthRiskRatingID
+Ref: InspectionHazard.HazardTypeID > HazardType.HazardTypeID
+Ref: InspectionHazard.InspectionID > Inspection.InspectionID
+Ref: InspectionHazard.HazardReportID > HazardReport.HazardReportID
+Ref: InspectionHazard.SeverityID > Severity.SeverityID
+Ref: HazardReport.PropertyID > property.property_id
+Ref: HazardReport.TenantID > TenantPerson.TenantID
+Ref: HazardReport.InvestigationTypeID > InvestigationType.InvestigationTypeID
+Ref: HazardReport.ReportStatusID > ReportStatus.ReportStatusID
+Ref: Inspection.PropertyID > property.property_id
+Ref: Inspection.TenantID > TenantPerson.TenantID
+Ref: Inspection.TenancyID > Tenancy.TenancyID
+Ref: Inspection.TriggerSourceID > TriggerSource.TriggerSourceID
+Ref: Inspection.EscalationStatusID > EscalationStatus.EscalationStatusID
+Ref: Notification.InspectionID > Inspection.InspectionID
+Ref: Notification.TenantID > TenantPerson.TenantID
+Ref: Notification.WorkOrderID > WorkOrder.WorkOrderID
+Ref: Notification.NotificationTypeID > NotificationType.NotificationTypeID
+Ref: Notification.NotificationMethodID > NotificationMethod.NotificationMethodID
+Ref: Escalation.InspectionID > Inspection.InspectionID
+Ref: Escalation.EscalationStageID > EscalationStage.EscalationStageID
+Ref: Escalation.EscalationTypeID> EscalationType.EscalationTypeID
+
+// --------------------------------------
+// Property Component
+// --------------------------------------
+
+// Main Tables
+
+Table site {
+  site_id integer [pk]
+  site_name varchar(255) [not null]
+}
+
+Table property {
+  property_id integer [pk]
+  property_name varchar(255) [not null]
+  site_id integer [not null]
+}
+
+Table unit {
+  unit_id integer [pk]
+  property_id integer [not null]
+  alert_type_id integer 
+  lease varchar(255)
+}
+
+Table address {
+  address_id integer [pk]
+  unit_id integer [not null]
+  address_line varchar(255)
+  building_name varchar(255)
+  street_name varchar(255)
+  building_number varchar(50)
+  floor integer
+  city_name varchar(100) [not null]
+  country varchar(100) [not null]
+  post_code varchar(20) [not null]
+}
+
+Table physical_characteristics {
+  physical_char_id integer [pk]
+  property_id integer [not null]
+  window_glazing_type_id integer
+  wall_insulation_type_id integer
+  roof_insulation_type_id integer
+  ventilation_type varchar(100)
+  built_year integer
+  construction_type_id integer 
+  last_updated_date date [not null]
+}
+
+Table heating_system {
+  heating_system_id integer [pk]
+  property_id integer [not null]
+  energy_control varchar(100)
+  heat_conversion_method varchar(100)
+  purpose varchar(100)
+  is_smart_system boolean [default: false]
+  installation_date date
+  manufacturer varchar(255)
+  model_number varchar(100)
+  last_serviced_date date
+  notes text
+}
+
+Table thermal_transmittance {
+  thermal_trans_id integer [pk]
+  physical_char_id integer [not null]
+  u_value numeric(5,3) [not null]
+  element varchar(100) [not null]
+  measurement_date date [not null]
+  notes text
+}
+
+Table energy_performance_certification {
+  epc_id integer [pk]
+  unit_id integer [not null]
+  certificate_number varchar(50) [unique, not null]
+  current_energy_rating integer [not null]
+  current_energy_band char [not null]
+  potential_energy_rating integer [not null]
+  potential_energy_band char [not null]
+  current_env_impact_rating integer [not null]
+  current_env_impact_band char [not null]
+  potential_env_impact_rating integer [not null]
+  potential_env_impact_band char [not null]
+  co2_per_year integer [not null]
+  space_heating_cost_year numeric(10,2) [not null]
+  water_heating_cost_year numeric(10,2) [not null]
+  lighting_cost_year numeric(10,2) [not null]
+  total_energy_cost_year numeric(12,2) [not null]
+  energy_use_per_sqm_year integer [not null]
+  recommendation_summary text
+}
+
+Table certification {
+  certification_id integer [pk]
+  unit_id integer [not null]
+  certification_type_id integer [not null]
+  issue_date date [not null]
+  expiry_date date [not null]
+  issued_by varchar(255) [not null]
+  status varchar(50) [not null]
+  attachment_url varchar(2048)
+}
+
+// Codelists/lookup Tables
+
 Table energy_efficiency_band_code {
   band_id integer [pk]
   code char [unique, not null]
@@ -115,203 +343,32 @@ Table certification_type_code {
   code varchar(50) [unique, not null]
 }
 
+// Relationships
+
+Ref: property.site_id > site.site_id
+Ref: unit.property_id > property.property_id
+Ref: unit.alert_type_id > location_alert_type_code.alert_type_id
+Ref: address.unit_id > unit.unit_id
+Ref: physical_characteristics.property_id > property.property_id
+Ref: physical_characteristics.window_glazing_type_id > glazing_layer_type_code.glazing_type_id
+Ref: physical_characteristics.wall_insulation_type_id > wall_insulation_type_code.insulation_type_id
+Ref: physical_characteristics.roof_insulation_type_id > roof_insulation_type_code.insulation_type_id
+Ref: physical_characteristics.construction_type_id > construction_type_code.construction_type_id
+Ref: heating_system.property_id > property.property_id
+Ref: thermal_transmittance.physical_char_id > physical_characteristics.physical_char_id
+Ref: energy_performance_certification.unit_id > unit.unit_id
+Ref: energy_performance_certification.current_energy_band > energy_efficiency_band_code.band_id
+Ref: energy_performance_certification.potential_energy_band > energy_efficiency_band_code.band_id
+Ref: energy_performance_certification.current_env_impact_band > energy_efficiency_band_code.band_id
+Ref: energy_performance_certification.potential_env_impact_band > energy_efficiency_band_code.band_id
+Ref: certification.unit_id > unit.unit_id
+Ref: certification.certification_type_id > certification_type_code.certification_type_id
 
 // --------------------------------------
+// Tenant Component
+// --------------------------------------
+
 // Main Tables
-// --------------------------------------
-
-Table HazardType {
-  HazardTypeID int [pk, increment]
-  HazardType nvarchar(100)
-  HealthRiskRatingID int [ref: > HealthRiskRating.HealthRiskRatingID]
-  Category nvarchar(500)
-
-  Note: 'Stores types of hazards and their associated health risk ratings.'
-}
-
-Table InspectionHazard {
-  InspectionHazardID int [pk, increment]
-  HazardTypeID int [ref: > HazardType.HazardTypeID]
-  InspectionID int [ref: > Inspection.InspectionID]
-  HazardReportID int [ref: > HazardReport.HazardReportID]
-  SeverityID int [ref: > Severity.SeverityID]
-  Notes nvarchar(500)
-
-  Note: 'Links inspections with reported hazards including severity and notes.'
-}
-
-Table HazardReport {
-  HazardReportID int [pk, increment]
-  PropertyID int //[ref: > Property.PropertyID]
-  TenantID int //[ref: > TenantPerson.TenantID]
-  DateReported date
-  ReportedBy nvarchar(100)
-  Description nvarchar(500)
-  PhotoEvidence nvarchar(500)
-  LocationDetails nvarchar(500)
-  InvestigationTypeID int [ref: > InvestigationType.InvestigationTypeID]
-  InvestigationDueDate date
-  EmergencyActionTaken bit
-  MadeSafeDate date
-  FurtherWorkRequired bit
-  FurtherWorkDueDate date
-  ReportStatusID int [ref: > ReportStatus.ReportStatusID]
-
-  Note: 'Captures reported hazards including details and status.'
-}
-
-Table Inspection {
-  InspectionID int [pk, increment]
-  PropertyID int //[ref: > Property.PropertyID]
-  TenantID int //[ref: > TenantPerson.TenantID]
-  TenancyID int //[ref: > Tenancy.TenancyID]
-  TriggerSourceID int [ref: > TriggerSource.TriggerSourceID]
-  HazardReportedDate date
-  InspectionScheduledDate date
-  InspectionCompletedDate date
-  InspectorName nvarchar(100)
-  HazardConfirmed bit
-  RepairRequired bit
-  RepairScheduledDate date
-  RepairCompletedDate date
-  SLABreachFlag bit
-  EscalationStatusID int [ref: > EscalationStatus.EscalationStatusID]
-  NotificationSentToTenant bit
-  InspectionNotes nvarchar(500)
-
-  Note: 'Details inspections including schedule, status, and outcomes.'
-}
-
-Table Notification {
-  NotificationID int [pk, increment]
-  InspectionID int [ref: > Inspection.InspectionID]
-  TenantID int //[ref: > TenantPerson.TenantID]
-  WorkOrderID int //[ref: > WorkOrder.WorkOrderID]
-  NotificationTypeID int [ref: > NotificationType.NotificationTypeID]
-  DateSent date
-  NotificationMethodID int [ref: > NotificationMethod.NotificationMethodID]
-  ContentSummary nvarchar(500)
-
-  Note: 'Records notifications sent to tenants about inspections or repairs.'
-}
-
-Table Escalation {
-  EscalationID int [pk, increment]
-  InspectionID int [ref: > Inspection.InspectionID]
-  EscalationReason nvarchar(100)
-  EscalationStageID int [ref: > EscalationStage.EscalationStageID]
-  EscalationTypeID int [ref: > EscalationType.EscalationTypeID]
-  EscalatedTo nvarchar(100)
-  EscalationStartDate date
-  EscalationEndDate date
-  ActionTaken nvarchar(500)
-  CompensationOffered bit
-  CompensationAmount decimal(10,2)
-  AlternativeAccommodationOffered bit
-  AlternativeAccommodationDetails nvarchar(500)
-  TenantAcceptance bit
-  EscalationNotes nvarchar(500)
-
-  Note: 'Tracks escalations made during the inspection or repair process.'
-}
-
-Table site {
-  site_id integer [pk]
-  site_name varchar(255) [not null]
-}
-
-Table property {
-  property_id integer [pk]
-  property_name varchar(255) [not null]
-  site_id integer [ref: > site.site_id, not null]
-}
-
-Table unit {
-  unit_id integer [pk]
-  property_id integer [ref: > property.property_id, not null]
-  alert_type_id integer [ref: > location_alert_type_code.alert_type_id]
-  lease varchar(255)
-}
-
-Table address {
-  address_id integer [pk]
-  unit_id integer [ref: > unit.unit_id, not null]
-  address_line varchar(255)
-  building_name varchar(255)
-  street_name varchar(255)
-  building_number varchar(50)
-  floor integer
-  city_name varchar(100) [not null]
-  country varchar(100) [not null]
-  post_code varchar(20) [not null]
-}
-
-Table physical_characteristics {
-  physical_char_id integer [pk]
-  property_id integer [ref: > property.property_id, not null]
-  window_glazing_type_id integer [ref: > glazing_layer_type_code.glazing_type_id]
-  wall_insulation_type_id integer [ref: > wall_insulation_type_code.insulation_type_id]
-  roof_insulation_type_id integer [ref: > roof_insulation_type_code.insulation_type_id]
-  ventilation_type varchar(100)
-  built_year integer
-  construction_type_id integer [ref: > construction_type_code.construction_type_id]
-  last_updated_date date [not null]
-}
-
-Table heating_system {
-  heating_system_id integer [pk]
-  property_id integer [ref: > property.property_id, not null]
-  energy_control varchar(100)
-  heat_conversion_method varchar(100)
-  purpose varchar(100)
-  is_smart_system boolean [default: false]
-  installation_date date
-  manufacturer varchar(255)
-  model_number varchar(100)
-  last_serviced_date date
-  notes text
-}
-
-Table thermal_transmittance {
-  thermal_trans_id integer [pk]
-  physical_char_id integer [ref: > physical_characteristics.physical_char_id, not null]
-  u_value numeric(5,3) [not null]
-  element varchar(100) [not null]
-  measurement_date date [not null]
-  notes text
-}
-
-Table energy_performance_certification {
-  epc_id integer [pk]
-  unit_id integer [ref: > unit.unit_id, not null]
-  certificate_number varchar(50) [unique, not null]
-  current_energy_rating integer [not null]
-  current_energy_band char [ref: > energy_efficiency_band_code.band_id, not null]
-  potential_energy_rating integer [not null]
-  potential_energy_band char [ref: > energy_efficiency_band_code.band_id, not null]
-  current_env_impact_rating integer [not null]
-  current_env_impact_band char [ref: > energy_efficiency_band_code.band_id, not null]
-  potential_env_impact_rating integer [not null]
-  potential_env_impact_band char [ref: > energy_efficiency_band_code.band_id, not null]
-  co2_per_year integer [not null]
-  space_heating_cost_year numeric(10,2) [not null]
-  water_heating_cost_year numeric(10,2) [not null]
-  lighting_cost_year numeric(10,2) [not null]
-  total_energy_cost_year numeric(12,2) [not null]
-  energy_use_per_sqm_year integer [not null]
-  recommendation_summary text
-}
-
-Table certification {
-  certification_id integer [pk]
-  unit_id integer [ref: > unit.unit_id, not null]
-  certification_type_id integer [ref: > certification_type_code.certification_type_id, not null]
-  issue_date date [not null]
-  expiry_date date [not null]
-  issued_by varchar(255) [not null]
-  status varchar(50) [not null]
-  attachment_url varchar(2048)
-}
 
 Table TenantPerson {
     TenantID varchar(50) [pk]
@@ -324,7 +381,7 @@ Table TenantPerson {
 
 Table Tenancy {
     TenancyID varchar(50) [pk]
-    TenantID varchar(50) [not null, ref: > TenantPerson.TenantID]
+    TenantID varchar(50) [not null]
     AddressID varchar(50) [not null]
     StartDate date [not null]
     EndDate date
@@ -334,8 +391,8 @@ Table Tenancy {
 
 Table HouseholdMemberPerson {
     HouseholdMemberID varchar(50) [pk]
-    TenantID varchar(50) [not null, ref: > TenantPerson.TenantID]
-    TenancyID varchar(50) [not null, ref: > Tenancy.TenancyID]
+    TenantID varchar(50) [not null]
+    TenancyID varchar(50) [not null]
     FullName varchar(255) [not null]
     DateOfBirth date
     RelationshipToTenant varchar(100)
@@ -346,133 +403,154 @@ Table HouseholdMemberPerson {
     RiskAssessmentDate date
 }
 
-Table WorkPriority {
-    ID varchar [pk]
-    PriorityCode varchar
-    PriorityDescription varchar
-    EffectiveDateTime int
-    NumberOfDays int
-    Comments text
-    RequiredStartDateTime timestamp
-    RequiredCompletionDateTime timestamp
-}
+// Relationships
 
-Table WorkElement {
-    WorkElementID varchar [pk]
-    RateScheduleItem varchar
-    ImpactedAssetReference varchar
-    Trade int
-    ServiceChargeSubject varchar
-    DependsOn varchar
-}
+Ref: Tenancy.TenantID > TenantPerson.TenantID
+Ref: HouseholdMemberPerson.TenantID > TenantPerson.TenantID
+Ref: HouseholdMemberPerson.TenancyID > Tenancy.TenancyID
 
-Table WorkElementDependency {
-    WorkElementID varchar
-    DependsOnWorkElement varchar
-    Type varchar
-    Timing interval
-    
-    indexes {
-        (WorkElementID, DependsOnWorkElement) [pk]
-    }
-}
+// --------------------------------------
+// Tenant Component
+// --------------------------------------
 
-Table WorkOrder {
-    WorkOrderID int [pk]
-    WorkElementID varchar
-    AddressID int
-    InspectionID int
-    EscalationID int
-    TenancyID int
-    TenantID int
-    LocationAlertID varchar
-    PersonAlertID varchar
-    WorkPriorityID varchar
-    HazardReportID varchar
-    DateRaised date
-    DateReported date
-    PlannedStartDate date
-    PlannedFinishDate date
-    ActualCompletionDateTime timestamp
-    DescriptionOfWork text
-    EstimatedCost decimal
-    EstimatedLabourHours int
-    LocationOfRepair text
-    JobStatusUpdate text
-    SpatialLocation text
-    RepairSLABreachFlag text
-}
+// Main Tables
 
-Table WorkOrderStatusHistory {
-    WorkOrderID int
-    Status text
-    UpdatedBy text
-    Timestamp timestamp
-    Comments text
-
-    indexes {
-        (WorkOrderID, Timestamp) [pk]
-    }
-}
-
-Table WorkOrderComplete {
-    WorkOrderID varchar [pk]
-    BillOfMaterialItem text
-    CompletedWorkElements text
-    OperativesUsed text
-    JobStatusUpdate text
-    FollowOnWork text
-}
-
-Table WorkOrderAccessInformation {
-    WorkOrderID varchar [pk]
-    KeySafe text
-    Description text
-}
-
-Table AlertRegardingLocation {
-    ID varchar [pk]
-    Type text
-    Attachment text
-    Comments text
-}
-
-Table AlertRegardingPerson {
-    ID varchar [pk]
-    Type text
-    Comments text
+Table ContractorOrganisation {
+  ContractorOrganisationID varchar PK
+  Name varchar
+  ContractorPortal varchar
+  Subcontractors text
 }
 
 Table WorkClass {
-    ID varchar [pk]
-    WorkClassCode varchar
-    WorkClassDescription varchar
+  WorkClassID varchar PK
+  WorkClassCode varchar
+  WorkClassDescription text
 }
 
-Table ContractorOrganisation {
-    ID varchar [pk]
-    Name text
-    ContractorPortal text
-    Subcontractors text
+Table WorkPriority {
+  WorkPriorityID varchar PK
+  PriorityCode varchar
+  PriorityDescription text
+  EffectiveDateTime timestamp
+  NumberOfDays int
+  Comments text
+  RequiredStartDate date
+  RequiredCompletionDate date
 }
 
 Table TradeCode {
-    Code varchar [pk]
-    CustomCode varchar
-    CustomName varchar
+  Code varchar PK
+  CustomCode varchar
+  CustomName varchar
 }
 
 Table RateScheduleItem {
-    ID varchar [pk]
-    M3NHFSORCode varchar
-    CustomCode varchar
-    CustomName varchar
+  RateScheduleItemID varchar PK
+  M3NHFSORCode varchar
+  Quantity decimal
+  CustomCode varchar
+  CustomName varchar
+}
+
+Table WorkOrder {
+  WorkOrderID varchar PK
+  WorkElementID varchar
+  AddressID varchar
+  InspectionID varchar
+  EscalationID varchar
+  TenancyID varchar
+  TenantID varchar
+  HazardReportID varchar
+  WorkClassID varchar
+  LocationAlertID varchar
+  PersonAlertID varchar
+  WorkPriorityID varchar
+  ContractorOrganisationID varchar
+  DateRaised date
+  DateReported date
+  PlannedStartDate date
+  PlannedFinishDate date
+  ActualStartDateTime timestamp
+  ActualCompletionDateTime timestamp
+  DescriptionOfWork text
+  EstimatedCost decimal
+  EstimatedLabourHours decimal
+  LocationOfRepair varchar
+  JobStatusUpdate varchar
+  RepairSLABreachFlag varchar
+}
+
+Table WorkElement {
+  WorkElementID varchar PK
+  WorkOrderID varchar
+  RateScheduleItemID varchar
+  TradeCode varchar
+  ServiceChargeSubject varchar
+}
+
+Table WorkElementDependency {
+  WorkElementID varchar PK
+  DependsOnWorkElementID varchar
+  Type varchar
+  Timing varchar
+}
+
+Table WorkOrderStatusHistory {
+  WorkOrderStatusHistoryID varchar PK
+  WorkOrderID varchar
+  StatusCode varchar
+  UpdatedBy varchar
+  Reason text
+  ReasonCode varchar
+  CreatedDateTime timestamp
+  EnteredDateTime timestamp
+  ExistedDateTime timestamp
+  Comments text
+}
+
+Table WorkOrderComplete {
+  WorkOrderCompleteID varchar PK
+  WorkOrderID varchar
+  BillOfMeterialItem varchar
+  CompletedWorkElements text
+  OperativesUsed text
+  JobStatusUpdate varchar
+  FollowOnWork varchar
+}
+
+Table WorkOrderAccessInformation {
+  WorkOrderAccessInformationID varchar PK
+  WorkOrderID varchar
+  Description varchar
+  KeySafe text
+}
+
+Table AlertRegardingLocation {
+  LocationAlertID varchar PK
+  AlertType varchar
+  Attachments text
+  Comments text
+}
+
+Table AlertRegardingPerson {
+  PersonAlertID varchar PK
+  AlertType varchar
+  Comments text
 }
 
 // Relationships
-Ref: WorkOrder.WorkElementID > WorkElement.WorkElementID
+
+Ref: WorkOrder.WorkClassID > WorkClass.WorkClassID
+Ref: WorkOrder.WorkPriorityID > WorkPriority.WorkPriorityID
+Ref: WorkOrder.ContractorOrganisationID > ContractorOrganisation.ContractorOrganisationID
+Ref: WorkElement.WorkOrderID > WorkOrder.WorkOrderID
+Ref: WorkElement.RateScheduleItemID > RateScheduleItem.RateScheduleItemID
+Ref: WorkElement.TradeCode > TradeCode.Code
 Ref: WorkElementDependency.WorkElementID > WorkElement.WorkElementID
-Ref: WorkElementDependency.DependsOnWorkElement > WorkElement.WorkElementID
+Ref: WorkElementDependency.DependsOnWorkElementID > WorkElement.WorkElementID
 Ref: WorkOrderStatusHistory.WorkOrderID > WorkOrder.WorkOrderID
 Ref: WorkOrderComplete.WorkOrderID > WorkOrder.WorkOrderID
 Ref: WorkOrderAccessInformation.WorkOrderID > WorkOrder.WorkOrderID
+Ref: WorkOrder.LocationAlertID > AlertRegardingLocation.LocationAlertID
+Ref: WorkOrder.PersonAlertID > AlertRegardingPerson.PersonAlertID
