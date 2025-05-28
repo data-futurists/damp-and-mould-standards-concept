@@ -106,7 +106,7 @@ Table InspectionHazard {
 Table HazardReport {
   HazardReportID int [pk, increment]
   PropertyID int //[ref: > Property.PropertyID]
-  TenantID int //[ref: > Tenant.TenantID]
+  TenantID int //[ref: > TenantPerson.TenantID]
   DateReported date
   ReportedBy nvarchar(100)
   Description nvarchar(500)
@@ -126,7 +126,7 @@ Table HazardReport {
 Table Inspection {
   InspectionID int [pk, increment]
   PropertyID int //[ref: > Property.PropertyID]
-  TenantID int //[ref: > Tenant.TenantID]
+  TenantID int //[ref: > TenantPerson.TenantID]
   TenancyID int //[ref: > Tenancy.TenancyID]
   TriggerSourceID int [ref: > TriggerSource.TriggerSourceID]
   HazardReportedDate date
@@ -148,7 +148,7 @@ Table Inspection {
 Table Notification {
   NotificationID int [pk, increment]
   InspectionID int [ref: > Inspection.InspectionID]
-  TenantID int //[ref: > Tenant.TenantID]
+  TenantID int //[ref: > TenantPerson.TenantID]
   WorkOrderID int //[ref: > WorkOrder.WorkOrderID]
   NotificationTypeID int [ref: > NotificationType.NotificationTypeID]
   DateSent date

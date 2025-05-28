@@ -1,0 +1,857 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Inspection Module Data Model",
+  "type": "object",
+  "properties": {
+    "HazardType": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/HazardType" }
+    },
+    "InspectionHazard": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/InspectionHazard" }
+    },
+    "HazardReport": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/HazardReport" }
+    },
+    "Inspection": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/Inspection" }
+    },
+    "Notification": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/Notification" }
+    },
+    "Escalation": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/Escalation" }
+    },
+    "HealthRiskRating": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/HealthRiskRating" }
+    },
+    "Severity": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/Severity" }
+    },
+    "InvestigationType": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/InvestigationType" }
+    },
+    "ReportStatus": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/ReportStatus" }
+    },
+    "TriggerSource": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/TriggerSource" }
+    },
+    "EscalationStatus": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/EscalationStatus" }
+    },
+    "NotificationType": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/NotificationType" }
+    },
+    "NotificationMethod": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/NotificationMethod" }
+    },
+    "EscalationStage": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/EscalationStage" }
+    },
+    "EscalationType": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/EscalationType" }
+    },
+    "energy_efficiency_band_codes": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/energy_efficiency_band_code" }
+    },
+    "location_alert_type_codes": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/location_alert_type_code" }
+    },
+    "glazing_layer_type_codes": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/glazing_layer_type_code" }
+    },
+    "roof_insulation_type_codes": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/roof_insulation_type_code" }
+    },
+    "wall_insulation_type_codes": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/wall_insulation_type_code" }
+    },
+    "construction_type_codes": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/construction_type_code" }
+    },
+    "certification_type_codes": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/certification_type_code" }
+    },
+    "sites": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/site" }
+    },
+    "properties": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/property" }
+    },
+    "units": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/unit" }
+    },
+    "addresses": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/address" }
+    },
+    "physical_characteristics": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/physical_characteristics" }
+    },
+    "heating_systems": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/heating_system" }
+    },
+    "thermal_transmittances": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/thermal_transmittance" }
+    },
+    "energy_performance_certifications": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/energy_performance_certification" }
+    },
+    "certifications": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/certification" }
+    },
+    "WorkOrder": { "$ref": "#/$defs/WorkOrder" }
+  },
+  "required": [
+    "HazardType",
+    "InspectionHazard",
+    "HazardReport",
+    "Inspection",
+    "Notification",
+    "Escalation",
+    "energy_efficiency_band_codes",
+    "location_alert_type_codes",
+    "glazing_layer_type_codes",
+    "roof_insulation_type_codes",
+    "wall_insulation_type_codes",
+    "construction_type_codes",
+    "certification_type_codes",
+    "sites",
+    "properties",
+    "units",
+    "addresses",
+    "physical_characteristics",
+    "heating_systems",
+    "thermal_transmittances",
+    "energy_performance_certifications",
+    "certifications"
+  ],
+  "additionalProperties": false,
+  "definitions": {
+    "HazardType": {
+      "type": "object",
+      "description": "Table storing types of hazards.",
+      "properties": {
+        "HazardTypeID": { "type": "integer", "description": "Unique identifier for the hazard type." },
+        "HazardType": { "type": "string", "description": "Name of the hazard type." },
+        "HealthRiskRatingID": { "type": "integer", "description": "Reference to the health risk rating." },
+        "Category": { "type": "string", "description": "Category or grouping for the hazard type." }
+      },
+      "required": ["HazardType", "HealthRiskRatingID"]
+    },
+    "HazardReport": {
+      "type": "object",
+      "description": "Table storing hazard reports submitted.",
+      "properties": {
+        "HazardReportID": { "type": "integer", "description": "Unique identifier for the hazard report." },
+        "PropertyID": { "type": "integer", "description": "Reference to the property." },
+        "TenantID": { "type": "integer", "description": "Reference to the tenant." },
+        "DateReported": { "type": "string", "format": "date", "description": "Date the hazard was reported." },
+        "ReportedBy": { "type": "string", "description": "ID of the person who reported the hazard." },
+        "Description": { "type": "string", "description": "Detailed description of the reported hazard." },
+        "PhotoEvidence": { "type": "string", "description": "URL or path to photo evidence." },
+        "LocationDetails": { "type": "string", "description": "Details about the location of the hazard." },
+        "InvestigationTypeID": { "type": "integer", "description": "Reference to type of investigation." },
+        "InvestigationDueDate": { "type": "string", "format": "date", "description": "Due date for investigation to be completed." },
+        "EmergencyActionTaken": { "type": "boolean", "description": "Whether emergency action was taken." },
+        "MadeSafeDate": { "type": "string", "format": "date", "description": "Date hazard was made safe." },
+        "FurtherWorkRequired": { "type": "boolean", "description": "Whether further work is required." },
+        "FurtherWorkDueDate": { "type": "string", "format": "date", "description": "Due date for further work to be completed." },
+        "ReportStatusID": { "type": "integer", "description": "Reference to the status of the report." }
+      },
+      "required": [
+        "PropertyID", "TenantID", "DateReported", "ReportedBy",
+        "InvestigationTypeID", "InvestigationDueDate", "EmergencyActionTaken",
+        "FurtherWorkRequired", "ReportStatusID"
+      ]
+    },
+    "Inspection": {
+      "type": "object",
+      "description": "Table storing inspection details.",
+      "properties": {
+        "InspectionID": { "type": "integer", "description": "Unique identifier for the inspection." },
+        "PropertyID": { "type": "integer", "description": "Reference to the property being inspected." },
+        "TenantID": { "type": "integer", "description": "Reference to the tenant." },
+        "TenancyID": { "type": "integer", "description": "Reference to the tenancy." },
+        "TriggerSourceID": { "type": "integer", "description": "Reference to what triggered the inspection." },
+        "HazardReportedDate": { "type": "string", "format": "date", "description": "Date the hazard was reported." },
+        "InspectionScheduledDate": { "type": "string", "format": "date", "description": "Scheduled date for inspection." },
+        "InspectionCompletedDate": { "type": "string", "format": "date", "description": "Date inspection was completed." },
+        "InspectorName": { "type": "string", "description": "Name of the inspector." },
+        "HazardConfirmed": { "type": "boolean", "description": "Whether a hazard was confirmed." },
+        "RepairRequired": { "type": "boolean", "description": "Whether repair is required." },
+        "RepairScheduledDate": { "type": "string", "format": "date", "description": "Scheduled date for repair." },
+        "RepairCompletedDate": { "type": "string", "format": "date", "description": "Date repair was completed." },
+        "SLABreachFlag": { "type": "boolean", "description": "Whether the SLA was breached." },
+        "EscalationStatusID": { "type": "integer", "description": "Reference to escalation status." },
+        "NotificationSentToTenant": { "type": "boolean", "description": "Whether tenant was notified." },
+        "InspectionNotes": { "type": "string", "description": "Additional notes from inspection." }
+      },
+      "required": [
+        "PropertyID", "TenantID", "TenancyID", "TriggerSourceID",
+        "HazardReportedDate", "HazardConfirmed", "RepairRequired",
+        "SLABreachFlag", "EscalationStatusID", "NotificationSentToTenant"
+      ]
+    },
+
+    "InspectionHazard": {
+      "type": "object",
+      "description": "Table mapping inspections to hazards found.",
+      "properties": {
+        "InspectionHazardID": { "type": "integer", "description": "Unique identifier for the inspection hazard." },
+        "HazardTypeID": { "type": "integer", "description": "Reference to the hazard type." },
+        "InspectionID": { "type": "integer", "description": "Reference to the inspection." },
+        "HazardReportID": { "type": "integer", "description": "Reference to the original hazard report." },
+        "SeverityID": { "type": "integer", "description": "Reference to the severity level." },
+        "Notes": { "type": "string", "description": "Additional notes about the hazard." }
+      },
+      "required": ["HazardTypeID", "InspectionID", "HazardReportID", "SeverityID"]
+    },
+
+    "Notification": {
+      "type": "object",
+      "description": "Table storing notifications related to inspections.",
+      "properties": {
+        "NotificationID": { "type": "integer", "description": "Unique identifier for the notification." },
+        "InspectionID": { "type": "integer", "description": "Reference to the inspection." },
+        "TenantID": { "type": "integer", "description": "Reference to the tenant." },
+        "WorkOrderID": { "type": "integer", "description": "Reference to the work order." },
+        "NotificationTypeID": { "type": "integer", "description": "Type of notification." },
+        "DateSent": { "type": "string", "format": "date", "description": "Date the notification was sent." },
+        "NotificationMethodID": { "type": "integer", "description": "Method used to send the notification." },
+        "ContentSummary": { "type": "string", "description": "Summary of the notification content." }
+      },
+      "required": [
+        "InspectionID", "TenantID", "WorkOrderID",
+        "NotificationTypeID", "DateSent", "NotificationMethodID"
+      ]
+    },
+
+    "Escalation": {
+      "type": "object",
+      "description": "Table storing escalation actions and tracking.",
+      "properties": {
+        "EscalationID": { "type": "integer", "description": "Unique identifier for the escalation." },
+        "InspectionID": { "type": "integer", "description": "Reference to the related inspection." },
+        "EscalationReason": { "type": "string", "description": "Reason for escalation." },
+        "EscalationStageID": { "type": "integer", "description": "Stage of the escalation." },
+        "EscalationTypeID": { "type": "integer", "description": "Type of escalation." },
+        "EscalatedTo": { "type": "string", "description": "Person or team escalated to." },
+        "EscalationStartDate": { "type": "string", "format": "date", "description": "Start date of escalation." },
+        "EscalationEndDate": { "type": "string", "format": "date", "description": "End date of escalation (if any)." },
+        "ActionTaken": { "type": "string", "description": "Actions taken in response to escalation." },
+        "CompensationOffered": { "type": "boolean", "description": "Whether compensation was offered." },
+        "CompensationAmount": { "type": "number", "description": "Amount of compensation offered (if any)." },
+        "AlternativeAccommodationOffered": { "type": "boolean", "description": "If alternative accommodation was offered." },
+        "AlternativeAccommodationDetails": { "type": "string", "description": "Details of the accommodation offered." },
+        "TenantAcceptance": { "type": "boolean", "description": "Whether the tenant accepted the escalation outcome." },
+        "EscalationNotes": { "type": "string", "description": "Additional notes about the escalation." }
+      },
+      "required": [
+        "InspectionID", "EscalationStageID", "EscalationTypeID",
+        "EscalatedTo", "EscalationStartDate", "CompensationOffered",
+        "AlternativeAccommodationOffered", "TenantAcceptance"
+      ]
+    },
+
+    "HealthRiskRating": {
+      "type": "object",
+      "description": "Code list for health risk rating levels.",
+      "properties": {
+        "HealthRiskRatingID": { "type": "integer", "description": "ID of the health risk rating." },
+        "HealthRiskRating": { "type": "string", "description": "Health risk rating level." }
+      },
+      "required": ["HealthRiskRating"]
+    },
+
+    "Severity": {
+      "type": "object",
+      "description": "Code list for hazard severity levels.",
+      "properties": {
+        "SeverityID": { "type": "integer", "description": "ID of the severity level." },
+        "Severity": { "type": "string", "description": "Severity level description." }
+      },
+      "required": ["Severity"]
+    },
+
+    "InvestigationType": {
+      "type": "object",
+      "description": "Code list for types of investigation.",
+      "properties": {
+        "InvestigationTypeID": { "type": "integer", "description": "ID of the investigation type." },
+        "InvestigationType": { "type": "string", "description": "Description of the investigation type." }
+      },
+      "required": ["InvestigationType"]
+    },
+
+    "ReportStatus": {
+      "type": "object",
+      "description": "Code list for report statuses.",
+      "properties": {
+        "ReportStatusID": { "type": "integer", "description": "ID of the report status." },
+        "ReportStatus": { "type": "string", "description": "Name of the report status." }
+      },
+      "required": ["ReportStatus"]
+    },
+
+    "TriggerSource": {
+      "type": "object",
+      "description": "Code list for what triggered inspections.",
+      "properties": {
+        "TriggerSourceID": { "type": "integer", "description": "ID of the trigger source." },
+        "TriggerSource": { "type": "string", "description": "Source that triggered the inspection." }
+      },
+      "required": ["TriggerSource"]
+    },
+
+    "EscalationStatus": {
+      "type": "object",
+      "description": "Code list for escalation statuses.",
+      "properties": {
+        "EscalationStatusID": { "type": "integer", "description": "ID of the escalation status." },
+        "EscalationStatus": { "type": "string", "description": "Description of escalation status." }
+      },
+      "required": ["EscalationStatus"]
+    },
+
+    "NotificationType": {
+      "type": "object",
+      "description": "Code list for types of notifications.",
+      "properties": {
+        "NotificationTypeID": { "type": "integer", "description": "ID of the notification type." },
+        "NotificationType": { "type": "string", "description": "Type of notification." }
+      },
+      "required": ["NotificationType"]
+    },
+
+    "EscalationStage": {
+      "type": "object",
+      "description": "Code list for stages in escalation lifecycle.",
+      "properties": {
+        "EscalationStageID": { "type": "integer", "description": "ID of the escalation stage." },
+        "EscalationStage": { "type": "string", "description": "Stage name." }
+      },
+      "required": ["EscalationStage"]
+    },
+
+    "NotificationMethod": {
+      "type": "object",
+      "description": "Code list for notification methods.",
+      "properties": {
+        "NotificationMethodID": { "type": "integer", "description": "ID of the notification method." },
+        "NotificationMethod": { "type": "string", "description": "Type of notification method." }
+      },
+      "required": ["NotificationMethod"]
+    },
+
+    "EscalationType": {
+      "type": "object",
+      "description": "Code list for types of escalations.",
+      "properties": {
+        "EscalationTypeID": { "type": "integer", "description": "ID of the escalation type." },
+        "EscalationType": { "type": "string", "description": "Type of escalation." }
+      },
+      "required": ["EscalationType"]
+    },
+    "energy_efficiency_band_code": {
+      "type": "object",
+      "properties": {
+        "band_id": { "type": "integer", "description": "Unique identifier for the energy rating band" },
+        "code": { "type": "string", "maxLength": 1, "description": "The energy rating band for a given unit within a property" }
+      },
+      "required": ["band_id", "code"],
+      "additionalProperties": false
+    },
+    "location_alert_type_code": {
+      "type": "object",
+      "description": "Any alerts the contractor needs to be aware of that affect this work order and relate to the location (site/property/unit)",
+      "properties": {
+        "alert_type_id": { "type": "integer", "description": "Unique identifier for the location alert type" },
+        "code": { "type": "string", "description": "The code representing the alert type for a specific location within a property" }
+      },
+      "required": ["alert_type_id", "code"],
+      "additionalProperties": false
+    },
+    "glazing_layer_type_code": {
+      "type": "object",
+      "description": "The type of glazing used in the windows of a property",
+      "properties": {
+        "glazing_type_id": { "type": "integer", "description": "Unique identifier for the glazing type" },
+        "code": { "type": "string", "description": "The code representing the glazing type for a specific window in a property" }
+      },
+      "required": ["glazing_type_id", "code"],
+      "additionalProperties": false
+    },
+    "roof_insulation_type_code": {
+      "type": "object",
+      "description": "The type of insulation used in the roof of a property",
+      "properties": {
+        "insulation_type_id": { "type": "integer", "description": "Unique identifier for the roof insulation type" },
+        "code": { "type": "string", "description": "The code representing the roof insulation type for a specific property" }
+      },
+      "required": ["insulation_type_id", "code"],
+      "additionalProperties": false
+    },
+    "wall_insulation_type_code": {
+      "type": "object",
+      "description": "The type of insulation used in the walls of a property",
+      "properties": {
+        "insulation_type_id": { "type": "integer", "description": "Unique identifier for the wall insulation type" },
+        "code": { "type": "string", "description": "The code representing the wall insulation type for a specific property" }
+      },
+      "required": ["insulation_type_id", "code"],
+      "additionalProperties": false
+    },
+    "construction_type_code": {
+      "type": "object",
+      "description": "The type of construction used for a property",
+      "properties": {
+        "construction_type_id": { "type": "integer", "description": "Unique identifier for the construction type" },
+        "code": { "type": "string", "description": "The code representing the construction type for a specific property" }
+      },
+      "required": ["construction_type_id", "code"],
+      "additionalProperties": false
+    },
+    "certification_type_code": {
+      "type": "object",
+      "description": "The type of certification (compliance and safety) associated with a property or unit",
+      "properties": {
+        "certification_type_id": { "type": "integer", "description": "Unique identifier for the certification type" },
+        "code": { "type": "string", "description": "The code representing the certification type for a specific property or unit" }
+      },
+      "required": ["certification_type_id", "code"],
+      "additionalProperties": false
+    },
+    "site": {
+      "type": "object",
+      "description": "Part of the spatial hierarchy that describes a physical parcel of land and the buildings and facilities on, under or above that land parcel. Sites are assumed to be continuous, that it so say not divided by other parcels or features (for example roads) that are not part of the site. However, particularly in residential sites, the concept of an 'estate' can also be represented as a site, notwithstanding the presence of (adopted) roads subdividing the site in to discontinuous parts.",
+      "properties": {
+        "site_id": { "type": "integer", "description": "A unique identification reference for the Site." },
+        "site_name": { "type": "string", "description": "Formal Name. Eg Corporate Headquarters site" }
+      },
+      "required": ["site_id", "site_name"],
+      "additionalProperties": false
+    },
+    "property": {
+      "type": "object",
+      "description": "Part of the spatial hierarchy that describes a physical building or structure. Properties have a strict relationship with both Sites and Floors: a Property can be within one and only one Site, and wholly contains zero or more Floors. Properties may be contiguous with adjacent properties (whether or not they belong to the same Site) or discrete (separated by  land or other features). For contiguous/connected buildings, identification of where Property boundaries lie can be determined by considering the following: (i) if the users of the building have a specific name for it - for example 'North Tower', then it should be considered a separate Property even if it is physically connected to another Property at lower levels (and the low-level connecting structures are likely to be considered their own, separate Property); (ii) a Property is a physical description of space that is composed of a number of floors that - for the most part - are arranged one on top of the other (i.e. each floor is completely or largely overlapping the floor below). Properties also usually allow containment to be determined - someone or something should be either 'in' or 'out' of the Property. This can be particularly helpful when understanding Properties that represent outside structures like surface parking, play areas or sports fields.",
+      "properties": {
+        "property_id": { "type": "integer", "description": "A unique reference for the Property (which may be a 'UPRN', or a land registration title number)." },
+        "property_name": { "type": "string", "description": "This name this building is known as in the context. This may be the actual building name (which can also be provided in the Address entity) or it may be a name for this building in some other context." },
+        "site_id": { "type": "integer", "description": "A unique identification reference for the Site."}
+      },
+      "required": ["property_id", "property_name", "site_id"],
+      "additionalProperties": false
+    },
+    "unit": {
+      "type": "object",
+      "description": "A logical portion of one or more Properties - possibly including the entirety of a Property - that share some common attribute(s), for example (and most commonly) are part of a particular lease demise. A Unit may or may not specify specific Spaces that it is composed of, but irrespective of  this specificity, can nonetheless contain information about the implied physical space - for example its measured area.",
+      "properties": {
+        "unit_id": { "type": "integer", "description": "Unique reference for this Unit that distinguishes it from other Units." },
+        "property_id": { "type": "integer", "description": "A unique reference for the Property (which may be a 'UPRN', or a land registration title number)."},
+        "alert_type_id": { "type": "integer", "description": "Unique identifier for the location alert type" },
+        "lease": { "type": "string", "description": "Links the Lease to a Unit. The unit that this lease relates to"}
+      },
+      "required": ["unit_id", "property_id", "lease"],
+      "additionalProperties": false
+    },
+    "address": {
+      "type": "object",
+      "description": "Provides various common ways of describing a place. This is a base entity from which several other more specific types of address are derived.",
+      "properties": {
+        "address_id": { "type": "integer", "description": "Unique identifier for the address" },
+        "unit_id": { "type": "integer", "description": "Unique reference for this Unit that distinguishes it from other Units." },
+        "address_line": { "type": "string", "description": "Where the address cannot be separated into the explicit fields, use this as the generic 'address lines' for the address" },
+        "building_name": { "type": "string", "description": "The name of the building or house on a street of this address" },
+        "street_name": { "type": "string", "description":"Name of a street or thoroughfare" },
+        "building_number": { "type": "string", "description": "The number of a building or house on a street of this address." },
+        "floor": { "type": "integer", "description": "To identify, by name or number, of the floor in a building, as part of an address." },
+        "country": { "type": "string", "description": "To provide country information related to this address. The country of the address (not the country code)" },
+        "city_name": { "type": "string", "description": "The name of the city, town or village of this address." },
+        "post_code": { "type": "string", "description": "The identifier for one or more properties according to the postal service of that country; a group of letters and/or numbers added to the postal address to assist in the sorting of mail. E.g. UK postcode or US zip code" }
+      },
+      "required": ["address_id", "unit_id", "country", "postal_code"],
+      "additionalProperties": false
+    },
+    "physical_characteristics": {
+      "type": "object",
+      "description": "Physical characteristics of a property, including insulation types and construction details.",
+      "properties": {
+        "physical_char_id": { "type": "integer", "description": "Unique identifier for the physical characteristics record" },
+        "property_id": { "type": "integer", "description": "A unique reference for the Property (which may be a 'UPRN', or a land registration title number)." },
+        "wall_insulation_type_id": { "type": "integer", "description": "Summary information about whether or not the main, principal or majority of the walls have a cavity and, if so, how it is filled." },
+        "roof_insulation_type_id": { "type": "integer", "description": "Summary information about the insulation type and average depth used in the roof." },
+        "ventilation_type": { "type": "string", "description": "Summary information about the type of ventilation used in the property." },
+        "built_year": { "type": "integer", "description": "The year the property was built." },
+        "construction_type_id": { "type": "integer", "description": "Unique identifier for the construction type" },
+        "last_updated_date": { "type": "string", "format": "date", "description": "The date when the physical characteristics were last updated." }
+      },
+      "required": ["physical_char_id", "property_id", "last_updated_date"],
+      "additionalProperties": false
+    },
+    "heating_system": {
+      "type": "object",
+      "description": "A type of building system used to convert a fuel into heat, usually for the purposes of heating either water or space.",
+      "properties": {
+        "heating_system_id": { "type": "integer", "description": "Unique identifier for the heating system" },
+        "property_id": { "type": "integer", "description": "A unique reference for the Property (which may be a 'UPRN', or a land registration title number)." },
+        "energy_control": { "type": "string", "description": "What methods are used to control the power consumed by the device using the fuel." },
+        "heat_conversion_method": { "type": "string", "description": "The method used to convert the fuel into heat." },
+        "purpose": { "type": "string", "description": "Optionally specify what this fuel is used for. This can be space heating, water heating or some other purpose." },
+        "is_smart_system": { "type": "boolean", "description": "Does the system using the fuel have the ability to report current system state and some level of condition, usage and diagnostics?" },
+        "installation_date": { "type": "string", "format": "date", "description": "The date when the heating system was installed." },
+        "manufacturer": { "type": "string", "description": "The name of the manufacturer of the heating system." },
+        "model_number": { "type": "string", "description": "The model number of the heating system." },
+        "last_serviced_date": { "type": "string", "format": "date",  "description": "The date when the heating system was last serviced." },
+        "notes": { "type": "string", "description": "Any additional notes or comments about the heating system." }
+      },
+      "required": ["heating_system_id", "property_id"],
+      "additionalProperties": false
+    },
+    "thermal_transmittance": {
+      "type": "object",
+      "description": "Describes the thermal transmittance (also known as the U-value) or a building or element of a building (e.g. the roof).",
+      "properties": {
+        "thermal_trans_id": { "type": "integer", "description": "Unique identifier for the thermal transmittance record" },
+        "physical_char_id": { "type": "integer", "description": "Unique identifier for the physical characteristics record" },
+        "u_value": { "type": "number", "description": "The U-value measured in watts per square metre-kelvin (W/m2K) of the given element." },
+        "element": { "type": "string", "description": "Identifies the element of a building that is considered for a thermal transmittance calculation, for example the walls or windows." },
+        "measurement_date": { "type": "string", "format": "date" , "description": "The date when the U-value was measured." },
+        "notes": { "type": "string", "description": "Any additional notes or comments about the thermal transmittance." }
+      },
+      "required": ["thermal_trans_id", "physical_char_id", "u_value", "element", "measurement_date"],
+      "additionalProperties": false
+    },
+    "energy_performance_certification": {
+      "type": "object",
+      "description": "A UK statutory certification for the energy and envrionmental performance of buildings/dwellings.",
+      "properties": {
+        "epc_id": { "type": "integer", "description": "Unique identifier for the energy performance certification" },
+        "unit_id": { "type": "integer", "description": "Unique reference for this Unit that distinguishes it from other Units." },
+        "certificate_number": { "type": "string", "description": "The unique number assigned to the energy performance certificate." },
+        "current_energy_rating": { "type": "integer", "description": "The current energy efficiency numerical rating, as calculated using the Standard Assessment Procedure (SAP)" },
+        "current_energy_band": { "type": "string", "maxLength": 1, "description": "The current energy efficiency rating band (based on the energy efficiency rating)" },
+        "potential_energy_rating": { "type": "integer", "description": "The potential energy efficiency numerical rating, as calculated using the Standard Assessment Procedure (SAP)" },
+        "potential_energy_band": { "type": "string", "maxLength": 1, "description": "The potential energy efficiency rating band (based on the energy efficiency rating)" },
+        "current_env_impact_rating": { "type": "integer", "description": "The current environmental impact numerical rating, as calculated using the Standard Assessment Procedure (SAP)" },
+        "current_env_impact_band": { "type": "string", "maxLength": 1, "description": "The current environmental impact rating band (based on the environmental impact rating)" },
+        "potential_env_impact_rating": { "type": "integer", "description": "The potential environmental impact numerical rating, as calculated using the Standard Assessment Procedure (SAP)" },
+        "potential_env_impact_band": { "type": "string", "maxLength": 1, "description": "The potential environmental impact rating band (based on the environmental impact rating)" },
+        "co2_per_year": { "type": "integer", "description": "The tonnes of carbon dioxide currently produced by this property each year" },
+        "space_heating_cost_year": { "type": "number", "description": "The current cost of heating the space per year" },
+        "water_heating_cost_year": { "type": "number", "description": "The current cost of heating the water per year" },
+        "lighting_cost_year": { "type": "number", "description": "The current cost of lighting per year" },
+        "total_energy_cost_year": { "type": "number", "description": "The energy use per year measured in kWh/sqm" },
+        "energy_use_per_sqm_year": { "type": "integer", "description": "The energy use per year measured in kWh/sqm" },
+        "recommendation_summary": { "type": "string", "description": "Summary of recommendations for improving the energy efficiency of the property" }
+      },
+      "required": [
+        "epc_id",
+        "unit_id",
+        "certificate_number",
+        "current_energy_rating",
+        "current_energy_band",
+        "potential_energy_rating",
+        "potential_energy_band",
+        "current_env_impact_rating",
+        "current_env_impact_band",
+        "potential_env_impact_rating",
+        "potential_env_impact_band",
+        "co2_per_year",
+        "space_heating_cost_year",
+        "water_heating_cost_year",
+        "lighting_cost_year",
+        "total_energy_cost_year",
+        "energy_use_per_sqm_year"
+      ],
+      "additionalProperties": false
+    },
+    "certification": {
+      "type": "object",
+      "description": "A record describing an official certification for some entity (an asset, property, person etc.) including informaiton about the type and validity of the ceritifcation and a copy of the certificate itself.",
+      "properties": {
+        "certification_id": { "type": "integer", "description": "Unique identifier for the certification" },
+        "unit_id": { "type": "integer", "description": "Unique reference for this Unit that distinguishes it from other Units." },
+        "certification_type_id": { "type": "integer", "description": "Unique identifier for the certification type" },
+        "issue_date": { "type": "string", "format": "date", "description": "The date that this safety certificate was issued (i.e. the date of the inspection). This may before the Valid From date in situations where the regulation permits inspections to be carried out in advance of the anniversary of the preceeding inspection." },
+        "expiry_date": { "type": "string", "format": "date", "description": "When the certification is valid to or expires/requires renewal" },
+        "issued_by": { "type": "string", "description": "The party (which may be the organization or a specific operative within the organization) who issued the certificate." },
+        "status": { "type": "string", "description": "The status of the certification (e.g. valid, expired, pending)" },
+        "attachment_url": { "type": "string", "format": "uri", "description": "URL to the attachment of the certification document" }
+      },
+      "required": ["certification_id", "unit_id", "certification_type_id", "issue_date", "expiry_date", "issued_by", "status"],
+      "additionalProperties": false
+    },
+    "Tenancy": {
+      "description": "Records details about the tenancy agreement between a housing provider and a tenant.",
+      "primaryKey": ["TenancyID"],
+      "properties": {
+        "TenancyID": { "type": "string", "description": "Unique identifier for the tenancy." },
+        "TenantID": { "type": "string", "description": "Foreign key referencing the primary tenant." },
+        "AddressID": { "type": "string", "description": "Identifier of the property address linked to the tenancy." },
+        "StartDate": { "type": "string", "format": "date", "description": "The start date of the tenancy." },
+        "EndDate": { "type": "string", "format": "date", "description": "The end date of the tenancy, if applicable." },
+        "TenancyType": { "type": "string", "description": "Type of tenancy (e.g., fixed-term, assured, introductory)." },
+        "TenancyStatus": { "type": "string", "description": "Current status of the tenancy (e.g., active, ended, paused)." }
+      },
+      "foreignKeys": [
+        { "columns": ["TenantID"], "reference": { "table": "TenantPerson", "columns": ["TenantID"] } }
+      ]
+    },
+    "TenantPerson": {
+      "description": "Information about the tenant, typically the primary person named on the tenancy agreement.",
+      "primaryKey": ["TenantID"],
+      "properties": {
+        "TenantID": { "type": "string", "description": "Unique identifier for the tenant." },
+        "FullName": { "type": "string", "description": "Full name of the tenant." },
+        "DateOfBirth": { "type": "string", "format": "date", "description": "Tenant's date of birth." },
+        "ContactDetails": { "type": "string", "description": "Contact information such as phone or email." },
+        "VulnerabilityFlag": { "type": "boolean", "description": "Indicates whether the tenant is considered vulnerable." },
+        "PersonAlertCode": { "type": "string", "description": "Code representing a person-level alert related to the tenant." }
+      }
+    },
+    "HouseholdMemberPerson": {
+      "description": "Details of individuals living in the household who are not the primary tenant.",
+      "primaryKey": ["HouseholdMemberID"],
+      "properties": {
+        "HouseholdMemberID": { "type": "string", "description": "Unique identifier for the household member." },
+        "TenantID": { "type": "string", "description": "Tenant this household member is associated with." },
+        "TenancyID": { "type": "string", "description": "Tenancy this household member belongs to." },
+        "FullName": { "type": "string", "description": "Full name of the household member." },
+        "DateOfBirth": { "type": "string", "format": "date", "description": "Date of birth of the household member." },
+        "RelationshipToTenant": { "type": "string", "description": "Describes how this person is related to the tenant." },
+        "IsContractHolder": { "type": "boolean", "description": "Indicates whether this person is a contract holder." },
+        "VulnerabilityDetails": { "type": "string", "description": "Additional vulnerability details if applicable." },
+        "PersonAlertCode": { "type": "string", "description": "Alert code linked to the household member." },
+        "RiskAssessmentStatus": { "type": "string", "description": "Status of any risk assessment conducted." },
+        "RiskAssessmentDate": { "type": "string", "format": "date", "description": "Date when the risk assessment was conducted." }
+      },
+      "foreignKeys": [
+        { "columns": ["TenantID"], "reference": { "table": "TenantPerson", "columns": ["TenantID"] } },
+        { "columns": ["TenancyID"], "reference": { "table": "Tenancy", "columns": ["TenancyID"] } }
+      ]
+    },
+    "WorkOrder": {
+      "type": "object",
+      "description": "Details of the work to be done (including the location) that can be used to determine the resources required when establishing available appointments. This Work Order may have one or more Work Elements, and available appointments must be provided for each Work Element included.",
+      "properties": {
+        "WorkOrderID": { "type": "string", "description": "Unique identifier for the work order." },
+        "WorkElementID": { "type": "string", "description": "Unique identifier for the work element." },
+        "AddressID": { "type": "string", "description": "Identifier of the address where the issue is reported." },
+        "InspectionID": { "type": "string", "description": "Identifier for the associated inspection." },
+        "EscalationID": { "type": "string", "description": "Optional identifier for any escalation linked to this work order." },
+        "TenancyID": { "type": "string", "description": "Identifier for the associated tenancy." },
+        "TenantID": { "type": "string", "description": "Identifier for the tenant affected." },
+        "HazardReportID": { "type": "string", "description": "Identifier for the related hazard report." },
+        "WorkClassID": { "type": "string", "description": "Identifier for the work class." },
+        "WorkPriorityID": { "type": "string", "description": "Identifier for the work priority." },
+        "ContractorOrganisationID": { "type": "string", "description": "Identifier for the contractor organisation." },
+        "LocationAlertID": { "type": "string", "description": "Identifier for the location alert." },
+        "PersonAlertID": { "type": "string", "description": "Identifier for the person alert." },
+        "DateRaised": { "type": "string", "format": "date", "description": "The date and time this work order was raised, which may be earlier than an issued/approved date if it is being raised by a party without authority to approve." },
+        "DateReported": { "type": "string", "format": "date", "description": "The date and time the service request was made by the customer that gave rise to this work order, which may be earlier than the date raised if there was any delay between the customer report and issuing this work order (for example if there was a backlog processing emails)." },
+        "PlannedStartDate": { "type": "string", "format": "date", "description": "The date and time the work is planned to start." },
+        "PlannedFinishDate": { "type": "string", "format": "date", "description": "The date and time the work is planned to finish." },
+        "ActualStartDateTime": { "type": "string", "format": "date-time", "description": "The date and time the work actually started." },
+        "ActualCompletionDateTime": { "type": "string", "format": "date-time", "description": "The date and time the work was actually completed." },
+        "DescriptionOfWork": { "type": "string", "description": "A written or verbal account, representation, or explanation of the problem, incident or situation to be corrected or resolved. Description of work either from SOR standard coding or private code." },
+        "EstimatedCost": { "type": "number", "description": "Projected total expense of labor, material etc to complete the work." },
+        "EstimatedLabourHours": { "type": "number", "description": "Projected time in effort to complete the work, expressed in hours." },
+        "LocationOfRepair": { "type": "string", "description": "Description of where in the unit the work is to be undertaken." },
+        "JobStatusUpdate": { "type": "string", "description": "The status of the job at the time of the update." },
+        "RepairSLABreachFlag": { "type": "string", "description": "Flag indicating if the repair is a breach of the Service Level Agreement (SLA)." }
+      },
+      "required": ["WorkOrderID", "AddressID", "WorkPriorityID", "DateRaised","DateReported", "PlannedStartDate", "ActualStartDateTime","PlannedFinishDate", "ActualCompletionDateTime"]
+    },
+
+    "WorkElement": {
+      "type": "object",
+      "description": "Details of a specific work element or task to be performed, often specific to a single trade. In UK housing, this may also include a more specific Schedule of Rates code.",
+      "properties": {
+        "WorkElementID": { "type": "string", "description": "Unique identifier for the work element." },
+        "WorkOrderID": { "type": "string", "description": "Identifier for the associated work order." },
+        "RateScheduleItemID": {"type": "string",  "description": "Identifier for the rate schedule item."},
+        "TradeCode": { "$ref": "#/$defs/TradeCode" },
+        "ServiceChargeSubject": { "type": "string", "description": "The classification of this work element according to the underlying service charge type that the associated costs will be attributed to (prior to any apportionment to tenants)." },
+        "DependsOn": { "$ref": "#/$defs/WorkElementDependency" }
+      },
+      "required": ["WorkElementID", "WorkOrderID", "RateScheduleItemID"]
+    },
+
+    "WorkElementDependency": {
+      "type": "object",
+      "description": "Describes the relationship between work elements in a project, where one work element's execution is dependent on the completion or timing of another.",
+      "properties": {
+        "WorkElementID": { "type": "string", "description": "Identifier for the work element." },
+        "DependsOnWorkElementID": { "type": "string", "description": "Identifier for the work element that this one depends on." },
+        "Type": { "type": "string", "description": "Specifies the nature of the dependency between items - for example the dependent item cannot start until the item it depends on is complete." },
+        "Timing": { "type": "string", "description": "Specifies the minimum time between the dependent item and the item it depends upon. For example, a plastered wall might require 7 days to dry out before it can be painted, or a referral may not be alllowed until 3 months after a registration is made." }
+      },
+      "required": ["WorkElementID", "DependsOnWorkElementID", "Type"]
+    },
+
+    "WorkPriority": {
+      "type": "object",
+      "description": "The information relevant to the urgency of the Service Request or Work Order.",
+      "properties": {
+        "WorkPriorityID": { "type": "string", "description": "Unique identifier for the work priority." },
+        "PriorityCode": { "type": "string", "description": "Specific code describing the importance or urgency of the work request or work order." },
+        "PriorityDescription": { "type": "string", "description": "Text description of the Priority Code - for example 'Medium in this organization means within 5 days'." },
+        "EffectiveDateTime": { "type": "integer", "description": "Time, Day, Month and Year of when the request status code became applicable." },
+        "NumberOfDays": { "type": "integer", "description": "Numeric value defining the expected maximum number of days for completion of the work order." },
+        "Comments": { "type": "string", "description": "Narrative, free-form text for comments associated with the priority assigned to a work order, which might explain specific variations to the standard time associated with this priority - for example the work order was not raised immediately when the customer reported the issue and therefore the time remaining to resolve the issue is reduced."},
+        "RequiredStartDateTime": { "type": "string", "description": "Time, Day, Month and Year of when the work activity specified in the work order is to begin." },
+        "RequiredCompletionDateTime": { "type": "string", "description": "Time, Day, Month and Year of when the work activity specified in the work order is to be completed." }
+      },
+      "required": ["WorkPriorityID", "PriorityCode", "EffectiveDateTime", "RequiredStartDateTime", "RequiredCompletionDateTime"]
+
+    },
+
+    "WorkClass": {
+      "type": "object",
+      "description": "Defines the work class assigned to a work order.",
+      "properties": {
+        "WorkClassID": { "type": "string", "description": "Unique identifier for the work class." },
+        "WorkClassCode": { "type": "string", "description": "Specific code describing the type of work to be performed." },
+        "WorkClassDescription": { "type": "string", "description": "Text description of the Work Class Code." }
+      },
+      "required": ["WorkClassID", "WorkClassCode"]
+    },
+
+    "ContractorOrganisation": {
+      "type": "object",
+      "description": "Represents a company or entity that provides goods or services under a contract. This entity includes various attributes that detail the organization's name, references, subcontractors, and online presence, among other relevant information.",
+      "properties": {
+        "ContractorOrganisationID": { "type": "string", "description": "Unique identifier for the contractor organisation." },
+        "Name": { "type": "string", "description": "Name of the contractor organisation." },
+        "ContractorPortal": { "type": "string", "description": "URL of the contractor's portal." },
+        "Subcontractors": { "type": "string", "description": "List of subcontractors associated with the contractor organisation." }
+      },
+      "required": ["ContractorOrganisationID", "Name"]
+    },
+
+    "TradeCode": {
+      "type": "object",
+      "description": "The trade or trades that are required for a particular work element or that an operative is skilled in.",
+      "properties": {
+        "Code": { "type": "string", "description": "The code representing the trade." },
+        "CustomCode": { "type": "string", "description": "In addition to the standard code, a custom code may also be included where more detail than is available in the standard codes is required." },
+        "CustomName": { "type": "string", "description": "Where a custom code is provided, the name of the trade may also be specified." }
+      },
+      "required": ["Code"]
+    },
+ 
+    "RateScheduleItem": {
+      "type": "object",
+      "description": "An item from a standard or agreed schedule of rates, for example the M3/NHF standard Schedule of Rates.",
+      "properties": {
+        "RateScheduleItemID": { "type": "string", "description": "Unique identifier for the rate schedule item." },
+        "M3NHFSORCode": { "type": "string", "description": "A standard SOR code from the M3/NHF Schedule of Rates." },
+        "CustomCode": { "type": "string", "description": "If this is not a standard code (e.g. from a schedule), provide the custom code here." },
+        "CustomName": { "type": "string", "description": "If this is not a standard code (e.g. from a schedule), provide the name for this custom code here." },
+        "Quantity": { "type": "number", "description": "The quantity of the specified SOR code required." }
+      },
+      "required": ["RateScheduleItemID"]
+    },
+
+    "AlertRegardingLocation": {
+      "type": "object",
+      "description": "Alerts or cautions relating to a location - for example specific known dangers that are present like asbestos or other hazards.",
+      "properties": {
+        "LocationAlertID": { "type": "string", "description": "Unique identifier for the location alert." },
+        "AlertType": { "type": "string", "description": "Type of alert regarding the location, eg - asbestos" },
+        "Attachment": { "type": "string", "description": "File attachment relating to this alert, for example a report or photograph." },
+        "Comments": { "type": "string", "description": "Specific details related to this alert - for example what specifically to be aware of, sensible precautions to take, or what the specific restrictions are." }
+      },
+      "required": ["LocationAlertID", "Type"]
+    },
+
+    "AlertRegardingPerson": {
+      "type": "object",
+      "description": "Alerts or cautions relating to an individual who is or may be present in a particular context - for example when an operative is attending to conduct a repair.",
+      "properties": {
+        "PersonAlertID": { "type": "string", "description": "Unique identifier for the person alert." },
+        "AlertType": { "type": "string", "description": "This provides the specific type of alert that is being flagged, e.g. 'don't visit alone'. NOTE: These alert types and associated comments must not be repeated verbatim on an operatives work order for privacy reasons. Only the information that is essential to the performance of the operatives work should be included, which may be  abstracted or summarized from the details found in the AlertRegardingPerson entity." },
+        "Comments": { "type": "string", "description": "Specific details related to this alert - for example what specifically to be aware of, or sensible precautions to take." }
+      },
+      "required": ["PersonAlertID", "Type"]
+    },
+
+    "WorkOrderStatusHistory": {
+      "type": "object",
+      "description": "This subcomponent is used to record how the status of the Work Order changed over time",
+      "properties": {
+        "WorkOrderStatusHistoryID": { "type": "string", "description": "Unique identifier for the work order status history entry." },
+        "WorkOrderID": { "type": "integer",  "description": "Unique identifier for the work order." },
+        "StatusCode": { "type": "string", "description": "The status code associated with this entry." },
+        "UpdatedBy": { "type": "string", "description": "Name of the person or system that updated the status." },
+        "Reason": { "type": "string", "description": "The descriptive reason that the entry was made, correponding to why there was a change in status." },
+        "ReasonCode": { "type": "string", "description": "The code associated with the reason for the status change." },
+        "CreatedDateTime": { "type": "string", "format": "date-time", "description": "Date and time this entry was created. This may be after the status was technically entered if there was a delay between the status change taking place and it being recorded." },
+        "EnteredDateTime": { "type": "string", "format": "date-time", "description": "The time that the work order entered this status." },
+        "ExitedDateTime": { "type": "string", "format": "date-time", "description": "The time that this entry's status stopped applying, for example the work order moved to a new status." },
+        "Comments": { "type": "string", "description": "Free-form text for comments associated with the status change." }
+      },
+      "required": ["WorkOrderID", "StatusCode", "Reason", "CreatedDateTime"]
+    },
+
+    "WorkOrderComplete": {
+      "type": "object",
+      "description": "Represents a completed work order within a project. This entity tracks the individual work elements that were finished, the operatives involved, the materials used, and any subsequent work orders or updates related to the job.",
+      "properties": {
+        "WorkOrderCompleteID": { "type": "string", "description": "Unique identifier for the completed work order." },
+        "WorkOrderID": { "type": "string", "description": "Unique identifier for the completed work order." },
+        "BillOfMaterialItem": { "type": "string", "description": "The individual rate schedule items (including any custom items) that were use/consumed during the performance of this Work Order. Where Completed Work Elements are listed, the Bill Of Material Items should *not* duplicate the Rate Schedule Items in the Complete Work Elements. Rather, only Rate Schedule Items that are *not* already included in a Completed Work Element should be included here." },
+        "CompletedWorkElements": { "type": "string", "description": "The work elements that were actually completed as part of this work order." },
+        "OperativesUsed": { "type": "string", "description": "The operative(s) who carried out the work. These operatives may also be linked to work elements they were invovled with by specifying one or more work element references on each operative. However, only work element references that are included in the list of Completed Work Elements above should be used." },
+        "JobStatusUpdate": { "type": "string", "description": "The job status updates issued during the execution of this work order." },
+        "FollowOnWork": { "type": "string", "description": "Any follow-on works arising from this work order." }
+      },
+      "required": ["WorkOrderID", "BillOfMaterialItem", "CompletedWorkElements", "OperativesUsed"]
+    },
+
+    "WorkOrderAccessInformation": {
+      "type": "object",
+      "description": "This work order relates to communal areas of the property",
+      "properties": {
+        "WorkOrderAccessInformationID": { "type": "string", "description": "Unique identifier for the work order access information." },
+        "WorkOrderID": { "type": "string", "description": "Unique identifier for the work order." },
+        "Description": { "type": "string", "description": "Narrative description of how to access the relevant parts of the site, property and/or unit." },
+        "KeySafe": { "type": "string", "description": "Details of any keysafe location and access code that may be required to complete work." }
+
+      },
+      "required": ["WorkOrderID", "KeySafe", "Description"]
+    }
+  }
+}

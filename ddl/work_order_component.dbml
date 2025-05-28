@@ -1,133 +1,139 @@
-// Work Order Module DBML Schema
-
-Table WorkPriority {
-    ID varchar [pk]
-    PriorityCode varchar
-    PriorityDescription varchar
-    EffectiveDateTime int
-    NumberOfDays int
-    Comments text
-    RequiredStartDateTime timestamp
-    RequiredCompletionDateTime timestamp
-}
-
-Table WorkElement {
-    WorkElementID varchar [pk]
-    RateScheduleItem varchar
-    ImpactedAssetReference varchar
-    Trade int
-    ServiceChargeSubject varchar
-    DependsOn varchar
-}
-
-Table WorkElementDependency {
-    WorkElementID varchar
-    DependsOnWorkElement varchar
-    Type varchar
-    Timing interval
-    
-    indexes {
-        (WorkElementID, DependsOnWorkElement) [pk]
-    }
-}
-
-Table WorkOrder {
-    WorkOrderID int [pk]
-    WorkElementID varchar
-    AddressID int
-    InspectionID int
-    EscalationID int
-    TenancyID int
-    TenantID int
-    LocationAlertID varchar
-    PersonAlertID varchar
-    WorkPriorityID varchar
-    HazardReportID varchar
-    DateRaised date
-    DateReported date
-    PlannedStartDate date
-    PlannedFinishDate date
-    ActualCompletionDateTime timestamp
-    DescriptionOfWork text
-    EstimatedCost decimal
-    EstimatedLabourHours int
-    LocationOfRepair text
-    JobStatusUpdate text
-    SpatialLocation text
-    RepairSLABreachFlag text
-}
-
-Table WorkOrderStatusHistory {
-    WorkOrderID int
-    Status text
-    UpdatedBy text
-    Timestamp timestamp
-    Comments text
-
-    indexes {
-        (WorkOrderID, Timestamp) [pk]
-    }
-}
-
-Table WorkOrderComplete {
-    WorkOrderID varchar [pk]
-    BillOfMaterialItem text
-    CompletedWorkElements text
-    OperativesUsed text
-    JobStatusUpdate text
-    FollowOnWork text
-}
-
-Table WorkOrderAccessInformation {
-    WorkOrderID varchar [pk]
-    KeySafe text
-    Description text
-}
-
-Table AlertRegardingLocation {
-    ID varchar [pk]
-    Type text
-    Attachment text
-    Comments text
-}
-
-Table AlertRegardingPerson {
-    ID varchar [pk]
-    Type text
-    Comments text
+Table ContractorOrganisation {
+  ContractorOrganisationID varchar PK
+  Name varchar
+  ContractorPortal varchar
+  Subcontractors text
 }
 
 Table WorkClass {
-    ID varchar [pk]
-    WorkClassCode varchar
-    WorkClassDescription varchar
+  WorkClassID varchar PK
+  WorkClassCode varchar
+  WorkClassDescription text
 }
 
-Table ContractorOrganisation {
-    ID varchar [pk]
-    Name text
-    ContractorPortal text
-    Subcontractors text
+Table WorkPriority {
+  WorkPriorityID varchar PK
+  PriorityCode varchar
+  PriorityDescription text
+  EffectiveDateTime timestamp
+  NumberOfDays int
+  Comments text
+  RequiredStartDate date
+  RequiredCompletionDate date
 }
 
 Table TradeCode {
-    Code varchar [pk]
-    CustomCode varchar
-    CustomName varchar
+  Code varchar PK
+  CustomCode varchar
+  CustomName varchar
 }
 
 Table RateScheduleItem {
-    ID varchar [pk]
-    M3NHFSORCode varchar
-    CustomCode varchar
-    CustomName varchar
+  RateScheduleItemID varchar PK
+  M3NHFSORCode varchar
+  Quantity decimal
+  CustomCode varchar
+  CustomName varchar
 }
 
-// Relationships
-Ref: WorkOrder.WorkElementID > WorkElement.WorkElementID
+Table WorkOrder {
+  WorkOrderID varchar PK
+  WorkElementID varchar
+  AddressID varchar
+  InspectionID varchar
+  EscalationID varchar
+  TenancyID varchar
+  TenantID varchar
+  HazardReportID varchar
+  WorkClassID varchar
+  LocationAlertID varchar
+  PersonAlertID varchar
+  WorkPriorityID varchar
+  ContractorOrganisationID varchar
+  DateRaised date
+  DateReported date
+  PlannedStartDate date
+  PlannedFinishDate date
+  ActualStartDateTime timestamp
+  ActualCompletionDateTime timestamp
+  DescriptionOfWork text
+  EstimatedCost decimal
+  EstimatedLabourHours decimal
+  LocationOfRepair varchar
+  JobStatusUpdate varchar
+  RepairSLABreachFlag varchar
+}
+
+Table WorkElement {
+  WorkElementID varchar PK
+  WorkOrderID varchar
+  RateScheduleItemID varchar
+  TradeCode varchar
+  ServiceChargeSubject varchar
+}
+
+Table WorkElementDependency {
+  WorkElementID varchar PK
+  DependsOnWorkElementID varchar
+  Type varchar
+  Timing varchar
+}
+
+Table WorkOrderStatusHistory {
+  WorkOrderStatusHistoryID varchar PK
+  WorkOrderID varchar
+  StatusCode varchar
+  UpdatedBy varchar
+  Reason text
+  ReasonCode varchar
+  CreatedDateTime timestamp
+  EnteredDateTime timestamp
+  ExistedDateTime timestamp
+  Comments text
+}
+
+Table WorkOrderComplete {
+  WorkOrderCompleteID varchar PK
+  WorkOrderID varchar
+  BillOfMeterialItem varchar
+  CompletedWorkElements text
+  OperativesUsed text
+  JobStatusUpdate varchar
+  FollowOnWork varchar
+}
+
+Table WorkOrderAccessInformation {
+  WorkOrderAccessInformationID varchar PK
+  WorkOrderID varchar
+  Description varchar
+  KeySafe text
+}
+
+Table AlertRegardingLocation {
+  LocationAlertID varchar PK
+  AlertType varchar
+  Attachments text
+  Comments text
+}
+
+Table AlertRegardingPerson {
+  PersonAlertID varchar PK
+  AlertType varchar
+  Comments text
+}
+
+Ref: WorkOrder.WorkClassID > WorkClass.WorkClassID
+Ref: WorkOrder.WorkPriorityID > WorkPriority.WorkPriorityID
+Ref: WorkOrder.ContractorOrganisationID > ContractorOrganisation.ContractorOrganisationID
+Ref: WorkElement.WorkOrderID > WorkOrder.WorkOrderID
+Ref: WorkElement.RateScheduleItemID > RateScheduleItem.RateScheduleItemID
+Ref: WorkElement.TradeCode > TradeCode.Code
 Ref: WorkElementDependency.WorkElementID > WorkElement.WorkElementID
-Ref: WorkElementDependency.DependsOnWorkElement > WorkElement.WorkElementID
+Ref: WorkElementDependency.DependsOnWorkElementID > WorkElement.WorkElementID
 Ref: WorkOrderStatusHistory.WorkOrderID > WorkOrder.WorkOrderID
 Ref: WorkOrderComplete.WorkOrderID > WorkOrder.WorkOrderID
 Ref: WorkOrderAccessInformation.WorkOrderID > WorkOrder.WorkOrderID
+Ref: WorkOrder.LocationAlertID > AlertRegardingLocation.LocationAlertID
+Ref: WorkOrder.PersonAlertID > AlertRegardingPerson.PersonAlertID
+
 

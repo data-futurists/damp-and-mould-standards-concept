@@ -1,0 +1,32 @@
+Table TenantPerson {
+  TenantID varchar [pk, note: "Unique identifier for the tenant"]
+  FullName varchar [not null, note: "Full name of the tenant"]
+  DateOfBirth date [note: "Tenant's date of birth"]
+  ContactDetails text [note: "Contact information such as phone or email"]
+  VulnerabilityFlag boolean [default: false, note: "Indicates if the tenant is considered vulnerable"]
+  PersonAlertCode varchar [note: "Code representing an alert related to the tenant"]
+}
+
+Table Tenancy {
+  TenancyID varchar [pk, note: "Unique identifier for the tenancy"]
+  TenantID varchar [not null, ref: > TenantPerson.TenantID, note: "Foreign key referencing the primary tenant"]
+  AddressID varchar [not null, note: "Identifier for the property address"]
+  StartDate date [not null, note: "Start date of the tenancy"]
+  EndDate date [note: "End date of the tenancy"]
+  TenancyType varchar [note: "Type of tenancy (e.g., fixed-term, assured, introductory)"]
+  TenancyStatus varchar [note: "Current tenancy status (e.g., active, ended)"]
+}
+
+Table HouseholdMemberPerson {
+  HouseholdMemberID varchar [pk, note: "Unique identifier for the household member"]
+  TenantID varchar [not null, ref: > TenantPerson.TenantID, note: "Tenant associated with the household member"]
+  TenancyID varchar [not null, ref: > Tenancy.TenancyID, note: "Tenancy associated with the household member"]
+  FullName varchar [not null, note: "Full name of the household member"]
+  DateOfBirth date [note: "Date of birth of the household member"]
+  RelationshipToTenant varchar [note: "Relationship to the primary tenant"]
+  IsContractHolder boolean [default: false, note: "Whether this person is a contract holder"]
+  VulnerabilityDetails text [note: "Additional vulnerability information"]
+  PersonAlertCode varchar [note: "Code representing a person-level alert"]
+  RiskAssessmentStatus varchar [note: "Status of the risk assessment"]
+  RiskAssessmentDate date [note: "Date when the risk assessment was conducted"]
+}
