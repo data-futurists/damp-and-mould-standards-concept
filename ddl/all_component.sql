@@ -418,7 +418,7 @@ CREATE TABLE WorkPriority (
 
 -- Table: TradeCode
 CREATE TABLE TradeCode (
-    Code VARCHAR(100) PRIMARY KEY,                    -- Standard trade code
+    TradeCode VARCHAR(100) PRIMARY KEY,                    -- Standard trade code
     CustomCode VARCHAR(100),                          -- Custom code used by provider
     CustomName VARCHAR(255)                           -- Custom name for the trade
 );

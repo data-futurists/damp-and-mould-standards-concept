@@ -153,9 +153,9 @@ CREATE TABLE AlertRegardingPerson (
 -- WorkOrder Lookup Codes Tables
 -- --------------------------------------------------
 CREATE TABLE work_class_code (
-  work_class_id INTEGER PRIMARY KEY,
-  code VARCHAR(50) NOT NULL UNIQUE,
-  description TEXT NOT NULL
+  WorkClassID INTEGER PRIMARY KEY,
+  WorkClassCode VARCHAR(50) NOT NULL UNIQUE,
+  Description TEXT NOT NULL
 );
 
 INSERT INTO work_class_code (work_class_code_id, code, description) 
@@ -196,8 +196,8 @@ VALUES
 
   
 CREATE TABLE work_priority_code (
-  priority_code_id INTEGER PRIMARY KEY,
-  code VARCHAR(20) NOT NULL UNIQUE,
+  PriorityCodeID INTEGER PRIMARY KEY,
+  PriortityCode VARCHAR(20) NOT NULL UNIQUE,
   description TEXT NOT NULL
 );
 
@@ -214,9 +214,9 @@ INSERT INTO work_priority_code (priority_code_id, code, description) VALUES
   (10, 'Reactive', 'Reactive - unplanned work in response to faults or failures');
 
 CREATE TABLE trade_code (
-  trade_code_id SERIAL PRIMARY KEY,
-  code VARCHAR(20) NOT NULL UNIQUE,
-  description VARCHAR(100) NOT NULL
+  TradeCodeID SERIAL PRIMARY KEY,
+  TradeCode VARCHAR(20) NOT NULL UNIQUE,
+  Description VARCHAR(100) NOT NULL
 );
 
 INSERT INTO trade_code (trade_code_id, code, description) 
@@ -285,16 +285,16 @@ VALUES
   (61, 'TILER', 'Tiler wall and floor');
 
 CREATE TABLE rate_schedule_item_code (
-  rate_schedule_item_code SERIAL PRIMARY KEY,
-  code VARCHAR(10) NOT NULL UNIQUE,
-  description VARCHAR(100) NOT NULL
+  RateScheduleItemID SERIAL PRIMARY KEY,
+  RateScheduleItemCode VARCHAR(10) NOT NULL UNIQUE,
+  Description VARCHAR(100) NOT NULL
 );
 -- need to add the actual codes --
 
 CREATE TABLE personal_alert_type_code (
-  alert_type_id INTEGER PRIMARY KEY,
-  code VARCHAR(50) NOT NULL UNIQUE,
-  description TEXT NOT NULL
+  PersonalAlertCodeID INTEGER PRIMARY KEY,
+  PersonalAlertCode VARCHAR(50) NOT NULL UNIQUE,
+  Description TEXT NOT NULL
 );
 
 INSERT INTO PersonAlertTypeCode (alert_type_id, code, description) 
@@ -325,9 +325,9 @@ VALUES
   (22, 'RefusedAccess', 'Tenant has refused property access for repairs or inspections'),
 
 CREATE TABLE location_alert_type_code (
-  alert_type_id INTEGER PRIMARY KEY,
-  code VARCHAR(50) NOT NULL UNIQUE,
-  description TEXT NOT NULL
+  LocationAlertCodeID INTEGER PRIMARY KEY,
+  LocationAlertCode VARCHAR(50) NOT NULL UNIQUE,
+  Description TEXT NOT NULL
 );
 
 INSERT INTO LocationAlertTypeCode (alert_type_id, code, description)
