@@ -24,7 +24,7 @@
         "WorkPriorityID": { "type": "string", "description": "Identifier for the work priority." },
         "ContractorOrganisationID": { "type": "string", "description": "Identifier for the contractor organisation." },
         "LocationAlertID": { "type": "string", "description": "Identifier for the location alert." },
-        "PersonAlertID": { "type": "str", "description": "Identifier for the person alert." },
+        "PersonAlertID": { "type": "string", "description": "Identifier for the person alert." },
         "DateRaised": { "type": "string", "format": "date", "description": "The date and time this work order was raised, which may be earlier than an issued/approved date if it is being raised by a party without authority to approve." },
         "DateReported": { "type": "string", "format": "date", "description": "The date and time the service request was made by the customer that gave rise to this work order, which may be earlier than the date raised if there was any delay between the customer report and issuing this work order (for example if there was a backlog processing emails)." },
         "PlannedStartDate": { "type": "string", "format": "date", "description": "The date and time the work is planned to start." },
@@ -198,6 +198,7 @@
 
       },
       "required": ["WorkOrderID", "KeySafe", "Description"]
+  
     }
   }
 }
