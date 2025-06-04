@@ -17,7 +17,8 @@ CREATE TABLE Tenancy (
   EndDate DATE,
   TenancyType VARCHAR(100),
   TenancyStatus VARCHAR(100),
-  CONSTRAINT FK_Tenancy_Tenant FOREIGN KEY (TenantID) REFERENCES TenantPerson(TenantID)
+  CONSTRAINT FK_Tenancy_Tenant FOREIGN KEY (TenantID) 
+    REFERENCES TenantPerson(TenantID)
 );
 
 -- HouseholdMemberPerson Table
@@ -33,6 +34,8 @@ CREATE TABLE HouseholdMemberPerson (
   PersonAlertCode VARCHAR(50),
   RiskAssessmentStatus VARCHAR(100),
   RiskAssessmentDate DATE,
-  CONSTRAINT FK_HouseholdMember_Tenant FOREIGN KEY (TenantID) REFERENCES TenantPerson(TenantID),
-  CONSTRAINT FK_HouseholdMember_Tenancy FOREIGN KEY (TenancyID) REFERENCES Tenancy(TenancyID)
+  CONSTRAINT FK_HouseholdMember_Tenant FOREIGN KEY (TenantID) 
+    REFERENCES TenantPerson(TenantID),
+  CONSTRAINT FK_HouseholdMember_Tenancy FOREIGN KEY (TenancyID) 
+    REFERENCES Tenancy(TenancyID)
 );

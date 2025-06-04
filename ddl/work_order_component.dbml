@@ -7,14 +7,16 @@ Table ContractorOrganisation {
 
 Table WorkClass {
   WorkClassID varchar PK
+  WorkClassCodeID varchar
   WorkClassCode varchar
   WorkClassDescription text
 }
 
 Table WorkPriority {
   WorkPriorityID varchar PK
-  PriorityCode varchar
-  PriorityDescription text
+  WorkPriorityCodeID varchar
+  WorkPriorityCode varchar
+  WorkPriorityDescription text
   EffectiveDateTime timestamp
   NumberOfDays int
   Comments text
@@ -23,13 +25,16 @@ Table WorkPriority {
 }
 
 Table TradeCode {
-  Code varchar PK
+  TradeID varchar PK
+  TradeCodeID varchar
+  TradeCode varchar
   CustomCode varchar
   CustomName varchar
 }
 
 Table RateScheduleItem {
   RateScheduleItemID varchar PK
+  RateScheduleItemCodeID varchar
   M3NHFSORCode varchar
   Quantity decimal
   CustomCode varchar
@@ -77,6 +82,7 @@ Table WorkElementDependency {
   DependsOnWorkElementID varchar
   Type varchar
   Timing varchar
+  Description text
 }
 
 Table WorkOrderStatusHistory {
@@ -111,6 +117,7 @@ Table WorkOrderAccessInformation {
 
 Table AlertRegardingLocation {
   LocationAlertID varchar PK
+  LocationAlertCodeID varchar
   AlertType varchar
   Attachments text
   Comments text
@@ -118,6 +125,7 @@ Table AlertRegardingLocation {
 
 Table AlertRegardingPerson {
   PersonAlertID varchar PK
+  PersonalAlertCodeID varchar
   AlertType varchar
   Comments text
 }
@@ -125,15 +133,20 @@ Table AlertRegardingPerson {
 Ref: WorkOrder.WorkClassID > WorkClass.WorkClassID
 Ref: WorkOrder.WorkPriorityID > WorkPriority.WorkPriorityID
 Ref: WorkOrder.ContractorOrganisationID > ContractorOrganisation.ContractorOrganisationID
+Ref: WorkOrder.LocationAlertID > AlertRegardingLocation.LocationAlertID
+Ref: WorkOrder.PersonAlertID > AlertRegardingPerson.PersonAlertID
 Ref: WorkElement.WorkOrderID > WorkOrder.WorkOrderID
 Ref: WorkElement.RateScheduleItemID > RateScheduleItem.RateScheduleItemID
-Ref: WorkElement.TradeCode > TradeCode.Code
+Ref: WorkElement.TradeCodeID > TradeCode.TradeCodeID
 Ref: WorkElementDependency.WorkElementID > WorkElement.WorkElementID
 Ref: WorkElementDependency.DependsOnWorkElementID > WorkElement.WorkElementID
 Ref: WorkOrderStatusHistory.WorkOrderID > WorkOrder.WorkOrderID
 Ref: WorkOrderComplete.WorkOrderID > WorkOrder.WorkOrderID
 Ref: WorkOrderAccessInformation.WorkOrderID > WorkOrder.WorkOrderID
-Ref: WorkOrder.LocationAlertID > AlertRegardingLocation.LocationAlertID
-Ref: WorkOrder.PersonAlertID > AlertRegardingPerson.PersonAlertID
+Ref: AlertRegardingLocation.LocationAlertCodeID > LocationAlertTypeCode.LocationAlertCodeID
+Ref: AlertRegardingPerson.PersonalAlertCodeID > PersonAlertTypeCode.PersonalAlertCodeID
+Ref: WorkPriority.WorkPriorityCodeID > WorkPriorityCode.WorkPriorityCodeID
+Ref: WorkClass.WorkClassCodeID > WorkClassCode.WorkClassCodeID
+
 
 
