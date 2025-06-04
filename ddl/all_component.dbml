@@ -185,16 +185,16 @@ Ref: InspectionHazard.InspectionID > Inspection.InspectionID
 Ref: InspectionHazard.HazardReportID > HazardReport.HazardReportID
 Ref: InspectionHazard.SeverityID > Severity.SeverityID
 Ref: HazardReport.PropertyID > property.property_id
-Ref: HazardReport.TenantID > TenantPerson.TenantID
+Ref: HazardReport.TenantID > Tenant.TenantID
 Ref: HazardReport.InvestigationTypeID > InvestigationType.InvestigationTypeID
 Ref: HazardReport.ReportStatusID > ReportStatus.ReportStatusID
 Ref: Inspection.PropertyID > property.property_id
-Ref: Inspection.TenantID > TenantPerson.TenantID
+Ref: Inspection.TenantID > Tenant.TenantID
 Ref: Inspection.TenancyID > Tenancy.TenancyID
 Ref: Inspection.TriggerSourceID > TriggerSource.TriggerSourceID
 Ref: Inspection.EscalationStatusID > EscalationStatus.EscalationStatusID
 Ref: Notification.InspectionID > Inspection.InspectionID
-Ref: Notification.TenantID > TenantPerson.TenantID
+Ref: Notification.TenantID > Tenant.TenantID
 Ref: Notification.WorkOrderID > WorkOrder.WorkOrderID
 Ref: Notification.NotificationTypeID > NotificationType.NotificationTypeID
 Ref: Notification.NotificationMethodID > NotificationMethod.NotificationMethodID
@@ -370,7 +370,7 @@ Ref: certification.certification_type_id > certification_type_code.certification
 
 // Main Tables
 
-Table TenantPerson {
+Table Tenant {
     TenantID varchar(50) [pk]
     FullName varchar(255) [not null]
     DateOfBirth date
@@ -405,12 +405,12 @@ Table HouseholdMemberPerson {
 
 // Relationships
 
-Ref: Tenancy.TenantID > TenantPerson.TenantID
-Ref: HouseholdMemberPerson.TenantID > TenantPerson.TenantID
+Ref: Tenancy.TenantID > Tenant.TenantID
+Ref: HouseholdMemberPerson.TenantID > Tenant.TenantID
 Ref: HouseholdMemberPerson.TenancyID > Tenancy.TenancyID
 
 // --------------------------------------
-// Tenant Component
+// WorkOrder Component
 // --------------------------------------
 
 // Main Tables
@@ -424,14 +424,16 @@ Table ContractorOrganisation {
 
 Table WorkClass {
   WorkClassID varchar PK
+  WorkClassCodeID varchar
   WorkClassCode varchar
   WorkClassDescription text
 }
 
 Table WorkPriority {
   WorkPriorityID varchar PK
-  PriorityCode varchar
-  PriorityDescription text
+  WorkPriorityCodeID varchar
+  WorkPriorityCode varchar
+  WorkPriorityDescription text
   EffectiveDateTime timestamp
   NumberOfDays int
   Comments text
@@ -439,14 +441,11 @@ Table WorkPriority {
   RequiredCompletionDate date
 }
 
-Table TradeCode {
-  Code varchar PK
-  CustomCode varchar
-  CustomName varchar
-}
+
 
 Table RateScheduleItem {
   RateScheduleItemID varchar PK
+  RateScheduleItemCodeID varchar
   M3NHFSORCode varchar
   Quantity decimal
   CustomCode varchar
@@ -485,7 +484,7 @@ Table WorkElement {
   WorkElementID varchar PK
   WorkOrderID varchar
   RateScheduleItemID varchar
-  TradeCode varchar
+  TradeCodeID varchar
   ServiceChargeSubject varchar
 }
 
@@ -494,6 +493,7 @@ Table WorkElementDependency {
   DependsOnWorkElementID varchar
   Type varchar
   Timing varchar
+  Description text
 }
 
 Table WorkOrderStatusHistory {
@@ -528,6 +528,7 @@ Table WorkOrderAccessInformation {
 
 Table AlertRegardingLocation {
   LocationAlertID varchar PK
+  LocationAlertCodeID varchar
   AlertType varchar
   Attachments text
   Comments text
@@ -535,22 +536,84 @@ Table AlertRegardingLocation {
 
 Table AlertRegardingPerson {
   PersonAlertID varchar PK
+  PersonAlertCodeID varchar
   AlertType varchar
   Comments text
 }
 
-// Relationships
+// Codes Tables
+
+Table TradeCodes {
+  TradeCodeID varchar PK
+  TradeCode varchar
+  CustomCode varchar
+  CustomName varchar
+  Description text
+}
+
+Table WorkPriorityCodes {
+  WorkPriorityCodeID varchar PK
+  WorkPriorityCode varchar
+  Description text
+}
+
+Table WorkClassCodes {
+  WorkClassCodeID varchar PK
+  WorkClassCode varchar
+  Description text
+}
+
+Table RateScheduleItemCodes {
+  RateScheduleItemCodeID varchar PK
+  RateScheduleItemCode varchar
+  Description text
+}
+
+Table PersonAlertTypeCodes {
+  PersonAlertCodeID varchar PK
+  PersonAlertCode varchar
+  Description text
+}
+
+Table LocationAlertTypeCodes {
+  LocationAlertCodeID varchar PK
+  LocationAlertCode varchar
+  Description text
+}
+
+
 
 Ref: WorkOrder.WorkClassID > WorkClass.WorkClassID
 Ref: WorkOrder.WorkPriorityID > WorkPriority.WorkPriorityID
 Ref: WorkOrder.ContractorOrganisationID > ContractorOrganisation.ContractorOrganisationID
-Ref: WorkElement.WorkOrderID > WorkOrder.WorkOrderID
-Ref: WorkElement.RateScheduleItemID > RateScheduleItem.RateScheduleItemID
-Ref: WorkElement.TradeCode > TradeCode.Code
-Ref: WorkElementDependency.WorkElementID > WorkElement.WorkElementID
-Ref: WorkElementDependency.DependsOnWorkElementID > WorkElement.WorkElementID
-Ref: WorkOrderStatusHistory.WorkOrderID > WorkOrder.WorkOrderID
-Ref: WorkOrderComplete.WorkOrderID > WorkOrder.WorkOrderID
-Ref: WorkOrderAccessInformation.WorkOrderID > WorkOrder.WorkOrderID
 Ref: WorkOrder.LocationAlertID > AlertRegardingLocation.LocationAlertID
 Ref: WorkOrder.PersonAlertID > AlertRegardingPerson.PersonAlertID
+Ref: WorkOrder.AddressID > address.address_id
+Ref: WorkOrder.InspectionID > Inspection.InspectionID
+Ref: WorkOrder.EscalationID > Escalation.EscalationID
+Ref: WorkOrder.TenancyID > Tenancy.TenancyID
+Ref: WorkOrder.TenantID > Tenant.TenantID
+Ref: WorkOrder.HazardReportID > HazardReport.HazardReportID
+
+Ref: WorkElement.WorkOrderID > WorkOrder.WorkOrderID
+Ref: WorkElement.RateScheduleItemID > RateScheduleItem.RateScheduleItemID
+Ref: WorkElement.TradeCodeID > TradeCodes.TradeCodeID
+Ref: WorkElementDependency.WorkElementID > WorkElement.WorkElementID
+Ref: WorkElementDependency.DependsOnWorkElementID > WorkElement.WorkElementID
+
+Ref: WorkOrderStatusHistory.WorkOrderID > WorkOrder.WorkOrderID
+
+Ref: WorkOrderComplete.WorkOrderID > WorkOrder.WorkOrderID
+
+Ref: WorkOrderAccessInformation.WorkOrderID > WorkOrder.WorkOrderID
+
+Ref: AlertRegardingLocation.LocationAlertCodeID > LocationAlertTypeCodes.LocationAlertCodeID
+Ref: AlertRegardingPerson.PersonAlertCodeID > PersonAlertTypeCodes.PersonAlertCodeID
+Ref: WorkPriority.WorkPriorityCodeID > WorkPriorityCodes.WorkPriorityCodeID
+Ref: WorkClass.WorkClassCodeID > WorkClassCodes.WorkClassCodeID
+Ref: RateScheduleItem.RateScheduleItemCodeID > RateScheduleItemCodes.RateScheduleItemCodeID
+
+
+
+
+

@@ -35,7 +35,7 @@ CREATE TABLE HazardReport (
   FurtherWorkDueDate DATE NULL, 
   ReportStatusID INT NOT NULL, 
   CONSTRAINT fk_hazardreport_property FOREIGN KEY (PropertyID) REFERENCES Property(PropertyID), 
-  CONSTRAINT fk_hazardreport_tenant FOREIGN KEY (TenantID) REFERENCES TenantPerson(TenantID), 
+  CONSTRAINT fk_hazardreport_tenant FOREIGN KEY (TenantID) REFERENCES Tenant(TenantID), 
   CONSTRAINT fk_hazardreport_investigationtype FOREIGN KEY (InvestigationTypeID) REFERENCES InvestigationType(InvestigationTypeID), 
   CONSTRAINT fk_hazardreport_reportstatus FOREIGN KEY (ReportStatusID) REFERENCES ReportStatus(ReportStatusID), 
   CONSTRAINT chk_emergency_action CHECK (
@@ -74,7 +74,7 @@ CREATE TABLE Inspection (
   NotificationSentToTenant BIT NOT NULL DEFAULT 0, 
   InspectionNotes NVARCHAR(500) NULL, 
   CONSTRAINT fk_inspection_property FOREIGN KEY (PropertyID) REFERENCES Property(PropertyID), 
-  CONSTRAINT fk_inspection_tenant FOREIGN KEY (TenantID) REFERENCES TenantPerson(TenantID), 
+  CONSTRAINT fk_inspection_tenant FOREIGN KEY (TenantID) REFERENCES Tenant(TenantID), 
   CONSTRAINT fk_inspection_tenancy FOREIGN KEY (TenancyID) REFERENCES Tenancy(TenancyID), 
   CONSTRAINT fk_inspection_triggersource FOREIGN KEY (TriggerSourceID) REFERENCES TriggerSource(TriggerSourceID), 
   CONSTRAINT fk_inspection_escalationstatus FOREIGN KEY (EscalationStatusID) REFERENCES EscalationStatus(EscalationStatusID), 
@@ -131,7 +131,7 @@ CREATE TABLE Notification (
   NotificationMethodID INT NOT NULL, 
   ContentSummary NVARCHAR(500) NULL, 
   CONSTRAINT fk_notification_inspection FOREIGN KEY (InspectionID) REFERENCES Inspection(InspectionID), 
-  CONSTRAINT fk_notification_tenant FOREIGN KEY (TenantID) REFERENCES TenantPerson(TenantID), 
+  CONSTRAINT fk_notification_tenant FOREIGN KEY (TenantID) REFERENCES Tenant(TenantID), 
   CONSTRAINT fk_notification_workorder FOREIGN KEY (WorkOrderID) REFERENCES WorkOrder(WorkOrderID), 
   CONSTRAINT fk_notification_notificationtype FOREIGN KEY (NotificationTypeID) REFERENCES NotificationType(NotificationTypeID), 
   CONSTRAINT fk_notification_notificationmethod FOREIGN KEY (NotificationMethodID) REFERENCES NotificationMethod(NotificationMethodID)
@@ -348,7 +348,7 @@ CREATE TABLE certification (
 -- Tenant Tables
 ----------------------------------------------------------------------------------------
 -- TenantPerson Table
-CREATE TABLE TenantPerson (
+CREATE TABLE Tenant (
   TenantID VARCHAR(50) PRIMARY KEY,
   FullName VARCHAR(255) NOT NULL,
   DateOfBirth DATE,
@@ -366,7 +366,7 @@ CREATE TABLE Tenancy (
   EndDate DATE,
   TenancyType VARCHAR(100),
   TenancyStatus VARCHAR(100),
-  CONSTRAINT FK_Tenancy_Tenant FOREIGN KEY (TenantID) REFERENCES TenantPerson(TenantID)
+  CONSTRAINT FK_Tenancy_Tenant FOREIGN KEY (TenantID) REFERENCES Tenant(TenantID)
 );
 
 -- HouseholdMemberPerson Table
@@ -382,7 +382,7 @@ CREATE TABLE HouseholdMemberPerson (
   PersonAlertCode VARCHAR(50),
   RiskAssessmentStatus VARCHAR(100),
   RiskAssessmentDate DATE,
-  CONSTRAINT FK_HouseholdMember_Tenant FOREIGN KEY (TenantID) REFERENCES TenantPerson(TenantID),
+  CONSTRAINT FK_HouseholdMember_Tenant FOREIGN KEY (TenantID) REFERENCES Tenant(TenantID),
   CONSTRAINT FK_HouseholdMember_Tenancy FOREIGN KEY (TenancyID) REFERENCES Tenancy(TenancyID)
 );
 
@@ -407,8 +407,8 @@ CREATE TABLE WorkClass (
     WorkClassCodeID VARCHAR(50),                      -- FK to work class code         
     WorkClassCode VARCHAR(100),                       -- Short code for work class
     WorkClassDescription TEXT                         -- Detailed description of the work class
-    CONSTRAINT FK_WorkClass_WorkClassCode FOREIGN KEY (WorkClassCodeID) 
-      REFERENCES WorkClassCodes(WorkClassCodeID)
+    CONSTRAINT FK_WorkClass_WorkClassCode 
+      FOREIGN KEY (WorkClassCodeID) REFERENCES WorkClassCodes(WorkClassCodeID)
 );                     
 
 -- Table: WorkPriority
@@ -422,10 +422,9 @@ CREATE TABLE WorkPriority (
     Comments TEXT,                                    -- Additional comments
     RequiredStartDateTime DATE,                       -- Required start date
     RequiredCompletionDateTime DATE                   -- Required completion date
-    CONSTRAINT FK_WorkPriority_WorkPriorityCode FOREIGN KEY (WorkPriorityCodeID) 
-      REFERENCES WorkPriorityCodes(WorkPriorityCodeID)
+    CONSTRAINT FK_WorkPriority_WorkPriorityCode 
+      FOREIGN KEY (WorkPriorityCodeID) REFERENCES WorkPriorityCodes(WorkPriorityCodeID)
 );
-
 -- Table: RateScheduleItem
 CREATE TABLE RateScheduleItem (
     RateScheduleItemID VARCHAR(50) PRIMARY KEY,       -- Unique ID for the rate schedule item
@@ -434,8 +433,8 @@ CREATE TABLE RateScheduleItem (
     Quantity DECIMAL(10, 2),                          -- Quantity required
     CustomCode VARCHAR(100),                          -- Custom rate code
     CustomName VARCHAR(255)                           -- Custom name for rate item
-    CONSTRAINT FK_RateScheduleItem_RateScheduleItemCode FOREIGN KEY (RateScheduleItemCodeID) 
-      REFERENCES RateScheduleItemCodes(RateScheduleItemCodeID)
+    CONSTRAINT FK_RateScheduleItem_RateScheduleItemCode 
+      FOREIGN KEY (RateScheduleItemCodeID) REFERENCES RateScheduleItemCodes(RateScheduleItemCodeID)
 );
 
 -- Table: WorkElement
@@ -445,12 +444,14 @@ CREATE TABLE WorkElement (
     RateScheduleItemID VARCHAR(255),                  -- FK to RateScheduleItem
     TradeCodeID VARCHAR(100),                         -- FK to TradeCode
     ServiceChargeSubject VARCHAR(255),                -- Subject to service charge?
-    CONSTRAINT FK_WorkElement_WorkOrder FOREIGN KEY (WorkOrderID) 
-      REFERENCES WorkOrder(WorkOrderID),
-    CONSTRAINT FK_WorkElement_RateScheduleItem FOREIGN KEY (RateScheduleItemID) 
-      REFERENCES RateScheduleItem(RateScheduleItemID),
-    CONSTRAINT FK_WorkElement_TradeCode FOREIGN KEY (TradeCodeID) 
-      REFERENCES TradeCodes(TradeCodeIDCode)
+    CONSTRAINT FK_WorkElement_WorkOrder 
+      FOREIGN KEY (WorkOrderID) REFERENCES WorkOrder(WorkOrderID),
+
+    CONSTRAINT FK_WorkElement_RateScheduleItem 
+      FOREIGN KEY (RateScheduleItemID) REFERENCES RateScheduleItem(RateScheduleItemID),
+    
+    CONSTRAINT FK_WorkElement_TradeCode 
+      FOREIGN KEY (TradeCodeID) REFERENCES TradeCodes(TradeCodeID)
 );
 
 -- Table: WorkElementDependency
@@ -460,10 +461,11 @@ CREATE TABLE WorkElementDependency (
     Type VARCHAR(100),                                  -- Type of dependency
     Timing VARCHAR(255),                                -- Timing constraint or information
     Description TEXT,                                   -- Description of the dependency
-    CONSTRAINT FK_WorkElementDependency_WorkElement FOREIGN KEY (WorkElementID) 
-      REFERENCES WorkElement(WorkElementID),
-    CONSTRAINT FK_WorkElementDependency_DependsOn FOREIGN KEY (DependsOnWorkElementID) 
-      REFERENCES WorkElement(WorkElementID)
+    CONSTRAINT FK_WorkElementDependency_WorkElement 
+      FOREIGN KEY (WorkElementID) REFERENCES WorkElement(WorkElementID),
+
+    CONSTRAINT FK_WorkElementDependency_DependsOn 
+      FOREIGN KEY (DependsOnWorkElementID) REFERENCES WorkElement(WorkElementID)
 );
 
 -- Table: WorkOrder
@@ -493,16 +495,39 @@ CREATE TABLE WorkOrder (
     LocationOfRepair VARCHAR(255),                    -- Where the repair is happening
     JobStatusUpdate VARCHAR(255),                     -- Last known job status
     RepairSLABreachFlag VARCHAR(10),                  -- SLA breach indicator (Y/N/Null)
-    CONSTRAINT FK_WorkOrder_WorkClass FOREIGN KEY (WorkClassID) 
-      REFERENCES WorkClass(WorkClassID),
-    CONSTRAINT FK_WorkOrder_WorkPriority FOREIGN KEY (WorkPriorityID) 
-      REFERENCES WorkPriority(WorkPriorityID),
-    CONSTRAINT FK_WorkOrder_ContractorOrg FOREIGN KEY (ContractorOrganisationID) 
-      REFERENCES ContractorOrganisation(ContractorOrganisationID)
-    CONSTRAINT FK_WorkOrder_PersonAlert FOREIGN KEY (PersonAlertID) 
-      REFERENCES AlertRegardingPerson(PersonAlertID),
-    CONSTRAINT FK_WorkOrder_LocationAlert FOREIGN KEY (LocationAlerdID) 
-      REFERENCES AlertRegardingLocation(LocationAlertID)
+    CONSTRAINT fk_WorkOrder_WorkClassID
+      FOREIGN KEY (WorkClassID) REFERENCES WorkClass(WorkClassID),
+
+    CONSTRAINT fk_WorkOrder_WorkPriorityID
+      FOREIGN KEY (WorkPriorityID) REFERENCES WorkPriority(WorkPriorityID),
+
+    CONSTRAINT fk_WorkOrder_ContractorOrganisationID
+      FOREIGN KEY (ContractorOrganisationID) REFERENCES ContractorOrganisation(ContractorOrganisationID),
+
+    CONSTRAINT fk_WorkOrder_LocationAlertID
+      FOREIGN KEY (LocationAlertID) REFERENCES AlertRegardingLocation(LocationAlertID),
+
+    CONSTRAINT fk_WorkOrder_PersonAlertID
+      FOREIGN KEY (PersonAlertID) REFERENCES AlertRegardingPerson(PersonAlertID),
+
+    CONSTRAINT fk_WorkOrder_AddressID
+      FOREIGN KEY (AddressID) REFERENCES address(address_id),
+
+    CONSTRAINT fk_WorkOrder_InspectionID
+      FOREIGN KEY (InspectionID) REFERENCES Inspection(InspectionID),
+
+    CONSTRAINT fk_WorkOrder_EscalationID
+      FOREIGN KEY (EscalationID) REFERENCES Escalation(EscalationID),
+
+    CONSTRAINT fk_WorkOrder_TenancyID
+     FOREIGN KEY (TenancyID) REFERENCES Tenancy(TenancyID),
+
+    CONSTRAINT fk_WorkOrder_TenantID
+      FOREIGN KEY (TenantID) REFERENCES Tenant(TenantID),
+
+    CONSTRAINT fk_WorkOrder_HazardReportID
+      FOREIGN KEY (HazardReportID) REFERENCES HazardReport(HazardReportID)
+
 );
 
 -- Table: WorkOrderStatusHistory
@@ -517,8 +542,8 @@ CREATE TABLE WorkOrderStatusHistory (
     EnteredDateTime TIMESTAMP,                         -- When status was entered
     ExistedDateTime TIMESTAMP,                         -- When status ended
     Comments TEXT,                                     -- Any extra comments
-    CONSTRAINT FK_WorkOrderStatusHistory_WorkOrder FOREIGN KEY (WorkOrderID) 
-      REFERENCES WorkOrder(WorkOrderID)
+    CONSTRAINT FK_WorkOrderStatusHistory_WorkOrder 
+      FOREIGN KEY (WorkOrderID) REFERENCES WorkOrder(WorkOrderID)
 );
 
 -- Table: WorkOrderComplete
@@ -530,8 +555,8 @@ CREATE TABLE WorkOrderComplete (
     OperativesUsed TEXT,                               -- Who completed the work
     JosStatusUpdate VARCHAR(255),                      -- Status update
     FollowOnWork VARCHAR(255),                         -- Follow-on work needed
-    CONSTRAINT FK_WorkOrderComplete_WorkOrder FOREIGN KEY (WorkOrderID) 
-      REFERENCES WorkOrder(WorkOrderID)
+    CONSTRAINT FK_WorkOrderComplete_WorkOrder 
+      FOREIGN KEY (WorkOrderID) REFERENCES WorkOrder(WorkOrderID)
 );
 
 -- Table: WorkOrderAccessInformation
@@ -540,8 +565,8 @@ CREATE TABLE WorkOrderAccessInformation (
     WorkOrderID VARCHAR(50),                                   -- FK to work order
     Description VARCHAR(100),                                   -- Type of access (e.g. key, presence)
     KeySafe TEXT,                                                -- Detailed access info
-    CONSTRAINT FK_WorkOrderAccess_WorkOrder FOREIGN KEY (WorkOrderID) 
-      REFERENCES WorkOrder(WorkOrderID)
+    CONSTRAINT FK_WorkOrderAccess_WorkOrder 
+      FOREIGN KEY (WorkOrderID) REFERENCES WorkOrder(WorkOrderID)
 );
 
 -- Table: AlertRegardingLocation
@@ -551,18 +576,18 @@ CREATE TABLE AlertRegardingLocation (
     AlertType VARCHAR(100),                                    -- Type of location alert
     Attachments TEXT,                                          -- Attachments related to the alert
     Comments TEXT,                                             -- Description of the alert
-    CONSTRAINT FK_AlertLocation_LocationAlertCode FOREIGN KEY (LocationAlertCodeID)
-      REFERENCES LocationAlertTypeCodes(LocationAlertCodeID)  
+    CONSTRAINT FK_AlertLocation_LocationAlertCode 
+      FOREIGN KEY (LocationAlertCodeID) REFERENCES LocationAlertTypeCodes(LocationAlertCodeID)  
 );
 
 -- Table: AlertRegardingPerson
 CREATE TABLE AlertRegardingPerson (
     PersonAlertID VARCHAR(50) PRIMARY KEY,                     -- Unique alert ID
-    PersonalAlertCodeID VARCHAR(50),                           -- FK to personal alert code
+    PersonAlertCodeID VARCHAR(50),                           -- FK to personal alert code
     AlertType VARCHAR(100),                                    -- Type of person alert
     Comments TEXT,                                             -- Description of the alert
-    CONSTRAINT FK_AlertPerson_PersonalAlertCode FOREIGN KEY (PersonalAlertCodeID) 
-      REFERENCES PersonalAlertTypeCodes(PersonalAlertCodeID)
+    CONSTRAINT FK_AlertPerson_PersonAlertCode 
+      FOREIGN KEY (PersonAlertCodeID) REFERENCES PersonAlertTypeCodes(PersonAlertCodeID)
 );
 
 -- --------------------------------------------------
@@ -633,8 +658,8 @@ VALUES
 CREATE TABLE TradeCodes (
   TradeCodeID VARCHAR (50) PRIMARY KEY,
   TradeCode VARCHAR(100) NOT NULL UNIQUE,
-  CustomCode VARCHAR(100) NULL,
-  CustomName VARCHAR(255) NULL,
+  CustomCode VARCHAR(100),                          -- Custom code used by provider
+  CustomName VARCHAR(255)                           -- Custom name for the trade
   Description VARCHAR(100) NOT NULL
 );
 
@@ -710,13 +735,13 @@ CREATE TABLE RateScheduleItemCodes (
 );
 -- need to add the actual codes --
 
-CREATE TABLE PersonalAlertTypeCodes (
-  PersonalAlertCodeID VARCHAR (50) PRIMARY KEY,
-  PersonalAlertCode VARCHAR(50) NOT NULL UNIQUE,
+CREATE TABLE PersonAlertTypeCodes (
+  PersonAlertCodeID VARCHAR (50) PRIMARY KEY,
+  PersonAlertCode VARCHAR(50) NOT NULL UNIQUE,
   Description TEXT NOT NULL
 );
 
-INSERT INTO PersonAlertTypeCodes (PersonalAlertCodeID, PersonalAlertCode, Description) 
+INSERT INTO PersonAlertTypeCodes (PersonAlertCodeID, PersonAlertCode, Description) 
 VALUES
 -- From UKHDS
   (1, 'NoVisitAlone', 'Do not visit alone'),
@@ -769,6 +794,9 @@ VALUES
   (15, 'RestrictedAccess', 'Restricted physical or legal access to parts of the property'),
   (16, 'FireRiskZone', 'Property is in a fire-sensitive zone or has elevated fire risk profile'),
   (17, 'AwaabsLawMonitoring', 'This location is subject to special monitoring under Awaab’s Law due to prior compliance failure');
+
+
+
 
 
 
