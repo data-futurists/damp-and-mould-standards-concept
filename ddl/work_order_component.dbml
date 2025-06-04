@@ -24,13 +24,7 @@ Table WorkPriority {
   RequiredCompletionDate date
 }
 
-Table TradeCode {
-  TradeID varchar PK
-  TradeCodeID varchar
-  TradeCode varchar
-  CustomCode varchar
-  CustomName varchar
-}
+
 
 Table RateScheduleItem {
   RateScheduleItemID varchar PK
@@ -73,7 +67,7 @@ Table WorkElement {
   WorkElementID varchar PK
   WorkOrderID varchar
   RateScheduleItemID varchar
-  TradeCode varchar
+  TradeCodeID varchar
   ServiceChargeSubject varchar
 }
 
@@ -125,9 +119,47 @@ Table AlertRegardingLocation {
 
 Table AlertRegardingPerson {
   PersonAlertID varchar PK
-  PersonalAlertCodeID varchar
+  PersonAlertCodeID varchar
   AlertType varchar
   Comments text
+}
+
+Table TradeCodes {
+  TradeCodeID varchar PK
+  TradeCode varchar
+  CustomCode varchar
+  CustomName varchar
+  Description text
+}
+
+Table WorkPriorityCodes {
+  WorkPriorityCodeID varchar PK
+  WorkPriorityCode varchar
+  Description text
+}
+
+Table WorkClassCodes {
+  WorkClassCodeID varchar PK
+  WorkClassCode varchar
+  Description text
+}
+
+Table RateScheduleItemCodes {
+  RateScheduleItemCodeID varchar PK
+  RateScheduleItemCode varchar
+  Description text
+}
+
+Table PersonAlertTypeCodes {
+  PersonAlertCodeID varchar PK
+  PersonAlertCode varchar
+  Description text
+}
+
+Table LocationAlertTypeCodes {
+  LocationAlertCodeID varchar PK
+  LocationAlertCode varchar
+  Description text
 }
 
 
@@ -139,16 +171,17 @@ Ref: WorkOrder.LocationAlertID > AlertRegardingLocation.LocationAlertID
 Ref: WorkOrder.PersonAlertID > AlertRegardingPerson.PersonAlertID
 Ref: WorkElement.WorkOrderID > WorkOrder.WorkOrderID
 Ref: WorkElement.RateScheduleItemID > RateScheduleItem.RateScheduleItemID
-Ref: WorkElement.TradeCodeID > TradeCode.TradeCodeID
+Ref: WorkElement.TradeCodeID > TradeCodes.TradeCodeID
 Ref: WorkElementDependency.WorkElementID > WorkElement.WorkElementID
 Ref: WorkElementDependency.DependsOnWorkElementID > WorkElement.WorkElementID
 Ref: WorkOrderStatusHistory.WorkOrderID > WorkOrder.WorkOrderID
 Ref: WorkOrderComplete.WorkOrderID > WorkOrder.WorkOrderID
 Ref: WorkOrderAccessInformation.WorkOrderID > WorkOrder.WorkOrderID
-Ref: AlertRegardingLocation.LocationAlertCodeID > LocationAlertTypeCode.LocationAlertCodeID
-Ref: AlertRegardingPerson.PersonalAlertCodeID > PersonAlertTypeCode.PersonalAlertCodeID
-Ref: WorkPriority.WorkPriorityCodeID > WorkPriorityCode.WorkPriorityCodeID
-Ref: WorkClass.WorkClassCodeID > WorkClassCode.WorkClassCodeID
+Ref: AlertRegardingLocation.LocationAlertCodeID > LocationAlertTypeCodes.LocationAlertCodeID
+Ref: AlertRegardingPerson.PersonAlertCodeID > PersonAlertTypeCodes.PersonAlertCodeID
+Ref: WorkPriority.WorkPriorityCodeID > WorkPriorityCodes.WorkPriorityCodeID
+Ref: WorkClass.WorkClassCodeID > WorkClassCodes.WorkClassCodeID
+Ref: RateScheduleItem.RateScheduleItemCodeID > RateScheduleItemCodes.RateScheduleItemCodeID
 
 
 

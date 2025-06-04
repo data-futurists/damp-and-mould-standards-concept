@@ -166,11 +166,11 @@ CREATE TABLE AlertRegardingLocation (
 -- Table: AlertRegardingPerson
 CREATE TABLE AlertRegardingPerson (
     PersonAlertID VARCHAR(50) PRIMARY KEY,                     -- Unique alert ID
-    PersonalAlertCodeID VARCHAR(50),                           -- FK to personal alert code
+    PersonAlertCodeID VARCHAR(50),                           -- FK to personal alert code
     AlertType VARCHAR(100),                                    -- Type of person alert
     Comments TEXT,                                             -- Description of the alert
-    CONSTRAINT FK_AlertPerson_PersonalAlertCode FOREIGN KEY (PersonalAlertCodeID) 
-      REFERENCES PersonalAlertTypeCodes(PersonalAlertCodeID)
+    CONSTRAINT FK_AlertPerson_PersonAlertCode FOREIGN KEY (PersonAlertCodeID) 
+      REFERENCES PersonAlertTypeCodes(PersonAlertCodeID)
 );
 
 -- --------------------------------------------------
@@ -318,13 +318,13 @@ CREATE TABLE RateScheduleItemCodes (
 );
 -- need to add the actual codes --
 
-CREATE TABLE PersonalAlertTypeCodes (
-  PersonalAlertCodeID VARCHAR (50) PRIMARY KEY,
-  PersonalAlertCode VARCHAR(50) NOT NULL UNIQUE,
+CREATE TABLE PersonAlertTypeCodes (
+  PersonAlertCodeID VARCHAR (50) PRIMARY KEY,
+  PersonAlertCode VARCHAR(50) NOT NULL UNIQUE,
   Description TEXT NOT NULL
 );
 
-INSERT INTO PersonAlertTypeCodes (PersonalAlertCodeID, PersonalAlertCode, Description) 
+INSERT INTO PersonAlertTypeCodes (PersonAlertCodeID, PersonAlertCode, Description) 
 VALUES
 -- From UKHDS
   (1, 'NoVisitAlone', 'Do not visit alone'),
