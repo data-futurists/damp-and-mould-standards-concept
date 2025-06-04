@@ -58,7 +58,7 @@ CREATE TABLE WorkElement (
     CONSTRAINT FK_WorkElement_RateScheduleItem FOREIGN KEY (RateScheduleItemID) 
       REFERENCES RateScheduleItem(RateScheduleItemID),
     CONSTRAINT FK_WorkElement_TradeCode FOREIGN KEY (TradeCodeID) 
-      REFERENCES TradeCodes(TradeCodeIDCode)
+      REFERENCES TradeCodes(TradeCodeID)
 );
 
 -- Table: WorkElementDependency
@@ -241,6 +241,8 @@ VALUES
 CREATE TABLE TradeCodes (
   TradeCodeID VARCHAR (50) PRIMARY KEY,
   TradeCode VARCHAR(100) NOT NULL UNIQUE,
+  CustomCode VARCHAR(100),                          -- Custom code used by provider
+  CustomName VARCHAR(255)                           -- Custom name for the trade
   Description VARCHAR(100) NOT NULL
 );
 
