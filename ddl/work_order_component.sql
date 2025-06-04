@@ -34,18 +34,6 @@ CREATE TABLE WorkPriority (
     CONSTRAINT FK_WorkPriority_WorkPriorityCode FOREIGN KEY (WorkPriorityCodeID) 
       REFERENCES WorkPriorityCodes(WorkPriorityCodeID)
 );
-
--- Table: TradeCode
-CREATE TABLE TradeCode (
-    TradeID VARCHAR (50) PRIMARY KEY,                  -- Unique ID for the trade code
-    TradeCodeID VARCHAR(50) NOT NULL,                 -- FK to trade code
-    TradeCode VARCHAR(100),                           -- Standard trade code
-    CustomCode VARCHAR(100),                          -- Custom code used by provider
-    CustomName VARCHAR(255)                           -- Custom name for the trade
-    CONSTRAINT FK_TradeCode_TradeCode FOREIGN KEY (TradeCodeID) 
-      REFERENCES TradeCodes(TradeCodeID)
-);
-
 -- Table: RateScheduleItem
 CREATE TABLE RateScheduleItem (
     RateScheduleItemID VARCHAR(50) PRIMARY KEY,       -- Unique ID for the rate schedule item
