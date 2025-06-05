@@ -12,86 +12,252 @@ CREATE TABLE health_risk_rating (
   health_risk_rating_id INTEGER PRIMARY KEY AUTOINCREMENT,
   rating NVARCHAR(20) NOT NULL
 );
+INSERT INTO health_risk_rating (rating) 
+VALUES 
+  ('High'), 
+  ('Medium'), 
+  ('Low');
 
 CREATE TABLE severity (
   severity_id INTEGER PRIMARY KEY AUTOINCREMENT,
   level NVARCHAR(20) NOT NULL
 );
+INSERT INTO severity (level) 
+VALUES 
+  ('High'), 
+  ('Medium'), 
+  ('Low');
 
 CREATE TABLE investigation_type (
   investigation_type_id INTEGER PRIMARY KEY AUTOINCREMENT,
   type NVARCHAR(20) NOT NULL
 );
+INSERT INTO investigation_type (type) 
+VALUES 
+  ('Standard'), 
+  ('Renewed'), 
+  ('Further'), 
+  ('Emergency');
 
 CREATE TABLE report_status (
   report_status_id INTEGER PRIMARY KEY AUTOINCREMENT,
   status NVARCHAR(20) NOT NULL
 );
+INSERT INTO report_status (status) 
+VALUES 
+  ('Open'), 
+  ('Under Review'), 
+  ('Made Safe'), 
+  ('Closed');
 
 CREATE TABLE trigger_source (
   trigger_source_id INTEGER PRIMARY KEY AUTOINCREMENT,
   source NVARCHAR(20) NOT NULL
 );
+INSERT INTO trigger_source (source) 
+VALUES 
+  ('Tenant Report'), 
+  ('Routine Check'), 
+  ('Environmental Sensor'), 
+  ('Staff Report');
 
 CREATE TABLE escalation_status (
   escalation_status_id INTEGER PRIMARY KEY AUTOINCREMENT,
   status NVARCHAR(20) NOT NULL
 );
+INSERT INTO escalation_status (status) 
+VALUES 
+  ('None'), 
+  ('In Progress'), 
+  ('Escalated');
 
 CREATE TABLE escalation_stage (
   escalation_stage_id INTEGER PRIMARY KEY AUTOINCREMENT,
   stage NVARCHAR(20) NOT NULL
 );
+INSERT INTO escalation_stage (stage) 
+VALUES 
+  ('Open'), 
+  ('In Progress'), 
+  ('Resolved'), 
+  ('Rejected');
 
 CREATE TABLE escalation_type (
   escalation_type_id INTEGER PRIMARY KEY AUTOINCREMENT,
   type NVARCHAR(30) NOT NULL
 );
+INSERT INTO escalation_type (type)
+VALUES 
+  ('Senior Review'), 
+  ('Legal Action'), 
+  ('Compensation'), 
+  ('Alternative Accommodation');
 
 CREATE TABLE notification_type (
   notification_type_id INTEGER PRIMARY KEY AUTOINCREMENT,
   type NVARCHAR(20) NOT NULL
 );
+INSERT INTO notification_type (type)
+VALUES 
+  ('Scheduled'), 
+  ('Result'), 
+  ('Advice'), 
+  ('Delay');
 
 CREATE TABLE notification_method (
   notification_method_id INTEGER PRIMARY KEY AUTOINCREMENT,
   method NVARCHAR(20) NOT NULL
 );
+INSERT INTO notification_method (method)
+VALUES 
+  ('Email'), 
+  ('SMS'), 
+  ('Phone Call'), 
+  ('Letter');
 
 CREATE TABLE energy_efficiency_band (
   band_id INTEGER PRIMARY KEY AUTOINCREMENT,
   code CHAR(1) NOT NULL UNIQUE
 );
+INSERT INTO energy_efficiency_band (code)
+VALUES 
+  ('A'), 
+  ('B'), 
+  ('C'), 
+  ('D'), 
+  ('E'), 
+  ('F'), 
+  ('G');
 
 CREATE TABLE location_alert_type (
-  alert_type_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  location_alert_type_id INTEGER PRIMARY KEY AUTOINCREMENT,
   code VARCHAR(50) NOT NULL UNIQUE
 );
+INSERT INTO location_alert_type (code)
+VALUES 
+  ('Warranty'), 
+  ('NonMainsSewage'), 
+  ('ContactForDetails'), 
+  ('OperativeGenderRestriction'),
+  ('HeritageBuilding')
+  -- new alert types can be added here
+  ('RecurringIssue'), 
+  ('HighRiskArea'), 
+  ('EnvironmentalHazard'), 
+  ('AccessRestriction'), 
+  ('StructuralIssue'),
+  ('PoorVentilation'),
+  ('PastHHSRSFailure'),
+  ('FireSafetyConcern'),
+  ('PestInfestation'),
+  ('AsbestosPresent'),
+  ('WaterLeakage'),
+  ('FireRisk');
 
 CREATE TABLE glazing_type (
   glazing_type_id INTEGER PRIMARY KEY AUTOINCREMENT,
   code VARCHAR(50) NOT NULL UNIQUE
 );
+INSERT INTO glazing_type (code)
+VALUES 
+  ('None'),
+  ('Single'), 
+  ('Double'), 
+  ('Triple'), 
+  ('Secondary'),
+  ('Other'), 
+  ('Unknown');
 
 CREATE TABLE roof_insulation_type (
   insulation_type_id INTEGER PRIMARY KEY AUTOINCREMENT,
   code VARCHAR(50) NOT NULL UNIQUE
 );
+INSERT INTO roof_insulation_type (code)
+VALUES 
+  ('None'), 
+  ('Partial'), 
+  ('Full'), 
+  ('Board'), 
+  ('Roll'),
+  ('LooseFill'),
+  ('SprayFoam'), 
+  ('Other'), 
+  ('Unknown');
 
 CREATE TABLE wall_insulation_type (
   insulation_type_id INTEGER PRIMARY KEY AUTOINCREMENT,
   code VARCHAR(50) NOT NULL UNIQUE
 );
+INSERT INTO wall_insulation_type (code)
+VALUES 
+  ('None'),                             -- These codes are designed to align with EPC (Energy Performance Certificate) terminology, RdSAP, and PAS 2035 Retrofit standards.
+  ('Cavity'), 
+  ('CavityPartial'), 
+  ('CavityFull'), 
+  ('External'), 
+  ('External_EPS'), 
+  ('External_MineralWool'), 
+  ('External_WoodFibre'), 
+  ('Internal'), 
+  ('Internal_PIR'), 
+  ('Internal_MineralWool'), 
+  ('Internal_InsulatedPlasterboard'), 
+  ('SolidWallInsulated'), 
+  ('SolidWallUninsulated'), 
+  ('TimberFrameInsulated'), 
+  ('TimberFrameUninsulated'), 
+  ('SystemBuildInsulated'), 
+  ('SystemBuildUninsulated'), 
+  ('StoneWallInsulated'), 
+  ('StoneWallUninsulated'), 
+  ('ParkHomeInsulation'), 
+  ('PartyWallInsulation'), 
+  ('Partial'), 
+  ('Full'), 
+  ('Unknown');
 
 CREATE TABLE construction_type (
   construction_type_id INTEGER PRIMARY KEY AUTOINCREMENT,
   code VARCHAR(50) NOT NULL UNIQUE
 );
+INSERT INTO construction_type (code)
+VALUES
+  ('SolidBrick'), 
+  ('CavityBrick'), 
+  ('TimberFrame'), 
+  ('SteelFrame'), 
+  ('ConcreteFrame'), 
+  ('SystemBuilt'), 
+  ('Cob'), 
+  ('Stone'), 
+  ('WattleAndDaub'), 
+  ('BrickAndBlock'), 
+  ('CrossLaminatedTimber'), 
+  ('InsulatedConcreteFormwork'), 
+  ('StructuralInsulatedPanels'), 
+  ('ParkHome'), 
+  ('PreCastConcrete'), 
+  ('NoFinesConcrete'), 
+  ('ReinforcedConcrete'), 
+  ('Mixed'), 
+  ('Unknown');
 
 CREATE TABLE certification_type (
   certification_type_id INTEGER PRIMARY KEY AUTOINCREMENT,
   code VARCHAR(50) NOT NULL UNIQUE
 );
+INSERT INTO certification_type (code)
+VALUES 
+  ('EPC'),      -- Energy Performance Certificate
+  ('EIC'),      -- Electrical Installation Certificate
+  ('EICR'),     -- Electrical Installation Condition Report
+  ('PAT'),      -- Portable Appliance Testing
+  ('FRA'),      -- Fire Risk Assessment
+  ('LGSR'),     -- Landlord Gas Safety Record
+  ('CPC');      -- Compliance with Property Conditions
+ 
+ 
+
 
 -- ============================================
 -- SECTION 2: CORE AND MODULE TABLES
@@ -116,10 +282,10 @@ CREATE TABLE property (
 CREATE TABLE "unit" (
   unit_id INTEGER PRIMARY KEY,
   property_id INTEGER NOT NULL,
-  alert_type_id INTEGER,
+  location_alert_type_id INTEGER,
   lease VARCHAR(255),
   CONSTRAINT fk_unit_property FOREIGN KEY (property_id) REFERENCES property(property_id),
-  CONSTRAINT fk_unit_alert_type FOREIGN KEY (alert_type_id) REFERENCES location_alert_type(alert_type_id)
+  CONSTRAINT fk_unit_alert_type FOREIGN KEY (location_alert_type_id) REFERENCES location_alert_type(location_alert_type_id)
 );
 
 CREATE TABLE address (
@@ -252,6 +418,7 @@ CREATE TABLE household_member_person (
   household_member_id VARCHAR(50) PRIMARY KEY,
   tenant_id VARCHAR(50) NOT NULL,
   tenancy_id VARCHAR(50) NOT NULL,
+  person_alert_type_id VARCHAR(50),
   full_name VARCHAR(255) NOT NULL,
   date_of_birth DATE,
   relationship_to_tenant VARCHAR(100),
@@ -261,6 +428,7 @@ CREATE TABLE household_member_person (
   risk_assessment_date DATE,
   CONSTRAINT fk_household_member_tenant FOREIGN KEY (tenant_id) REFERENCES tenant_person(tenant_id),
   CONSTRAINT fk_household_member_tenancy FOREIGN KEY (tenancy_id) REFERENCES tenancy(tenancy_id)
+  CONSTRAINT fk_household_member_person_alert_type FOREIGN KEY (person_alert_type_id) REFERENCES person_alert_type(person_alert_type_id)
 );
 
 -- --------------------------------------------------
@@ -268,43 +436,195 @@ CREATE TABLE household_member_person (
 -- --------------------------------------------------
 
 CREATE TABLE contractor_organisation (
-  contractor_organisation_id VARCHAR(255) PRIMARY KEY,
+  contractor_organisation_id INTEGER PRIMARY KEY AUTOINCREMENT,
   name VARCHAR(255),
   contractor_portal VARCHAR(255),
   subcontractors TEXT
 );
 
 CREATE TABLE work_class (
-  work_class_id VARCHAR(255) PRIMARY KEY,
-  work_class_code VARCHAR(100),
-  work_class_description TEXT
+  work_class_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  code VARCHAR(50) NOT NULL UNIQUE
 );
-
-CREATE TABLE work_priority (
-  work_priority_id VARCHAR(255) PRIMARY KEY,
-  priority_code VARCHAR(100),
-  priority_description TEXT,
-  effective_date_time TIMESTAMP,
-  number_of_days INTEGER,
-  comments TEXT,
-  required_start_date_time DATE,
-  required_completion_date_time DATE
-);
-
+INSERT INTO work_class (code)
+VALUES 
+  ('Emergency'), 
+  ('Defect'), 
+  ('Urgent'), 
+  ('Remedial'), 
+  ('Routine'),
+  ('Upgrade'),
+  ('Statutory'), 
+  ('InsuranceClaim'), 
+  ('PreventativePlanned')
+  ('PlannedMaintenance'), 
+  ('ReactiveMaintenance'), 
+  ('VoidWorks'), 
+  ('Adaptations'), 
+  ('ImprovementWorks'), 
+  ('ComplianceCheck'), 
+  ('InspectionFollowUp'), 
+  ('EscalationWork'), 
+  ('MoveManagement'),
+  ('Inspection'),
+  ('Survey'), 
+  ('Cleaning'), 
+  ('GroundsMaintenance'), 
+  ('PestControl'), 
+  ('Security'), 
+  ('FireSafety'), 
+  ('HealthAndSafety'), 
+  ('EnergyEfficiency'),
+  ('EnvironmentalWorks'), 
+  ('Decoration'), 
+  ('Fencing'), 
+  ('Roofing'), 
+  ('Plumbing'), 
+  ('Electrical'),
+  ('HeatingAndVentilation'),
+  ('CarpentryAndJoinery'),
+  ('PaintingAndDecorating'),
+  ('Flooring'),
+  ('Landscaping'),
+  ('Other');
+  
 CREATE TABLE trade_code (
-  trade_code VARCHAR(100) PRIMARY KEY,
-  custom_code VARCHAR(100),
-  custom_name VARCHAR(255)
+  trade_code_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  code VARCHAR(100)
 );
+INSERT INTO trade_code (code) 
+VALUES 
+  ('Asphalter'),             -- All these codes are taken from UKHDS and ammended to be human readable
+  ('Bricklayer'),
+  ('BricklayingGang'),
+  ('CarpenterJoiner'),
+  ('CarpentryGang'),
+  ('CleanTeam'),
+  ('CleanVoid'),
+  ('CleanGang'),
+  ('CleanOperator'),
+  ('DisabledAdaptation'),
+  ('DrainLayer'),
+  ('ElectricEngineer'),
+  ('Electrician'),
+  ('ElectricianGang'),
+  ('ElectricianOperative'),
+  ('Fencer'),
+  ('FloorLayer'),
+  ('Glazier'),
+  ('GroundWorker'),
+  ('GroundsMaintenanceGardener'),
+  ('GroundsMaintenanceMowGrass'),
+  ('GroundsMaintenanceRemoveGrassByHand'),
+  ('GroundsMaintenanceRemoveLitter'),
+  ('GroundsMaintenanceReplaceGravelMargins'),
+  ('groundsMaintenanceRubbishRefuse'),
+  ('GroundsMaintenanceGang'),
+  ('GroundsMaintenanceOperative'),
+  ('HeatingEngineer'),
+  ('HeatingGasEngineer'),
+  ('MechanicalEngineer'),
+  ('MechanicalLiftCare'),
+  ('MultiSkilledOperative'),
+  ('MultiSkilledOperativeGeneral'),
+  ('MultiSkilledOperativeHandyman'),
+  ('PainterDecorator'),
+  ('PainiterDecoratorGang'),
+  ('Plasterer'),
+  ('Plumber'),
+  ('PlumberDrain'),
+  ('PlumberWaterStorage'),
+  ('PlumberGang'),
+  ('Roofer'),
+  ('RooferFlat'),
+  ('RooferPitch'),
+  ('RoofingGang'),
+  ('Specialist'),
+  ('SpecialistAsbestos'),
+  ('SpecialistCCTV'),
+  ('SpecialistDigitalAerials'),
+  ('SpecialistDoorEntry'),
+  ('SpecialistElectricianPlumber'),
+  ('SpecialistEmergencyLighting'),
+  ('SpecialistFireSafety'),
+  ('SpecialistPestControl'),
+  ('SpecialistRenewables'),
+  ('SpecialistScaffolding'),
+  ('SpecialistSecurity'),
+  ('SpecialistUPVC'),
+  ('StoneMason'),
+  ('TilerWallFloor')
+  ('Other');
 
 CREATE TABLE rate_schedule_item (
-  rate_schedule_item_id VARCHAR(255) PRIMARY KEY,
-  m3nhf_sor_code VARCHAR(100),
-  quantity DECIMAL(10,2),
-  custom_code VARCHAR(100),
-  custom_name VARCHAR(255)
-);
+  rate_schedule_item_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  code VARCHAR(100) NOT NULL UNIQUE
+); -- these are specific SOR codes
 
+INSERT INTO rate_schedule_item (code)
+VALUES 
+  ('SOR001'), 
+  ('SOR002'), 
+  ('SOR003'), 
+  ('SOR004'), 
+  ('SOR005'), 
+  ('SOR006'), 
+  ('SOR007'), 
+  ('SOR008'), 
+  ('SOR009'), 
+  ('SOR010'),
+  ('SOR011'),
+  ('SOR012'),
+  ('SOR013'),
+  ('SOR014'),
+  ('SOR015'),
+  ('SOR016'),
+  ('SOR017'),
+  ('SOR018'),
+  ('SOR019'),
+  ('SOR020');
+
+CREATE TABLE person_alert_type (
+  person_alert_type_id INTEGER PRIMARY KEY AUTOINCREMENT, 
+  code VARCHAR(50) NOT NULL UNIQUE
+);
+INSERT INTO person_alert_type (code)
+VALUES 
+  -- from UKHDS
+  ('DoNotVisitAlone'),
+  ('DoNotVisitAloneASB'),
+  ('Disability'),
+  ('HearingImpairment'),
+  ('VisionImpairment'),
+  ('Illness'),
+  ('PhysicalSupport'),
+  ('WheelchairUser'),
+  ('Elderly'),
+  ('OtherSafeguardingConcern'),
+  ('RegularMissingAppointments'),
+  ('LanguageSupport'),
+  ('LimitedCapacity'),
+
+
+-- new codes to consider
+  ('Vulnerable'), 
+  ('HighRisk'), 
+  ('MedicalCondition'), 
+  ('MentalHealthConcern'), 
+  ('ChildProtectionIssue'), 
+  ('ElderlyCareNeed'),
+  ('DomesticAbuseConcern'),
+  ('SubstanceMisuseIssue'),
+  ('FinancialHardship'),
+  ('HousingNeed'),
+  ('CulturalSensitivity'),
+  ('CommunicationBarrier'),
+  ('MobilityImpairment'),
+  ('SensoryImpairment'),
+  ('LearningDisability'),
+  ('AutismSpectrumCondition'),
+  ('RefusedAccess'),
+  ('Other');
 -- --------------------------------------------------
 -- Work Order Module Tables
 -- --------------------------------------------------
@@ -338,6 +658,27 @@ CREATE TABLE work_order (
   CONSTRAINT fk_work_order_work_class FOREIGN KEY (work_class_id) REFERENCES work_class(work_class_id),
   CONSTRAINT fk_work_order_work_priority FOREIGN KEY (work_priority_id) REFERENCES work_priority(work_priority_id),
   CONSTRAINT fk_work_order_contractor_org FOREIGN KEY (contractor_organisation_id) REFERENCES contractor_organisation(contractor_organisation_id)
+  CONSTRAINT fk_work_order_location_alert_type FOREIGN KEY (location_alert_type_id) REFERENCES location_alert_type(location_alert_type_id),
+  CONSTRAINT fk_work_order_person_alert_type FOREIGN KEY (person_alert_type_id) REFERENCES person_alert_type(person_alert_type_id),
+  CONSTRAINT fk_work_order_address FOREIGN KEY (address_id) REFERENCES address(address_id),
+  CONSTRAINT fk_work_order_inspection FOREIGN KEY (inspection_id) REFERENCES inspection(inspection_id),
+  CONSTRAINT fk_work_order_escalation FOREIGN KEY (escalation_id) REFERENCES escalation(escalation_id),
+  CONSTRAINT fk_work_order_tenancy FOREIGN KEY (tenancy_id) REFERENCES tenancy(tenancy_id),
+  CONSTRAINT fk_work_order_tenant FOREIGN KEY (tenant_id) REFERENCES tenant(tenant_id),
+  CONSTRAINT fk_work_order_hazard_report FOREIGN KEY (hazard_report_id) REFERENCES hazard_report(hazard_report_id),
+  CONSTRAINT fk_work_order_work_element FOREIGN KEY (work_element_id) REFERENCES work_element(work_element_id),
+  CONSTRAINT chk_repair_sla_breach_flag CHECK (repair_sla_breach_flag IN ('Yes', 'No'))
+);
+
+CREATE TABLE work_priority (
+  work_priority_id VARCHAR(255) PRIMARY KEY,
+  priority_code VARCHAR(100),
+  priority_description TEXT,
+  effective_date_time TIMESTAMP,
+  number_of_days INTEGER,
+  comments TEXT,
+  required_start_date_time DATE,
+  required_completion_date_time DATE
 );
 
 CREATE TABLE work_order_status_history (
