@@ -257,7 +257,6 @@ CREATE TABLE household_member_person (
   relationship_to_tenant VARCHAR(100),
   is_contract_holder BOOLEAN DEFAULT FALSE,
   vulnerability_details TEXT,
-  person_alert_code VARCHAR(50),
   risk_assessment_status VARCHAR(100),
   risk_assessment_date DATE,
   CONSTRAINT fk_household_member_tenant FOREIGN KEY (tenant_id) REFERENCES tenant_person(tenant_id),
@@ -372,23 +371,6 @@ CREATE TABLE work_order_access_information (
   description VARCHAR(100),
   key_safe TEXT,
   CONSTRAINT fk_work_order_access_work_order FOREIGN KEY (work_order_id) REFERENCES work_order(work_order_id)
-);
-
-CREATE TABLE alert_regarding_location (
-  location_alert_id VARCHAR(255) PRIMARY KEY,
-  alert_type VARCHAR(100),
-  attachments TEXT,
-  comments TEXT,
-  work_order_id VARCHAR(255),
-  CONSTRAINT fk_alert_location_work_order FOREIGN KEY (work_order_id) REFERENCES work_order(work_order_id)
-);
-
-CREATE TABLE alert_regarding_person (
-  person_alert_id VARCHAR(255) PRIMARY KEY,
-  alert_type VARCHAR(100),
-  comments TEXT,
-  work_order_id VARCHAR(255),
-  CONSTRAINT fk_alert_person_work_order FOREIGN KEY (work_order_id) REFERENCES work_order(work_order_id)
 );
 
 -- --------------------------------------------------
