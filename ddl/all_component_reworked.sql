@@ -1,9 +1,3 @@
--- Author(s): George Foster (TPXImpact), Rizwan Nobeebux (Data Futurists), Elena Iurco (Data Futurists)
--- Email(s): george.foster@tpximpact.com, rizwan.nobeebux@datafuturists.com, elena.iurco@datafuturists.com
---
--- SQLite Schema: Inspection, Property, Tenant, and Work Order Modules
--- Following best practices with consistent snake_case naming, ordered dependencies, and clear comments
-
 -- ============================================
 -- SECTION 1: CODE LISTS (Reference Tables)
 -- ============================================
@@ -12,6 +6,7 @@ CREATE TABLE health_risk_rating (
   health_risk_rating_id INTEGER PRIMARY KEY AUTOINCREMENT,
   rating NVARCHAR(20) NOT NULL
 );
+
 INSERT INTO health_risk_rating (rating) 
 VALUES 
   ('High'), 
@@ -139,8 +134,7 @@ VALUES
   ('NonMainsSewage'), 
   ('ContactForDetails'), 
   ('OperativeGenderRestriction'),
-  ('HeritageBuilding')
-  -- new alert types can be added here
+  ('HeritageBuilding'),
   ('RecurringIssue'), 
   ('HighRiskArea'), 
   ('EnvironmentalHazard'), 
@@ -190,7 +184,7 @@ CREATE TABLE wall_insulation_type (
 );
 INSERT INTO wall_insulation_type (code)
 VALUES 
-  ('None'),                             -- These codes are designed to align with EPC (Energy Performance Certificate) terminology, RdSAP, and PAS 2035 Retrofit standards.
+  ('None'),                             
   ('Cavity'), 
   ('CavityPartial'), 
   ('CavityFull'), 
@@ -255,9 +249,6 @@ VALUES
   ('FRA'),      -- Fire Risk Assessment
   ('LGSR'),     -- Landlord Gas Safety Record
   ('CPC');      -- Compliance with Property Conditions
- 
- 
-
 
 -- ============================================
 -- SECTION 2: CORE AND MODULE TABLES
@@ -295,11 +286,11 @@ CREATE TABLE address (
   building_name VARCHAR(255),
   street_name VARCHAR(255),
   building_number VARCHAR(50),
-  floor INTEGER,
+  floor INTEGER CHECK (floor >= -5 AND floor <= 200),
   city_name VARCHAR(100) NOT NULL,
   country VARCHAR(100) NOT NULL,
   post_code VARCHAR(20) NOT NULL,
-  CONSTRAINT fk_address_unit FOREIGN KEY (unit_id) REFERENCES unit(unit_id)
+  CONSTRAINT fk_address_unit FOREIGN KEY (unit_id) REFERENCES "unit"(unit_id)
 );
 
 CREATE TABLE physical_characteristics (
@@ -364,10 +355,10 @@ CREATE TABLE energy_performance_certification (
   energy_use_per_sqm_year INTEGER NOT NULL,
   recommendation_summary TEXT,
   CONSTRAINT fk_epc_unit FOREIGN KEY (unit_id) REFERENCES "unit"(unit_id),
-  CONSTRAINT fk_current_energy_band FOREIGN KEY (current_energy_band) REFERENCES energy_efficiency_band(energy_efficiency_band_id),
-  CONSTRAINT fk_potential_energy_band FOREIGN KEY (potential_energy_band) REFERENCES energy_efficiency_band(energy_efficiency_band_id),
-  CONSTRAINT fk_current_env_band FOREIGN KEY (current_env_impact_band) REFERENCES energy_efficiency_band(energy_efficiency_band_id),
-  CONSTRAINT fk_potential_env_band FOREIGN KEY (potential_env_impact_band) REFERENCES energy_efficiency_band(energy_efficiency_band_id),
+  CONSTRAINT fk_current_energy_band FOREIGN KEY (current_energy_band) REFERENCES energy_efficiency_band(band_id),
+  CONSTRAINT fk_potential_energy_band FOREIGN KEY (potential_energy_band) REFERENCES energy_efficiency_band(band_id),
+  CONSTRAINT fk_current_env_band FOREIGN KEY (current_env_impact_band) REFERENCES energy_efficiency_band(band_id),
+  CONSTRAINT fk_potential_env_band FOREIGN KEY (potential_env_impact_band) REFERENCES energy_efficiency_band(band_id),
   CONSTRAINT chk_ratings CHECK (
     current_energy_rating BETWEEN 0 AND 100 AND
     potential_energy_rating BETWEEN 0 AND 100 AND
@@ -429,7 +420,7 @@ CREATE TABLE household_member_person (
   risk_assessment_status VARCHAR(100),
   risk_assessment_date DATE,
   CONSTRAINT fk_household_member_tenant FOREIGN KEY (tenant_id) REFERENCES tenant_person(tenant_id),
-  CONSTRAINT fk_household_member_tenancy FOREIGN KEY (tenancy_id) REFERENCES tenancy(tenancy_id)
+  CONSTRAINT fk_household_member_tenancy FOREIGN KEY (tenancy_id) REFERENCES tenancy(tenancy_id),
   CONSTRAINT fk_household_member_person_alert_type FOREIGN KEY (person_alert_type_id) REFERENCES person_alert_type(person_alert_type_id)
 );
 
@@ -458,7 +449,7 @@ VALUES
   ('Upgrade'),
   ('Statutory'), 
   ('InsuranceClaim'), 
-  ('PreventativePlanned')
+  ('PreventativePlanned'), 
   ('PlannedMaintenance'), 
   ('ReactiveMaintenance'), 
   ('VoidWorks'), 
@@ -489,14 +480,14 @@ VALUES
   ('Flooring'),
   ('Landscaping'),
   ('Other');
-  
+
 CREATE TABLE trade_code (
   trade_code_id INTEGER PRIMARY KEY AUTOINCREMENT,
   code VARCHAR(100)
 );
 INSERT INTO trade_code (code) 
 VALUES 
-  ('Asphalter'),             -- All these codes are taken from UKHDS and ammended to be human readable
+  ('Asphalter'),             
   ('Bricklayer'),
   ('BricklayingGang'),
   ('CarpenterJoiner'),
@@ -555,14 +546,13 @@ VALUES
   ('SpecialistSecurity'),
   ('SpecialistUPVC'),
   ('StoneMason'),
-  ('TilerWallFloor')
+  ('TilerWallFloor'),
   ('Other');
 
 CREATE TABLE rate_schedule_item (
   rate_schedule_item_id INTEGER PRIMARY KEY AUTOINCREMENT,
   code VARCHAR(100) NOT NULL UNIQUE
-); -- these are specific SOR codes
-
+);
 INSERT INTO rate_schedule_item (code)
 VALUES 
   ('SOR001'), 
@@ -606,9 +596,7 @@ VALUES
   ('RegularMissingAppointments'),
   ('LanguageSupport'),
   ('LimitedCapacity'),
-
-
--- new codes to consider
+  -- new codes to consider
   ('Vulnerable'), 
   ('HighRisk'), 
   ('MedicalCondition'), 
@@ -627,6 +615,7 @@ VALUES
   ('AutismSpectrumCondition'),
   ('RefusedAccess'),
   ('Other');
+
 -- --------------------------------------------------
 -- Work Order Module Tables
 -- --------------------------------------------------
@@ -657,19 +646,35 @@ CREATE TABLE work_order (
   location_of_repair VARCHAR(255),
   job_status_update VARCHAR(255),
   repair_sla_breach_flag VARCHAR(10),
+
   CONSTRAINT fk_work_order_work_class FOREIGN KEY (work_class_id) REFERENCES work_class(work_class_id),
   CONSTRAINT fk_work_order_work_priority FOREIGN KEY (work_priority_id) REFERENCES work_priority(work_priority_id),
-  CONSTRAINT fk_work_order_contractor_org FOREIGN KEY (contractor_organisation_id) REFERENCES contractor_organisation(contractor_organisation_id)
-  CONSTRAINT fk_work_order_location_alert_type FOREIGN KEY (location_alert_type_id) REFERENCES location_alert_type(location_alert_type_id),
-  CONSTRAINT fk_work_order_person_alert_type FOREIGN KEY (person_alert_type_id) REFERENCES person_alert_type(person_alert_type_id),
+  CONSTRAINT fk_work_order_contractor_org FOREIGN KEY (contractor_organisation_id) REFERENCES contractor_organisation(contractor_organisation_id),  -- ← Added missing comma
+  CONSTRAINT fk_work_order_location_alert_type FOREIGN KEY (location_alert_id) REFERENCES location_alert_type(location_alert_type_id),
+  CONSTRAINT fk_work_order_person_alert_type FOREIGN KEY (person_alert_id) REFERENCES person_alert_type(person_alert_type_id),
   CONSTRAINT fk_work_order_address FOREIGN KEY (address_id) REFERENCES address(address_id),
   CONSTRAINT fk_work_order_inspection FOREIGN KEY (inspection_id) REFERENCES inspection(inspection_id),
   CONSTRAINT fk_work_order_escalation FOREIGN KEY (escalation_id) REFERENCES escalation(escalation_id),
   CONSTRAINT fk_work_order_tenancy FOREIGN KEY (tenancy_id) REFERENCES tenancy(tenancy_id),
   CONSTRAINT fk_work_order_tenant FOREIGN KEY (tenant_id) REFERENCES tenant_person(tenant_id),
   CONSTRAINT fk_work_order_hazard_report FOREIGN KEY (hazard_report_id) REFERENCES hazard_report(hazard_report_id),
+  -- NOTE: The table `work_element` was not defined in the original script. If it exists, keep this FK; otherwise remove or adjust it.
   CONSTRAINT fk_work_order_work_element FOREIGN KEY (work_element_id) REFERENCES work_element(work_element_id),
   CONSTRAINT chk_repair_sla_breach_flag CHECK (repair_sla_breach_flag IN ('Yes', 'No'))
+);
+
+CREATE TABLE work_element (
+  work_element_id VARCHAR(50) PRIMARY KEY,          -- Unique ID for the work element  
+  work_order_id VARCHAR(50),                        -- FK to the associated work order
+  rate_schedule_item_id VARCHAR(255),               -- FK to rate_schedule_item
+  trade_code_id VARCHAR(100),                       -- FK to trade_code
+  service_charge_subject VARCHAR(255),              -- Subject to service charge?
+  CONSTRAINT fk_work_element_work_order FOREIGN KEY (work_order_id) 
+    REFERENCES work_order(work_order_id),
+  CONSTRAINT fk_work_element_rate_schedule_item FOREIGN KEY (rate_schedule_item_id) 
+    REFERENCES rate_schedule_item(rate_schedule_item_id),
+  CONSTRAINT fk_work_element_trade_code FOREIGN KEY (trade_code_id) 
+    REFERENCES trade_code(trade_code_id)
 );
 
 CREATE TABLE work_priority (
