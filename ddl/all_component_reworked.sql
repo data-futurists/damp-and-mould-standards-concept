@@ -169,7 +169,7 @@ VALUES
   ('Unknown');
 
 CREATE TABLE roof_insulation_type (
-  insulation_type_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  roof_insulation_type_id INTEGER PRIMARY KEY AUTOINCREMENT,
   code VARCHAR(50) NOT NULL UNIQUE
 );
 INSERT INTO roof_insulation_type (code)
@@ -185,7 +185,7 @@ VALUES
   ('Unknown');
 
 CREATE TABLE wall_insulation_type (
-  insulation_type_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  wall_insulation_type_id INTEGER PRIMARY KEY AUTOINCREMENT,
   code VARCHAR(50) NOT NULL UNIQUE
 );
 INSERT INTO wall_insulation_type (code)
@@ -664,7 +664,7 @@ CREATE TABLE work_order (
   CONSTRAINT fk_work_order_inspection FOREIGN KEY (inspection_id) REFERENCES inspection(inspection_id),
   CONSTRAINT fk_work_order_escalation FOREIGN KEY (escalation_id) REFERENCES escalation(escalation_id),
   CONSTRAINT fk_work_order_tenancy FOREIGN KEY (tenancy_id) REFERENCES tenancy(tenancy_id),
-  CONSTRAINT fk_work_order_tenant FOREIGN KEY (tenant_id) REFERENCES tenant(tenant_id),
+  CONSTRAINT fk_work_order_tenant FOREIGN KEY (tenant_id) REFERENCES tenant_person(tenant_id),
   CONSTRAINT fk_work_order_hazard_report FOREIGN KEY (hazard_report_id) REFERENCES hazard_report(hazard_report_id),
   CONSTRAINT fk_work_order_work_element FOREIGN KEY (work_element_id) REFERENCES work_element(work_element_id),
   CONSTRAINT chk_repair_sla_breach_flag CHECK (repair_sla_breach_flag IN ('Yes', 'No'))
@@ -679,6 +679,27 @@ CREATE TABLE work_priority (
   comments TEXT,
   required_start_date_time DATE,
   required_completion_date_time DATE
+);
+
+CREATE TABLE work_element (
+    work_element_id VARCHAR(50) PRIMARY KEY,            -- Unique ID for the work element
+    work_order_id VARCHAR(50),                          -- FK to the associated work order
+    rate_schedule_item_id VARCHAR(255),                  -- FK to RateScheduleItem
+    trade_code_id VARCHAR(100),                         -- FK to TradeCode
+    service_charge_subject VARCHAR(255),                -- Subject to service charge?
+    CONSTRAINT fk_work_element_work_order FOREIGN KEY (work_order_id) REFERENCES work_order(work_order_id), 
+    CONSTRAINT fk_workE_element_rate_schedule_item FOREIGN KEY (rate_schedule_item_id) REFERENCES rate_schedule_item(rate_schedule_item_id), 
+    CONSTRAINT fk_work_element_trade_code FOREIGN KEY (trade_code_id) REFERENCES trade_code(trade_code_id)
+);
+
+CREATE TABLE work_element_dependency (
+    work_element_id VARCHAR(50) PRIMARY kEY,              -- Unique ID for the work element
+    depends_on_work_element_id VARCHAR(50),                 -- FK to the required previous element
+    type VARCHAR(100),                                  -- Type of dependency
+    timing VARCHAR(255),                                -- Timing constraint or information
+    description TEXT,                                   -- Description of the dependency
+    CONSTRAINT fk_work_element_dependency_work_element FOREIGN KEY (work_element_id) REFERENCES work_element(work_element_id),
+    CONSTRAINT fk_work_element_dependency_depends_on FOREIGN KEY (depends_on_work_element_id) REFERENCES work_element(work_element_id),
 );
 
 CREATE TABLE work_order_status_history (
@@ -825,7 +846,7 @@ CREATE TABLE escalation (
   CONSTRAINT chk_alternative_accommodation_details_offered CHECK ((alternative_accommodation_offered = 0 AND alternative_accommodation_details IS NULL) OR (alternative_accommodation_offered = 1 AND alternative_accommodation_details IS NOT NULL))
 );
 
-CREATE TABLE work_order_notification (
+CREATE TABLE notification (
   notification_id INTEGER PRIMARY KEY AUTOINCREMENT,
   inspection_id INTEGER NOT NULL,
   tenant_id VARCHAR(50) NOT NULL,
