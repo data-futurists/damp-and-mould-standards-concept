@@ -116,7 +116,7 @@ VALUES
   ('Letter');
 
 CREATE TABLE energy_efficiency_band (
-  band_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  energy_efficiency_band_id INTEGER PRIMARY KEY AUTOINCREMENT,
   code CHAR(1) NOT NULL UNIQUE
 );
 INSERT INTO energy_efficiency_band (code)
@@ -299,13 +299,13 @@ CREATE TABLE address (
   city_name VARCHAR(100) NOT NULL,
   country VARCHAR(100) NOT NULL,
   post_code VARCHAR(20) NOT NULL,
-  CONSTRAINT fk_address_unit FOREIGN KEY (unit_id) REFERENCES "unit"(unit_id)
+  CONSTRAINT fk_address_unit FOREIGN KEY (unit_id) REFERENCES unit(unit_id)
 );
 
 CREATE TABLE physical_characteristics (
   physical_char_id INTEGER PRIMARY KEY,
   property_id INTEGER NOT NULL,
-  window_glazing_type_id INTEGER,
+  glazing_type_id INTEGER,
   wall_insulation_type_id INTEGER,
   roof_insulation_type_id INTEGER,
   ventilation_type VARCHAR(100),
@@ -313,9 +313,9 @@ CREATE TABLE physical_characteristics (
   construction_type_id INTEGER,
   last_updated_date DATE NOT NULL,
   CONSTRAINT fk_phys_property FOREIGN KEY (property_id) REFERENCES property(property_id),
-  CONSTRAINT fk_glazing_type FOREIGN KEY (window_glazing_type_id) REFERENCES glazing_type(glazing_type_id),
-  CONSTRAINT fk_wall_insulation FOREIGN KEY (wall_insulation_type_id) REFERENCES wall_insulation_type(insulation_type_id),
-  CONSTRAINT fk_roof_insulation FOREIGN KEY (roof_insulation_type_id) REFERENCES roof_insulation_type(insulation_type_id),
+  CONSTRAINT fk_glazing_type FOREIGN KEY (glazing_type_id) REFERENCES glazing_type(glazing_type_id),
+  CONSTRAINT fk_wall_insulation FOREIGN KEY (wall_insulation_type_id) REFERENCES wall_insulation_type(wall_insulation_type_id),
+  CONSTRAINT fk_roof_insulation FOREIGN KEY (roof_insulation_type_id) REFERENCES roof_insulation_type(roof_insulation_type_id),
   CONSTRAINT fk_construction_type FOREIGN KEY (construction_type_id) REFERENCES construction_type(construction_type_id)
 );
 
@@ -364,10 +364,10 @@ CREATE TABLE energy_performance_certification (
   energy_use_per_sqm_year INTEGER NOT NULL,
   recommendation_summary TEXT,
   CONSTRAINT fk_epc_unit FOREIGN KEY (unit_id) REFERENCES "unit"(unit_id),
-  CONSTRAINT fk_current_energy_band FOREIGN KEY (current_energy_band) REFERENCES energy_efficiency_band(band_id),
-  CONSTRAINT fk_potential_energy_band FOREIGN KEY (potential_energy_band) REFERENCES energy_efficiency_band(band_id),
-  CONSTRAINT fk_current_env_band FOREIGN KEY (current_env_impact_band) REFERENCES energy_efficiency_band(band_id),
-  CONSTRAINT fk_potential_env_band FOREIGN KEY (potential_env_impact_band) REFERENCES energy_efficiency_band(band_id),
+  CONSTRAINT fk_current_energy_band FOREIGN KEY (current_energy_band) REFERENCES energy_efficiency_band(energy_efficiency_band_id),
+  CONSTRAINT fk_potential_energy_band FOREIGN KEY (potential_energy_band) REFERENCES energy_efficiency_band(energy_efficiency_band_id),
+  CONSTRAINT fk_current_env_band FOREIGN KEY (current_env_impact_band) REFERENCES energy_efficiency_band(energy_efficiency_band_id),
+  CONSTRAINT fk_potential_env_band FOREIGN KEY (potential_env_impact_band) REFERENCES energy_efficiency_band(energy_efficiency_band_id),
   CONSTRAINT chk_ratings CHECK (
     current_energy_rating BETWEEN 0 AND 100 AND
     potential_energy_rating BETWEEN 0 AND 100 AND
@@ -397,10 +397,12 @@ CREATE TABLE certification (
 CREATE TABLE tenant_person (
   tenant_id VARCHAR(50) PRIMARY KEY,
   full_name VARCHAR(255) NOT NULL,
+  person_alert_type_id VARCHAR(50),
   date_of_birth DATE,
   contact_details TEXT,
   vulnerability_flag BOOLEAN DEFAULT FALSE,
-  person_alert_code VARCHAR(50)
+  CONSTRAINT fk_tenant_person_alert_type FOREIGN KEY (person_alert_type_id) REFERENCES person_alert_type(person_alert_type_id),
+  CONSTRAINT chk_vulnerability_flag CHECK (vulnerability_flag IN (0, 1))
 );
 
 CREATE TABLE tenancy (
@@ -705,16 +707,74 @@ CREATE TABLE work_element_dependency (
 CREATE TABLE work_order_status_history (
   work_order_status_history_id VARCHAR(255) PRIMARY KEY,
   work_order_id VARCHAR(255),
-  status_code VARCHAR(100),
+  work_status_id VARCHAR(100),
   updated_by VARCHAR(255),
-  reason TEXT,
-  reason_code VARCHAR(100),
+  reason_id TEXT,
   created_date_time TIMESTAMP,
   entered_date_time TIMESTAMP,
   exited_date_time TIMESTAMP,
   comments TEXT,
   CONSTRAINT fk_work_order_status_history_work_order FOREIGN KEY (work_order_id) REFERENCES work_order(work_order_id)
+  CONSTRAINT fk_work_order_status_history_work_status FOREIGN KEY (work_status_id) REFERENCES work_status(work_status_id),
+  CONSTRAINT fk_work_order_status_history_reason FOREIGN KEY (reason_id) REFERENCES reason_code(reason_code_id)
 );
+
+CREATE TABLE reason_code (
+  reason_code_id VARCHAR(255) PRIMARY KEY,
+  code VARCHAR(100) NOT NULL UNIQUE,
+);
+INSERT INTO reason_code (code)
+VALUES 
+-- UKHDS codes
+  ('NoBudget'), 
+  ('LowPriority'), 
+  ('FullyFunded'), 
+  ('PartiallyFunded'), 
+  ('ScheduleConflict'), 
+  ('NoApproval'), 
+  ('Approved'), 
+  ('PriorityChange'), 
+ 
+-- new codes to consider
+  ('NoAccess'), 
+  ('TenantUnavailable'), 
+  ('WeatherConditions'), 
+  ('MaterialShortage'), 
+  ('TechnicalIssue'), 
+  ('ResourceAvailability'), 
+  ('SafetyConcern'), 
+  ('RegulatoryCompliance'), 
+  ('Other');
+
+CREATE TABLE work_status (
+  work_status_id VARCHAR(255) PRIMARY KEY,
+  code VARCHAR(100) NOT NULL UNIQUE,
+  description TEXT
+);
+INSERT INTO work_status (code)
+VALUES
+
+  -- UKHDS codes
+  ('AccountingHold'), 
+  ('Cancelled'), 
+  ('Complete'), 
+  ('Estimating'), 
+  ('Hold'), 
+  ('PendingApproval'), 
+  ('PendingDesign'), 
+  ('PendingMaterial'), 
+  ('Scheduled'),
+  ('Superceded'),
+--new codes to consider
+  ('Open'), 
+  ('InProgress'), 
+  ('Completed'), 
+  ('Cancelled'), 
+  ('OnHold'), 
+  ('AwaitingParts'), 
+  ('AwaitingApproval'), 
+  ('Scheduled'), 
+  ('Delayed');
 
 CREATE TABLE work_order_complete (
   work_order_complete_id VARCHAR(255) PRIMARY KEY,
