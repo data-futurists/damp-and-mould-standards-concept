@@ -55,6 +55,7 @@ Table Inspection {
   PropertyID int
   TenantID int
   TenancyID int
+  HazardReportID int
   TriggerSourceID int 
   HazardReportedDate date
   InspectionScheduledDate date
@@ -191,6 +192,7 @@ Ref: HazardReport.ReportStatusID > ReportStatus.ReportStatusID
 Ref: Inspection.PropertyID > property.property_id
 Ref: Inspection.TenantID > Tenant.TenantID
 Ref: Inspection.TenancyID > Tenancy.TenancyID
+Ref: Inspection.HazardReportID > HazardReport.HazardReportID
 Ref: Inspection.TriggerSourceID > TriggerSource.TriggerSourceID
 Ref: Inspection.EscalationStatusID > EscalationStatus.EscalationStatusID
 Ref: Notification.InspectionID > Inspection.InspectionID

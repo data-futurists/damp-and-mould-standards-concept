@@ -25,6 +25,11 @@ CREATE TABLE HazardType (
 );
 -- Create HazardReport table
 -- Table storing hazard reports submitted.
+
+-- how do we do communal areas
+-- GIS field
+
+
 CREATE TABLE HazardReport (
   HazardReportID INT PRIMARY KEY IDENTITY(1, 1), 
   PropertyID INT NOT NULL, 
@@ -38,6 +43,7 @@ CREATE TABLE HazardReport (
   InvestigationDueDate DATE NOT NULL, 
   EmergencyActionTaken BIT NOT NULL DEFAULT 0, 
   MadeSafeDate DATE NULL, 
+  -- move further work to work component
   FurtherWorkRequired BIT NOT NULL DEFAULT 0, 
   FurtherWorkDueDate DATE NULL, 
   ReportStatusID INT NOT NULL, 
@@ -65,12 +71,13 @@ CREATE TABLE HazardReport (
 CREATE TABLE Inspection (
   InspectionID INT PRIMARY KEY IDENTITY(1, 1), 
   PropertyID INT NOT NULL, 
-  TenantID INT NOT NULL, 
+  TenantID INT NOT NULL, -- change to another
   TenancyID INT NOT NULL, 
   TriggerSourceID INT NOT NULL, 
   HazardReportedDate DATE NOT NULL, 
   InspectionScheduledDate DATE NULL, 
-  InspectionCompletedDate DATE NULL, 
+  InspectionCompletedDate DATE NULL,
+  InspectorID INT NOT NULL,
   InspectorName NVARCHAR(100) NULL, 
   HazardConfirmed BIT NOT NULL DEFAULT 0, 
   RepairRequired BIT NOT NULL DEFAULT 0, 
@@ -83,7 +90,8 @@ CREATE TABLE Inspection (
   CONSTRAINT fk_inspection_property FOREIGN KEY (PropertyID) REFERENCES Property(PropertyID), 
   CONSTRAINT fk_inspection_tenant FOREIGN KEY (TenantID) REFERENCES TenantPerson(TenantID), 
   CONSTRAINT fk_inspection_tenancy FOREIGN KEY (TenancyID) REFERENCES Tenancy(TenancyID), 
-  CONSTRAINT fk_inspection_triggersource FOREIGN KEY (TriggerSourceID) REFERENCES TriggerSource(TriggerSourceID), 
+  CONSTRAINT fk_inspection_triggersource FOREIGN KEY (TriggerSourceID) REFERENCES TriggerSource(TriggerSourceID),
+  CONSTRAINT fk_inspection_inspector FOREIGN KEY (InspectorID) REFERENCES Inspector(InspectorID),
   CONSTRAINT fk_inspection_escalationstatus FOREIGN KEY (EscalationStatusID) REFERENCES EscalationStatus(EscalationStatusID), 
   CONSTRAINT chk_hazard_confirmed CHECK (
     HazardConfirmed IN (0, 1)
@@ -202,6 +210,7 @@ CREATE TABLE Escalation (
     )
   )
 );
+
 ----------------------------------------------------------------------------------------
 -- Code lists
 -- Scripts below create the required code lists and populate the options
@@ -323,3 +332,9 @@ VALUES
   ('Legal Action'), 
   ('Compensation'), 
   ('Alternative Accommodation');
+-- Create Inspector table
+-- Table storing inspector details.
+CREATE TABLE Inspector (
+  InspectorID INT PRIMARY KEY IDENTITY(1, 1), 
+  InspectorName NVARCHAR(100) NOT NULL, 
+);
