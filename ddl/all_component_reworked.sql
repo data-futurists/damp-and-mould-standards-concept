@@ -386,32 +386,33 @@ CREATE TABLE certification (
 -- --------------------------------------------------
 
 CREATE TABLE tenant_person (
-  tenant_id VARCHAR(50) PRIMARY KEY,
+  tenant_id INTEGER PRIMARY KEY AUTOINCREMENT,
   full_name VARCHAR(255) NOT NULL,
-  person_alert_type_id VARCHAR(50),
+  person_alert_type_id INTEGER,
   date_of_birth DATE,
-  contact_details TEXT,
+  phone_number INTEGER,
+  email INTEGER
   vulnerability_flag BOOLEAN DEFAULT FALSE,
   CONSTRAINT fk_tenant_person_alert_type FOREIGN KEY (person_alert_type_id) REFERENCES person_alert_type(person_alert_type_id),
   CONSTRAINT chk_vulnerability_flag CHECK (vulnerability_flag IN (0, 1))
 );
 
 CREATE TABLE tenancy (
-  tenancy_id VARCHAR(50) PRIMARY KEY,
-  tenant_id VARCHAR(50) NOT NULL,
-  address_id VARCHAR(50) NOT NULL,
+  tenancy_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  tenant_id INTEGER NOT NULL,
+  address_id INTEGER NOT NULL,
   start_date DATE NOT NULL,
-  end_date DATE,
+  end_date DATE NOT NULL,
   tenancy_type VARCHAR(100),
   tenancy_status VARCHAR(100),
   CONSTRAINT fk_tenancy_tenant FOREIGN KEY (tenant_id) REFERENCES tenant_person(tenant_id)
-);
+);00
 
 CREATE TABLE household_member_person (
-  household_member_id VARCHAR(50) PRIMARY KEY,
-  tenant_id VARCHAR(50) NOT NULL,
-  tenancy_id VARCHAR(50) NOT NULL,
-  person_alert_type_id VARCHAR(50),
+  household_member_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  tenant_id INTEGER NOT NULL,
+  tenancy_id INTEGER NOT NULL,
+  person_alert_type_id INTEGER,
   full_name VARCHAR(255) NOT NULL,
   date_of_birth DATE,
   relationship_to_tenant VARCHAR(100),
