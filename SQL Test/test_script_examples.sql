@@ -42,7 +42,7 @@ SELECT * FROM inspection WHERE repair_completed_date < repair_scheduled_date;
 -- fields comply. Any rows shown in the output are where the field does not satisfy 
 -- the data type. This test can be replicated for each data field/data type.
 
-SELECT * FROM hazard_report WHERE Emergency_action_taken NOT IN (0,1);
+SELECT * FROM hazard_report WHERE emergency_action_taken NOT IN (0,1);
 
 -- Another example testing the length of the description field in the hazard_report
 -- table. Any rows shown in the output are where the description field is too long.
