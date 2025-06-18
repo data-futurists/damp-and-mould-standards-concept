@@ -2,7 +2,7 @@
 -- Author(s): George Foster (TPXImpact), Rizwan Nobeebux (Data Futurists), Elena Iurco (Data Futurists)
 -- Email(s): george.foster@tpximpact.com, rizwan.nobeebux@datafuturists.com, elena.iurco@datafuturists.com
 --
--- Scripts below create the required tables in the Inspection, Property, Tenant and Work Order Modules
+-- Scripts below create the required tables in the investigation, Property, Tenant and Work Order Modules
 ----------------------------------------------------------------------------------------
 -- NOTES
 -- On delete or on update behaviour for the FKs? Leave for now
@@ -53,17 +53,17 @@ CREATE TABLE HazardReport (
     OR MadeSafeDate >= DateReported
   )
 );
--- Create Inspection table
--- Table storing inspection details.
-CREATE TABLE Inspection (
-  InspectionID INT PRIMARY KEY IDENTITY(1, 1), 
+-- Create investigation table
+-- Table storing investigation details.
+CREATE TABLE investigation (
+  investigationID INT PRIMARY KEY IDENTITY(1, 1), 
   PropertyID INT NOT NULL, 
   TenantID INT NOT NULL, 
   TenancyID INT NOT NULL, 
   TriggerSourceID INT NOT NULL, 
   HazardReportedDate DATE NOT NULL, 
-  InspectionScheduledDate DATE NULL, 
-  InspectionCompletedDate DATE NULL, 
+  investigationScheduledDate DATE NULL, 
+  investigationCompletedDate DATE NULL, 
   InspectorName NVARCHAR(100) NULL, 
   HazardConfirmed BIT NOT NULL DEFAULT 0, 
   RepairRequired BIT NOT NULL DEFAULT 0, 
@@ -72,12 +72,12 @@ CREATE TABLE Inspection (
   SLABreachFlag BIT NOT NULL DEFAULT 0, 
   EscalationStatusID INT NOT NULL, 
   NotificationSentToTenant BIT NOT NULL DEFAULT 0, 
-  InspectionNotes NVARCHAR(500) NULL, 
-  CONSTRAINT fk_inspection_property FOREIGN KEY (PropertyID) REFERENCES Property(PropertyID), 
-  CONSTRAINT fk_inspection_tenant FOREIGN KEY (TenantID) REFERENCES Tenant(TenantID), 
-  CONSTRAINT fk_inspection_tenancy FOREIGN KEY (TenancyID) REFERENCES Tenancy(TenancyID), 
-  CONSTRAINT fk_inspection_triggersource FOREIGN KEY (TriggerSourceID) REFERENCES TriggerSource(TriggerSourceID), 
-  CONSTRAINT fk_inspection_escalationstatus FOREIGN KEY (EscalationStatusID) REFERENCES EscalationStatus(EscalationStatusID), 
+  investigationNotes NVARCHAR(500) NULL, 
+  CONSTRAINT fk_investigation_property FOREIGN KEY (PropertyID) REFERENCES Property(PropertyID), 
+  CONSTRAINT fk_investigation_tenant FOREIGN KEY (TenantID) REFERENCES Tenant(TenantID), 
+  CONSTRAINT fk_investigation_tenancy FOREIGN KEY (TenancyID) REFERENCES Tenancy(TenancyID), 
+  CONSTRAINT fk_investigation_triggersource FOREIGN KEY (TriggerSourceID) REFERENCES TriggerSource(TriggerSourceID), 
+  CONSTRAINT fk_investigation_escalationstatus FOREIGN KEY (EscalationStatusID) REFERENCES EscalationStatus(EscalationStatusID), 
   CONSTRAINT chk_hazard_confirmed CHECK (
     HazardConfirmed IN (0, 1)
   ), 
@@ -95,42 +95,42 @@ CREATE TABLE Inspection (
     OR RepairScheduledDate IS NULL 
     OR RepairCompletedDate >= RepairScheduledDate
   ), 
-  CONSTRAINT chk_inspection_scheduled_date CHECK (
-    InspectionScheduledDate IS NULL 
-    OR InspectionScheduledDate >= HazardReportedDate
+  CONSTRAINT chk_investigation_scheduled_date CHECK (
+    investigationScheduledDate IS NULL 
+    OR investigationScheduledDate >= HazardReportedDate
   ), 
-  CONSTRAINT chk_inspection_completed_date CHECK (
-    InspectionCompletedDate IS NULL 
-    OR InspectionScheduledDate IS NULL 
-    OR InspectionCompletedDate >= InspectionScheduledDate
+  CONSTRAINT chk_investigation_completed_date CHECK (
+    investigationCompletedDate IS NULL 
+    OR investigationScheduledDate IS NULL 
+    OR investigationCompletedDate >= investigationScheduledDate
   )
 );
--- Create InspectionHazard table
--- Table mapping inspections to hazards found.
-CREATE TABLE InspectionHazard (
-  InspectionHazardID INT PRIMARY KEY IDENTITY(1, 1), 
+-- Create investigationHazard table
+-- Table mapping investigations to hazards found.
+CREATE TABLE investigationHazard (
+  investigationHazardID INT PRIMARY KEY IDENTITY(1, 1), 
   HazardTypeID INT NOT NULL, 
-  InspectionID INT NOT NULL, 
+  investigationID INT NOT NULL, 
   HazardReportID INT NOT NULL, 
   SeverityID INT NOT NULL, 
   Notes NVARCHAR(500) NULL, 
-  CONSTRAINT fk_inspectionhazard_hazardtype FOREIGN KEY (HazardTypeID) REFERENCES HazardType(HazardTypeID), 
-  CONSTRAINT fk_inspectionhazard_inspection FOREIGN KEY (InspectionID) REFERENCES Inspection(InspectionID), 
-  CONSTRAINT fk_inspectionhazard_hazardreport FOREIGN KEY (HazardReportID) REFERENCES HazardReport(HazardReportID), 
-  CONSTRAINT fk_inspectionhazard_severity FOREIGN KEY (SeverityID) REFERENCES Severity(SeverityID)
+  CONSTRAINT fk_investigationhazard_hazardtype FOREIGN KEY (HazardTypeID) REFERENCES HazardType(HazardTypeID), 
+  CONSTRAINT fk_investigationhazard_investigation FOREIGN KEY (investigationID) REFERENCES investigation(investigationID), 
+  CONSTRAINT fk_investigationhazard_hazardreport FOREIGN KEY (HazardReportID) REFERENCES HazardReport(HazardReportID), 
+  CONSTRAINT fk_investigationhazard_severity FOREIGN KEY (SeverityID) REFERENCES Severity(SeverityID)
 );
 -- Create Notification table
--- Table storing notifications related to inspections.
+-- Table storing notifications related to investigations.
 CREATE TABLE Notification (
   NotificationID INT PRIMARY KEY IDENTITY(1, 1), 
-  InspectionID INT NOT NULL, 
+  investigationID INT NOT NULL, 
   TenantID INT NOT NULL, 
   WorkOrderID INT NOT NULL, 
   NotificationTypeID INT NOT NULL, 
   DateSent DATE NOT NULL, 
   NotificationMethodID INT NOT NULL, 
   ContentSummary NVARCHAR(500) NULL, 
-  CONSTRAINT fk_notification_inspection FOREIGN KEY (InspectionID) REFERENCES Inspection(InspectionID), 
+  CONSTRAINT fk_notification_investigation FOREIGN KEY (investigationID) REFERENCES investigation(investigationID), 
   CONSTRAINT fk_notification_tenant FOREIGN KEY (TenantID) REFERENCES Tenant(TenantID), 
   CONSTRAINT fk_notification_workorder FOREIGN KEY (WorkOrderID) REFERENCES WorkOrder(WorkOrderID), 
   CONSTRAINT fk_notification_notificationtype FOREIGN KEY (NotificationTypeID) REFERENCES NotificationType(NotificationTypeID), 
@@ -140,7 +140,7 @@ CREATE TABLE Notification (
 -- Table storing escalation actions and tracking.
 CREATE TABLE Escalation (
   EscalationID INT PRIMARY KEY IDENTITY(1, 1), 
-  InspectionID INT NOT NULL, 
+  investigationID INT NOT NULL, 
   EscalationReason NVARCHAR(100) NULL, 
   EscalationStageID INT NOT NULL, 
   EscalationTypeID INT NOT NULL, 
@@ -154,7 +154,7 @@ CREATE TABLE Escalation (
   AlternativeAccommodationDetails NVARCHAR(500) NULL, 
   TenantAcceptance BIT NOT NULL DEFAULT 0, 
   EscalationNotes NVARCHAR(500) NULL, 
-  CONSTRAINT fk_escalation_inspection FOREIGN KEY (InspectionID) REFERENCES Inspection(InspectionID), 
+  CONSTRAINT fk_escalation_investigation FOREIGN KEY (investigationID) REFERENCES investigation(investigationID), 
   CONSTRAINT fk_escalation_escalationstage FOREIGN KEY (EscalationStageID) REFERENCES EscalationStage(EscalationStageID), 
   CONSTRAINT fk_escalation_escalationtype FOREIGN KEY (EscalationTypeID) REFERENCES EscalationType(EscalationTypeID), 
   CONSTRAINT chk_compensation_offered CHECK (
@@ -473,7 +473,7 @@ CREATE TABLE WorkOrder (
     WorkOrderID VARCHAR(50) PRIMARY KEY,             -- Unique ID for the work order
     WorkElementID VARCHAR(50),                       -- Possibly a representative element (optional FK)
     AddressID VARCHAR(50),                           -- FK to address
-    InspectionID VARCHAR(50),                        -- FK to inspection
+    investigationID VARCHAR(50),                        -- FK to investigation
     EscalationID VARCHAR(50),                        -- FK to escalation event
     TenancyID VARCHAR(50),                           -- FK to tenancy
     TenantID VARCHAR(50),                            -- FK to tenant
@@ -513,8 +513,8 @@ CREATE TABLE WorkOrder (
     CONSTRAINT fk_WorkOrder_AddressID
       FOREIGN KEY (AddressID) REFERENCES address(address_id),
 
-    CONSTRAINT fk_WorkOrder_InspectionID
-      FOREIGN KEY (InspectionID) REFERENCES Inspection(InspectionID),
+    CONSTRAINT fk_WorkOrder_investigationID
+      FOREIGN KEY (investigationID) REFERENCES investigation(investigationID),
 
     CONSTRAINT fk_WorkOrder_EscalationID
       FOREIGN KEY (EscalationID) REFERENCES Escalation(EscalationID),
@@ -605,7 +605,7 @@ VALUES
   (1, 'Emergency', 'Immediate response required to prevent danger to life or significant property damage'),
   (2, 'Defect', 'A defect that is to be repaired/corrected under warranty (either original builder''s warranty, manufacturer''s warranty, or seller''s warranty)'), -- UKHDS
   (3, 'Urgent', 'Work that requires immediate attention but is not classified as an emergency'),
-  (3, 'Remedial', 'Follow-up work to address issues identified during a previous inspection or audit'),
+  (3, 'Remedial', 'Follow-up work to address issues identified during a previous investigation or audit'),
 
   -- Statutory & Regulatory
   (4, 'Statutory', 'Work undertaken to comply with statutory or regulatory obligations'),
@@ -625,8 +625,8 @@ VALUES
   (14, 'MoveManagement', 'Personnel relocation'), -- UKHDS
 
   -- Assessment & Diagnostics
-  (15, 'Assessment', 'An inspection that would likely result in either a Demand or Maintenance Project work order'), -- UKHDS
-  (16, 'Inspection', 'Routine or ad-hoc inspection that may or may not result in further work'),
+  (15, 'Assessment', 'An investigation that would likely result in either a Demand or Maintenance Project work order'), -- UKHDS
+  (16, 'investigation', 'Routine or ad-hoc investigation that may or may not result in further work'),
   (17, 'Survey', 'Technical assessment such as stock condition, energy performance, or asbestos'),
 
   -- Demand-Based
@@ -766,7 +766,7 @@ VALUES
   (19, 'LowIncome', 'Household is on low income and may face barriers to heating or ventilation'),
   (20, 'ChildProtection', 'Child at risk or under child protection services'),
   (21, 'DomesticViolence', 'Person is a victim of domestic violence or abuse'),
-  (22, 'RefusedAccess', 'Tenant has refused property access for repairs or inspections'),
+  (22, 'RefusedAccess', 'Tenant has refused property access for repairs or investigations'),
 
 CREATE TABLE LocationAlertTypeCodes (
   LocationAlertCodeID VARCHAR (50) PRIMARY KEY,
@@ -787,7 +787,7 @@ VALUES
   (8, 'HealthRiskOccupants', 'One or more occupants are at high health risk from damp or poor air quality'),
   (9, 'PoorVentilation', 'Location has inadequate natural or mechanical ventilation'),
   (10, 'StructuralIssues', 'Structural conditions (e.g. cracks, leaks) increase damp/mould risk'),
-  (11, 'PastHHSRSFailure', 'Property has previously failed an HHSRS inspection'),
+  (11, 'PastHHSRSFailure', 'Property has previously failed an HHSRS investigation'),
   (12, 'ColdProperty', 'Property struggles to retain heat, contributing to condensation and mould'),
   (13, 'VoidMouldRemediation', 'Void property requires mould remediation before re-letting'),
   (14, 'AsbestosPresent', 'Asbestos materials present — additional precautions required'),
@@ -855,7 +855,7 @@ VALUES
   ('Made Safe'), 
   ('Closed');
 -- TriggerSource Table
--- Code list for what triggered inspections.
+-- Code list for what triggered investigations.
 CREATE TABLE TriggerSource (
   TriggerSourceID INT PRIMARY KEY IDENTITY(1, 1), 
   TriggerSource NVARCHAR(20) NOT NULL

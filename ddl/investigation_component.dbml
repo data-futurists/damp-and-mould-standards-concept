@@ -1,4 +1,4 @@
-// DBML script for Inspection Module schema
+// DBML script for investigation Module schema
 // Author: George Foster (TPXImpact)
 // Email: george.foster@tpximpact.com
 
@@ -41,7 +41,7 @@ Table TriggerSource {
   TriggerSourceID int [pk, increment]
   TriggerSource nvarchar(20)
 
-  Note: 'Defines what triggered an inspection.'
+  Note: 'Defines what triggered an investigation.'
 }
 
 Table EscalationStatus {
@@ -92,15 +92,15 @@ Table HazardType {
   Note: 'Stores types of hazards and their associated health risk ratings.'
 }
 
-Table InspectionHazard {
-  InspectionHazardID int [pk, increment]
+Table investigationHazard {
+  investigationHazardID int [pk, increment]
   HazardTypeID int [ref: > HazardType.HazardTypeID]
-  InspectionID int [ref: > Inspection.InspectionID]
+  investigationID int [ref: > investigation.investigationID]
   HazardReportID int [ref: > HazardReport.HazardReportID]
   SeverityID int [ref: > Severity.SeverityID]
   Notes nvarchar(500)
 
-  Note: 'Links inspections with reported hazards including severity and notes.'
+  Note: 'Links investigations with reported hazards including severity and notes.'
 }
 
 Table HazardReport {
@@ -123,15 +123,15 @@ Table HazardReport {
   Note: 'Captures reported hazards including details and status.'
 }
 
-Table Inspection {
-  InspectionID int [pk, increment]
+Table investigation {
+  investigationID int [pk, increment]
   PropertyID int //[ref: > Property.PropertyID]
   TenantID int //[ref: > TenantPerson.TenantID]
   TenancyID int //[ref: > Tenancy.TenancyID]
   TriggerSourceID int [ref: > TriggerSource.TriggerSourceID]
   HazardReportedDate date
-  InspectionScheduledDate date
-  InspectionCompletedDate date
+  investigationScheduledDate date
+  investigationCompletedDate date
   InspectorName nvarchar(100)
   HazardConfirmed bit
   RepairRequired bit
@@ -140,14 +140,14 @@ Table Inspection {
   SLABreachFlag bit
   EscalationStatusID int [ref: > EscalationStatus.EscalationStatusID]
   NotificationSentToTenant bit
-  InspectionNotes nvarchar(500)
+  investigationNotes nvarchar(500)
 
-  Note: 'Details inspections including schedule, status, and outcomes.'
+  Note: 'Details investigations including schedule, status, and outcomes.'
 }
 
 Table Notification {
   NotificationID int [pk, increment]
-  InspectionID int [ref: > Inspection.InspectionID]
+  investigationID int [ref: > investigation.investigationID]
   TenantID int //[ref: > TenantPerson.TenantID]
   WorkOrderID int //[ref: > WorkOrder.WorkOrderID]
   NotificationTypeID int [ref: > NotificationType.NotificationTypeID]
@@ -155,12 +155,12 @@ Table Notification {
   NotificationMethodID int [ref: > NotificationMethod.NotificationMethodID]
   ContentSummary nvarchar(500)
 
-  Note: 'Records notifications sent to tenants about inspections or repairs.'
+  Note: 'Records notifications sent to tenants about investigations or repairs.'
 }
 
 Table Escalation {
   EscalationID int [pk, increment]
-  InspectionID int [ref: > Inspection.InspectionID]
+  investigationID int [ref: > investigation.investigationID]
   EscalationReason nvarchar(100)
   EscalationStageID int [ref: > EscalationStage.EscalationStageID]
   EscalationTypeID int [ref: > EscalationType.EscalationTypeID]
@@ -175,5 +175,5 @@ Table Escalation {
   TenantAcceptance bit
   EscalationNotes nvarchar(500)
 
-  Note: 'Tracks escalations made during the inspection or repair process.'
+  Note: 'Tracks escalations made during the investigation or repair process.'
 }

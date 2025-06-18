@@ -457,10 +457,10 @@ VALUES
   ('Adaptations'), 
   ('ImprovementWorks'), 
   ('ComplianceCheck'), 
-  ('InspectionFollowUp'), 
+  ('investigationFollowUp'), 
   ('EscalationWork'), 
   ('MoveManagement'),
-  ('Inspection'),
+  ('investigation'),
   ('Survey'), 
   ('Cleaning'), 
   ('GroundsMaintenance'), 
@@ -625,7 +625,7 @@ CREATE TABLE work_order (
   work_order_id VARCHAR(255) PRIMARY KEY,
   work_element_id VARCHAR(255),
   address_id VARCHAR(255),
-  inspection_id VARCHAR(255),
+  investigation_id VARCHAR(255),
   escalation_id VARCHAR(255),
   tenancy_id VARCHAR(255),
   tenant_id VARCHAR(255),
@@ -654,7 +654,7 @@ CREATE TABLE work_order (
   CONSTRAINT fk_work_order_location_alert_type FOREIGN KEY (location_alert_id) REFERENCES location_alert_type(location_alert_type_id),
   CONSTRAINT fk_work_order_person_alert_type FOREIGN KEY (person_alert_id) REFERENCES person_alert_type(person_alert_type_id),
   CONSTRAINT fk_work_order_address FOREIGN KEY (address_id) REFERENCES address(address_id),
-  CONSTRAINT fk_work_order_inspection FOREIGN KEY (inspection_id) REFERENCES inspection(inspection_id),
+  CONSTRAINT fk_work_order_investigation FOREIGN KEY (investigation_id) REFERENCES investigation(investigation_id),
   CONSTRAINT fk_work_order_escalation FOREIGN KEY (escalation_id) REFERENCES escalation(escalation_id),
   CONSTRAINT fk_work_order_tenancy FOREIGN KEY (tenancy_id) REFERENCES tenancy(tenancy_id),
   CONSTRAINT fk_work_order_tenant FOREIGN KEY (tenant_id) REFERENCES tenant_person(tenant_id),
@@ -802,7 +802,7 @@ CREATE TABLE work_order_access_information (
 );
 
 -- --------------------------------------------------
--- Inspection Module Tables
+-- investigation Module Tables
 -- --------------------------------------------------
 
 CREATE TABLE hazard_type (
@@ -839,16 +839,16 @@ CREATE TABLE hazard_report (
   CONSTRAINT chk_made_safe_date CHECK (made_safe_date IS NULL OR made_safe_date >= date_reported)
 );
 
-CREATE TABLE inspection (
-  inspection_id INTEGER PRIMARY KEY AUTOINCREMENT,
+CREATE TABLE investigation (
+  investigation_id INTEGER PRIMARY KEY AUTOINCREMENT,
   property_id INTEGER NOT NULL,
   tenant_id VARCHAR(50) NOT NULL,
   tenancy_id VARCHAR(50) NOT NULL,
   hazard_report_id INTEGER NOT NULL,
   trigger_source_id INTEGER NOT NULL,
   hazard_reported_date DATE NOT NULL,
-  inspection_scheduled_date DATE,
-  inspection_completed_date DATE,
+  investigation_scheduled_date DATE,
+  investigation_completed_date DATE,
   inspector_name NVARCHAR(100),
   hazard_confirmed INTEGER NOT NULL DEFAULT 0,
   repair_required INTEGER NOT NULL DEFAULT 0,
@@ -857,38 +857,38 @@ CREATE TABLE inspection (
   sla_breach_flag INTEGER NOT NULL DEFAULT 0,
   escalation_status_id INTEGER NOT NULL,
   notification_sent_to_tenant INTEGER NOT NULL DEFAULT 0,
-  inspection_notes NVARCHAR(500),
-  CONSTRAINT fk_inspection_property FOREIGN KEY (property_id) REFERENCES property(property_id),
-  CONSTRAINT fk_inspection_tenant FOREIGN KEY (tenant_id) REFERENCES tenant_person(tenant_id),
-  CONSTRAINT fk_inspection_tenancy FOREIGN KEY (tenancy_id) REFERENCES tenancy(tenancy_id),
-  CONSTRAINT fk_inspection_hazard_report FOREIGN KEY (hazard_report_id) REFERENCES hazard_report(hazard_report_id),
-  CONSTRAINT fk_inspection_trigger_source FOREIGN KEY (trigger_source_id) REFERENCES trigger_source(trigger_source_id),
-  CONSTRAINT fk_inspection_escalation_status FOREIGN KEY (escalation_status_id) REFERENCES escalation_status(escalation_status_id),
+  investigation_notes NVARCHAR(500),
+  CONSTRAINT fk_investigation_property FOREIGN KEY (property_id) REFERENCES property(property_id),
+  CONSTRAINT fk_investigation_tenant FOREIGN KEY (tenant_id) REFERENCES tenant_person(tenant_id),
+  CONSTRAINT fk_investigation_tenancy FOREIGN KEY (tenancy_id) REFERENCES tenancy(tenancy_id),
+  CONSTRAINT fk_investigation_hazard_report FOREIGN KEY (hazard_report_id) REFERENCES hazard_report(hazard_report_id),
+  CONSTRAINT fk_investigation_trigger_source FOREIGN KEY (trigger_source_id) REFERENCES trigger_source(trigger_source_id),
+  CONSTRAINT fk_investigation_escalation_status FOREIGN KEY (escalation_status_id) REFERENCES escalation_status(escalation_status_id),
   CONSTRAINT chk_hazard_confirmed CHECK (hazard_confirmed IN (0,1)),
   CONSTRAINT chk_repair_required CHECK (repair_required IN (0,1)),
   CONSTRAINT chk_sla_breach CHECK (sla_breach_flag IN (0,1)),
   CONSTRAINT chk_notification_sent_to_tenant CHECK (notification_sent_to_tenant IN (0,1)),
   CONSTRAINT chk_repair_completed_date CHECK (repair_completed_date IS NULL OR repair_scheduled_date IS NULL OR repair_completed_date >= repair_scheduled_date),
-  CONSTRAINT chk_inspection_scheduled_date CHECK (inspection_scheduled_date IS NULL OR inspection_scheduled_date >= hazard_reported_date),
-  CONSTRAINT chk_inspection_completed_date CHECK (inspection_completed_date IS NULL OR inspection_scheduled_date IS NULL OR inspection_completed_date >= inspection_scheduled_date)
+  CONSTRAINT chk_investigation_scheduled_date CHECK (investigation_scheduled_date IS NULL OR investigation_scheduled_date >= hazard_reported_date),
+  CONSTRAINT chk_investigation_completed_date CHECK (investigation_completed_date IS NULL OR investigation_scheduled_date IS NULL OR investigation_completed_date >= investigation_scheduled_date)
 );
 
-CREATE TABLE inspection_hazard (
-  inspection_hazard_id INTEGER PRIMARY KEY AUTOINCREMENT,
+CREATE TABLE investigation_hazard (
+  investigation_hazard_id INTEGER PRIMARY KEY AUTOINCREMENT,
   hazard_type_id INTEGER NOT NULL,
-  inspection_id INTEGER NOT NULL,
+  investigation_id INTEGER NOT NULL,
   hazard_report_id INTEGER NOT NULL,
   severity_id INTEGER NOT NULL,
   notes NVARCHAR(500),
-  CONSTRAINT fk_inspection_hazard_type FOREIGN KEY (hazard_type_id) REFERENCES hazard_type(hazard_type_id),
-  CONSTRAINT fk_inspection_hazard_inspection FOREIGN KEY (inspection_id) REFERENCES inspection(inspection_id),
-  CONSTRAINT fk_inspection_hazard_report FOREIGN KEY (hazard_report_id) REFERENCES hazard_report(hazard_report_id),
-  CONSTRAINT fk_inspection_hazard_severity FOREIGN KEY (severity_id) REFERENCES severity(severity_id)
+  CONSTRAINT fk_investigation_hazard_type FOREIGN KEY (hazard_type_id) REFERENCES hazard_type(hazard_type_id),
+  CONSTRAINT fk_investigation_hazard_investigation FOREIGN KEY (investigation_id) REFERENCES investigation(investigation_id),
+  CONSTRAINT fk_investigation_hazard_report FOREIGN KEY (hazard_report_id) REFERENCES hazard_report(hazard_report_id),
+  CONSTRAINT fk_investigation_hazard_severity FOREIGN KEY (severity_id) REFERENCES severity(severity_id)
 );
 
 CREATE TABLE escalation (
   escalation_id INTEGER PRIMARY KEY AUTOINCREMENT,
-  inspection_id INTEGER NOT NULL,
+  investigation_id INTEGER NOT NULL,
   escalation_reason NVARCHAR(100),
   escalation_stage_id INTEGER NOT NULL,
   escalation_type_id INTEGER NOT NULL,
@@ -902,7 +902,7 @@ CREATE TABLE escalation (
   alternative_accommodation_details NVARCHAR(500),
   tenant_acceptance INTEGER NOT NULL DEFAULT 0,
   escalation_notes NVARCHAR(500),
-  CONSTRAINT fk_escalation_inspection FOREIGN KEY (inspection_id) REFERENCES inspection(inspection_id),
+  CONSTRAINT fk_escalation_investigation FOREIGN KEY (investigation_id) REFERENCES investigation(investigation_id),
   CONSTRAINT fk_escalation_stage FOREIGN KEY (escalation_stage_id) REFERENCES escalation_stage(escalation_stage_id),
   CONSTRAINT fk_escalation_type FOREIGN KEY (escalation_type_id) REFERENCES escalation_type(escalation_type_id),
   CONSTRAINT chk_compensation_offered CHECK (compensation_offered IN (0,1)),
@@ -916,14 +916,14 @@ CREATE TABLE escalation (
 
 CREATE TABLE notification (
   notification_id INTEGER PRIMARY KEY AUTOINCREMENT,
-  inspection_id INTEGER NOT NULL,
+  investigation_id INTEGER NOT NULL,
   tenant_id VARCHAR(50) NOT NULL,
   work_order_id VARCHAR(255) NOT NULL,
   notification_type_id INTEGER NOT NULL,
   date_sent DATE NOT NULL,
   notification_method_id INTEGER NOT NULL,
   content_summary NVARCHAR(500),
-  CONSTRAINT fk_notification_inspection FOREIGN KEY (inspection_id) REFERENCES inspection(inspection_id),
+  CONSTRAINT fk_notification_investigation FOREIGN KEY (investigation_id) REFERENCES investigation(investigation_id),
   CONSTRAINT fk_notification_tenant FOREIGN KEY (tenant_id) REFERENCES tenant_person(tenant_id),
   CONSTRAINT fk_notification_work_order FOREIGN KEY (work_order_id) REFERENCES work_order(work_order_id),
   CONSTRAINT fk_notification_type FOREIGN KEY (notification_type_id) REFERENCES notification_type(notification_type_id),

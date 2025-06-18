@@ -1,11 +1,11 @@
-// DBML script for Inspection Module schema
+// DBML script for investigation Module schema
 // Author(s): George Foster (TPXImpact), Rizwan Nobeebux (Data Futurists), Elena Iurco (Data Futurists)
 // Email(s): george.foster@tpximpact.com, rizwan.nobeebux@datafuturists.com, elena.iurco@datafuturists.com
 
 // Script created for use with dbdiagram.io for ERD
 
 // --------------------------------------
-// Inspection Component
+// investigation Component
 // --------------------------------------
 
 // Main Tables
@@ -19,15 +19,15 @@ Table HazardType {
   Note: 'Stores types of hazards and their associated health risk ratings.'
 }
 
-Table InspectionHazard {
-  InspectionHazardID int [pk, increment]
+Table investigationHazard {
+  investigationHazardID int [pk, increment]
   HazardTypeID int
-  InspectionID int
+  investigationID int
   HazardReportID int
   SeverityID int
   Notes nvarchar(500)
 
-  Note: 'Links inspections with reported hazards including severity and notes.'
+  Note: 'Links investigations with reported hazards including severity and notes.'
 }
 
 Table HazardReport {
@@ -50,16 +50,16 @@ Table HazardReport {
   Note: 'Captures reported hazards including details and status.'
 }
 
-Table Inspection {
-  InspectionID int [pk, increment]
+Table investigation {
+  investigationID int [pk, increment]
   PropertyID int
   TenantID int
   TenancyID int
   HazardReportID int
   TriggerSourceID int 
   HazardReportedDate date
-  InspectionScheduledDate date
-  InspectionCompletedDate date
+  investigationScheduledDate date
+  investigationCompletedDate date
   InspectorName nvarchar(100)
   HazardConfirmed bit
   RepairRequired bit
@@ -68,14 +68,14 @@ Table Inspection {
   SLABreachFlag bit
   EscalationStatusID int
   NotificationSentToTenant bit
-  InspectionNotes nvarchar(500)
+  investigationNotes nvarchar(500)
 
-  Note: 'Details inspections including schedule, status, and outcomes.'
+  Note: 'Details investigations including schedule, status, and outcomes.'
 }
 
 Table Notification {
   NotificationID int [pk, increment]
-  InspectionID int
+  investigationID int
   TenantID int
   WorkOrderID int
   NotificationTypeID int
@@ -83,12 +83,12 @@ Table Notification {
   NotificationMethodID int
   ContentSummary nvarchar(500)
 
-  Note: 'Records notifications sent to tenants about inspections or repairs.'
+  Note: 'Records notifications sent to tenants about investigations or repairs.'
 }
 
 Table Escalation {
   EscalationID int [pk, increment]
-  InspectionID int
+  investigationID int
   EscalationReason nvarchar(100)
   EscalationStageID int
   EscalationTypeID int
@@ -103,7 +103,7 @@ Table Escalation {
   TenantAcceptance bit
   EscalationNotes nvarchar(500)
 
-  Note: 'Tracks escalations made during the inspection or repair process.'
+  Note: 'Tracks escalations made during the investigation or repair process.'
 }
 
 // Codelists/lookup Tables
@@ -140,7 +140,7 @@ Table TriggerSource {
   TriggerSourceID int [pk, increment]
   TriggerSource nvarchar(20)
 
-  Note: 'Defines what triggered an inspection.'
+  Note: 'Defines what triggered an investigation.'
 }
 
 Table EscalationStatus {
@@ -181,26 +181,26 @@ Table EscalationType {
 // Relationships
 
 Ref: HazardType.HealthRiskRatingID > HealthRiskRating.HealthRiskRatingID
-Ref: InspectionHazard.HazardTypeID > HazardType.HazardTypeID
-Ref: InspectionHazard.InspectionID > Inspection.InspectionID
-Ref: InspectionHazard.HazardReportID > HazardReport.HazardReportID
-Ref: InspectionHazard.SeverityID > Severity.SeverityID
+Ref: investigationHazard.HazardTypeID > HazardType.HazardTypeID
+Ref: investigationHazard.investigationID > investigation.investigationID
+Ref: investigationHazard.HazardReportID > HazardReport.HazardReportID
+Ref: investigationHazard.SeverityID > Severity.SeverityID
 Ref: HazardReport.PropertyID > property.property_id
 Ref: HazardReport.TenantID > Tenant.TenantID
 Ref: HazardReport.InvestigationTypeID > InvestigationType.InvestigationTypeID
 Ref: HazardReport.ReportStatusID > ReportStatus.ReportStatusID
-Ref: Inspection.PropertyID > property.property_id
-Ref: Inspection.TenantID > Tenant.TenantID
-Ref: Inspection.TenancyID > Tenancy.TenancyID
-Ref: Inspection.HazardReportID > HazardReport.HazardReportID
-Ref: Inspection.TriggerSourceID > TriggerSource.TriggerSourceID
-Ref: Inspection.EscalationStatusID > EscalationStatus.EscalationStatusID
-Ref: Notification.InspectionID > Inspection.InspectionID
+Ref: investigation.PropertyID > property.property_id
+Ref: investigation.TenantID > Tenant.TenantID
+Ref: investigation.TenancyID > Tenancy.TenancyID
+Ref: investigation.HazardReportID > HazardReport.HazardReportID
+Ref: investigation.TriggerSourceID > TriggerSource.TriggerSourceID
+Ref: investigation.EscalationStatusID > EscalationStatus.EscalationStatusID
+Ref: Notification.investigationID > investigation.investigationID
 Ref: Notification.TenantID > Tenant.TenantID
 Ref: Notification.WorkOrderID > WorkOrder.WorkOrderID
 Ref: Notification.NotificationTypeID > NotificationType.NotificationTypeID
 Ref: Notification.NotificationMethodID > NotificationMethod.NotificationMethodID
-Ref: Escalation.InspectionID > Inspection.InspectionID
+Ref: Escalation.investigationID > investigation.investigationID
 Ref: Escalation.EscalationStageID > EscalationStage.EscalationStageID
 Ref: Escalation.EscalationTypeID> EscalationType.EscalationTypeID
 
@@ -458,7 +458,7 @@ Table WorkOrder {
   WorkOrderID varchar PK
   WorkElementID varchar
   AddressID varchar
-  InspectionID varchar
+  investigationID varchar
   EscalationID varchar
   TenancyID varchar
   TenantID varchar
@@ -591,7 +591,7 @@ Ref: WorkOrder.ContractorOrganisationID > ContractorOrganisation.ContractorOrgan
 Ref: WorkOrder.LocationAlertID > AlertRegardingLocation.LocationAlertID
 Ref: WorkOrder.PersonAlertID > AlertRegardingPerson.PersonAlertID
 Ref: WorkOrder.AddressID > address.address_id
-Ref: WorkOrder.InspectionID > Inspection.InspectionID
+Ref: WorkOrder.investigationID > investigation.investigationID
 Ref: WorkOrder.EscalationID > Escalation.EscalationID
 Ref: WorkOrder.TenancyID > Tenancy.TenancyID
 Ref: WorkOrder.TenantID > Tenant.TenantID

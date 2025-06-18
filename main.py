@@ -10,14 +10,14 @@ def main():
     st.sidebar.title("Navigation")
     page = st.sidebar.radio(
         "Go to",
-        ["Tenant", "Inspection", "Property", "Work Order", "All Components"]
+        ["Tenant", "investigation", "Property", "Work Order", "All Components"]
     )
     
     # Page routing
     if page == "Tenant":
         tenant_page()
-    elif page == "Inspection":
-        inspection_page()
+    elif page == "investigation":
+        investigation_page()
     elif page == "Property":
         property_page()
     elif page == "Work Order":
@@ -184,20 +184,20 @@ def all_components_page():
         st.error("DDL SQL file not found. Please ensure the file exists in the ddl directory.")
     
 
-def inspection_page():
-    st.title("Inspection")
-    st.write("This page provides an overview of the inspection component of the data model. This refers to the data model that is used to manage inspections, including their attributes and relationships.\n This component is crucial for understanding how inspections are represented in the system and how they relate to other components, such as properties and work orders.\n\n")
-    st.write("The inspection component includes various attributes such as inspection ID, date, type, and status. It also defines the relationships between inspections and other entities in the system, such as properties and work orders.\n\n")
+def investigation_page():
+    st.title("investigation")
+    st.write("This page provides an overview of the investigation component of the data model. This refers to the data model that is used to manage investigations, including their attributes and relationships.\n This component is crucial for understanding how investigations are represented in the system and how they relate to other components, such as properties and work orders.\n\n")
+    st.write("The investigation component includes various attributes such as investigation ID, date, type, and status. It also defines the relationships between investigations and other entities in the system, such as properties and work orders.\n\n")
 
         # Create a container for the ERD
     st.subheader("Entity Relationship Diagram (ERD)")
-    st.write("This diagram shows the relationships between different entities in the inspection component of the data model.")
+    st.write("This diagram shows the relationships between different entities in the investigation component of the data model.")
     erd_container = st.container()
     
     with erd_container:
         # Load and display the ERD SVG
         try:
-            svg_path = Path("erd/inspection_component.svg")  # Adjust path as needed
+            svg_path = Path("erd/investigation_component.svg")  # Adjust path as needed
             with open(svg_path, "r") as f:
                 svg_content = f.read()
             
@@ -213,7 +213,7 @@ def inspection_page():
 
     try:
         # Load JSON schema
-        schema_path = Path("schemas/inspection_component.JSON")
+        schema_path = Path("schemas/investigation_component.JSON")
         with open(schema_path, 'r') as file:
             schema = json.load(file)
 
@@ -253,7 +253,7 @@ def inspection_page():
 
     try:
         # Load SQL file
-        sql_path = Path("ddl/inspection_component.sql")
+        sql_path = Path("ddl/investigation_component.sql")
         with open(sql_path) as f:
             sql_content = f.read()
         
@@ -267,8 +267,8 @@ def inspection_page():
 
 def property_page():
     st.title("Property Component")
-    st.write("This page provides an overview of the property component of the data model. This refers to the data model that is used to manage properties, including their attributes and relationships.\n This component is crucial for understanding how properties are represented in the system and how they relate to other components, such as inspections and work orders.\n\n")
-    st.write("The property component includes various attributes such as property ID, address, type, and status. It also defines the relationships between properties and other entities in the system, such as tenants and inspections.\n\n")
+    st.write("This page provides an overview of the property component of the data model. This refers to the data model that is used to manage properties, including their attributes and relationships.\n This component is crucial for understanding how properties are represented in the system and how they relate to other components, such as investigations and work orders.\n\n")
+    st.write("The property component includes various attributes such as property ID, address, type, and status. It also defines the relationships between properties and other entities in the system, such as tenants and investigations.\n\n")
     
     # Create a container for the ERD
     st.subheader("Entity Relationship Diagram (ERD)")
@@ -348,8 +348,8 @@ def property_page():
 
 def work_order_page():
     st.title("Work Order")
-    st.write("This page provides an overview of the work order component of the data model. This refers to the data model that is used to manage work orders, including their attributes and relationships.\n This component is crucial for understanding how work orders are represented in the system and how they relate to other components, such as properties and inspections.\n\n")
-    st.write("The work order component includes various attributes such as work order ID, date, type, and status. It also defines the relationships between work orders and other entities in the system, such as properties and inspections.\n\n")
+    st.write("This page provides an overview of the work order component of the data model. This refers to the data model that is used to manage work orders, including their attributes and relationships.\n This component is crucial for understanding how work orders are represented in the system and how they relate to other components, such as properties and investigations.\n\n")
+    st.write("The work order component includes various attributes such as work order ID, date, type, and status. It also defines the relationships between work orders and other entities in the system, such as properties and investigations.\n\n")
 
     erd_container = st.container()
     

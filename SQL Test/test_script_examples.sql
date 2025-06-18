@@ -19,7 +19,7 @@ FROM
 -- This test confirms that the FKs used in the tables are contained in the parent table.
 -- The result of this query should be blank if the FKs are used correctly. If any rows
 -- are present then this shows that they should be added to the parent table.
--- The example is for the HazardReport table and the inspection_type table and should be 
+-- The example is for the HazardReport table and the investigation_type table and should be 
 -- replicated for each table in the model that contains FKs.
 SELECT 
   * 
@@ -38,12 +38,12 @@ WHERE
 -- The result of this query should be blank. Any results from this query indicates the
 -- date fields are incorrect as a completion cannot happen before a scheduled date.
 -- This test should be replicated for each set of dates where one must happen on or
--- before another. The example below is from the inspection table for the repair
+-- before another. The example below is from the investigation table for the repair
 -- completion and scheduled dates.
 SELECT 
   * 
 FROM 
-  inspection 
+  investigation 
 WHERE 
   repair_completed_date < repair_scheduled_date;
 -- FIELD TYPE CHECKS
