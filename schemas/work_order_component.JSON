@@ -5,7 +5,7 @@
   "description": "Schema for managing damp and mould work orders in compliance with Awaab's Law and HACT UK Housing Data Standards.",
   "type": "object",
   "properties": {
-    "work_order": { "$ref": "#/$defs/work_order" }
+    "work_order": { "$ref": "#/definitions/work_order" }
   },
   "definitions": {
     "work_order": {
