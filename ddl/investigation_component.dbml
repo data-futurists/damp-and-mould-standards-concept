@@ -5,175 +5,186 @@
 // Script created for use with dbdiagram.io
 // Links to Property, Tenant and Tenancy tables commented out
 
-// --------------------------------------
-// Code List Tables
-// --------------------------------------
+// Tables
 
-Table HealthRiskRating {
-  HealthRiskRatingID int [pk, increment]
-  HealthRiskRating nvarchar(20)
+table hazard_type {
+  hazard_type_id integer [pk, increment]
+  hazard_type nvarchar(100)
+  health_risk_rating_id integer
+  category nvarchar(500)
 
-  Note: 'Defines levels of health risk (e.g., High, Medium, Low).'
+  Note: "Stores types of hazards"
+  Indexes {
+    (health_risk_rating_id)
+  }
 }
 
-Table Severity {
-  SeverityID int [pk, increment]
-  Severity nvarchar(20)
 
-  Note: 'Defines severity levels used in hazard reporting.'
+table hazard_report {
+  hazard_report_id integer [pk, increment]
+  property_id integer
+  tenant_id varchar(50)
+  date_reported date
+  reported_by nvarchar(100)
+  description nvarchar(500)
+  photo_evidence nvarchar(500)
+  location_details nvarchar(500)
+  emergency_action_taken integer [default: 0]
+  made_safe_date date
+  further_work_required integer [default: 0]
+  further_work_due_date date
+  report_status_id integer
+  investigation_type_id integer
+
+  Note: "Stores hazard reports"
 }
 
-Table InvestigationType {
-  InvestigationTypeID int [pk, increment]
-  InvestigationType nvarchar(20)
+table investigation {
+  investigation_id integer [pk, increment]
+  property_id integer
+  tenant_id varchar(50)
+  tenancy_id varchar(50)
+  hazard_report_id integer
+  trigger_source_id integer
+  investigation_type_id integer
+  investigation_scheduled_date date
+  investigation_completed_date date
+  inspector_name nvarchar(100)
+  hazard_confirmed integer [default: 0]
+  repair_required integer [default: 0]
+  repair_scheduled_date date
+  repair_completed_date date
+  sla_breach_flag integer [default: 0]
+  escalation_status_id integer
+  notification_sent_to_tenant integer [default: 0]
+  investigation_notes nvarchar(500)
 
-  Note: 'Defines types of investigations conducted.'
+  Note: "Stores investigation details"
 }
 
-Table ReportStatus {
-  ReportStatusID int [pk, increment]
-  ReportStatus nvarchar(20)
+table investigation_hazard {
+  investigation_hazard_id integer [pk, increment]
+  hazard_type_id integer
+  investigation_id integer
+  hazard_report_id integer
+  severity_id integer
+  notes nvarchar(500)
 
-  Note: 'Defines statuses for hazard reports.'
+  Note: "Maps investigations to hazards"
 }
 
-Table TriggerSource {
-  TriggerSourceID int [pk, increment]
-  TriggerSource nvarchar(20)
+table notification {
+  notification_id integer [pk, increment]
+  investigation_id integer
+  tenant_id varchar(50)
+  work_order_id varchar(255)
+  notification_type_id integer
+  date_sent date
+  notification_method_id integer
+  content_summary nvarchar(500)
 
-  Note: 'Defines what triggered an investigation.'
+  Note: "Notifications related to investigations"
 }
 
-Table EscalationStatus {
-  EscalationStatusID int [pk, increment]
-  EscalationStatus nvarchar(20)
+table escalation {
+  escalation_id integer [pk, increment]
+  investigation_id integer
+  escalation_reason nvarchar(100)
+  escalation_stage_id integer
+  escalation_type_id integer
+  escalated_to nvarchar(100)
+  escalation_start_date date
+  escalation_end_date date
+  action_taken nvarchar(500)
+  compensation_offered integer [default: 0]
+  compensation_amount decimal(10,2)
+  alternative_accommodation_offered integer [default: 0]
+  alternative_accommodation_details nvarchar(500)
+  tenant_acceptance integer [default: 0]
+  escalation_notes nvarchar(500)
 
-  Note: 'Defines the status of an escalation.'
+  Note: "Tracks escalation actions"
 }
 
-Table NotificationType {
-  NotificationTypeID int [pk, increment]
-  NotificationType nvarchar(20)
+// Code Lists
 
-  Note: 'Defines types of notifications sent.'
+table health_risk_rating {
+  health_risk_rating_id integer [pk, increment]
+  health_risk_rating nvarchar(20)
 }
 
-Table NotificationMethod {
-  NotificationMethodID int [pk, increment]
-  NotificationMethod nvarchar(20)
-
-  Note: 'Defines methods of delivering notifications.'
+table severity {
+  severity_id integer [pk, increment]
+  severity nvarchar(20)
 }
 
-Table EscalationStage {
-  EscalationStageID int [pk, increment]
-  EscalationStage nvarchar(20)
-
-  Note: 'Defines stages of the escalation process.'
+table investigation_type {
+  investigation_type_id integer [pk, increment]
+  investigation_type nvarchar(20)
 }
 
-Table EscalationType {
-  EscalationTypeID int [pk, increment]
-  EscalationType nvarchar(30)
-
-  Note: 'Defines types of escalation actions taken.'
+table report_status {
+  report_status_id integer [pk, increment]
+  report_status nvarchar(20)
 }
 
-// --------------------------------------
-// Main Tables
-// --------------------------------------
-
-Table HazardType {
-  HazardTypeID int [pk, increment]
-  HazardType nvarchar(100)
-  HealthRiskRatingID int [ref: > HealthRiskRating.HealthRiskRatingID]
-  Category nvarchar(500)
-
-  Note: 'Stores types of hazards and their associated health risk ratings.'
+table trigger_source {
+  trigger_source_id integer [pk, increment]
+  trigger_source nvarchar(20)
 }
 
-Table investigationHazard {
-  investigationHazardID int [pk, increment]
-  HazardTypeID int [ref: > HazardType.HazardTypeID]
-  investigationID int [ref: > investigation.investigationID]
-  HazardReportID int [ref: > HazardReport.HazardReportID]
-  SeverityID int [ref: > Severity.SeverityID]
-  Notes nvarchar(500)
-
-  Note: 'Links investigations with reported hazards including severity and notes.'
+table escalation_status {
+  escalation_status_id integer [pk, increment]
+  escalation_status nvarchar(20)
 }
 
-Table HazardReport {
-  HazardReportID int [pk, increment]
-  PropertyID int //[ref: > Property.PropertyID]
-  TenantID int //[ref: > TenantPerson.TenantID]
-  DateReported date
-  ReportedBy nvarchar(100)
-  Description nvarchar(500)
-  PhotoEvidence nvarchar(500)
-  LocationDetails nvarchar(500)
-  InvestigationTypeID int [ref: > InvestigationType.InvestigationTypeID]
-  InvestigationDueDate date
-  EmergencyActionTaken bit
-  MadeSafeDate date
-  FurtherWorkRequired bit
-  FurtherWorkDueDate date
-  ReportStatusID int [ref: > ReportStatus.ReportStatusID]
-
-  Note: 'Captures reported hazards including details and status.'
+table notification_type {
+  notification_type_id integer [pk, increment]
+  notification_type nvarchar(20)
 }
 
-Table investigation {
-  investigationID int [pk, increment]
-  PropertyID int //[ref: > Property.PropertyID]
-  TenantID int //[ref: > TenantPerson.TenantID]
-  TenancyID int //[ref: > Tenancy.TenancyID]
-  TriggerSourceID int [ref: > TriggerSource.TriggerSourceID]
-  HazardReportedDate date
-  investigationScheduledDate date
-  investigationCompletedDate date
-  InspectorName nvarchar(100)
-  HazardConfirmed bit
-  RepairRequired bit
-  RepairScheduledDate date
-  RepairCompletedDate date
-  SLABreachFlag bit
-  EscalationStatusID int [ref: > EscalationStatus.EscalationStatusID]
-  NotificationSentToTenant bit
-  investigationNotes nvarchar(500)
-
-  Note: 'Details investigations including schedule, status, and outcomes.'
+table escalation_stage {
+  escalation_stage_id integer [pk, increment]
+  escalation_stage nvarchar(20)
 }
 
-Table Notification {
-  NotificationID int [pk, increment]
-  investigationID int [ref: > investigation.investigationID]
-  TenantID int //[ref: > TenantPerson.TenantID]
-  WorkOrderID int //[ref: > WorkOrder.WorkOrderID]
-  NotificationTypeID int [ref: > NotificationType.NotificationTypeID]
-  DateSent date
-  NotificationMethodID int [ref: > NotificationMethod.NotificationMethodID]
-  ContentSummary nvarchar(500)
-
-  Note: 'Records notifications sent to tenants about investigations or repairs.'
+table notification_method {
+  notification_method_id integer [pk, increment]
+  notification_method nvarchar(20)
 }
 
-Table Escalation {
-  EscalationID int [pk, increment]
-  investigationID int [ref: > investigation.investigationID]
-  EscalationReason nvarchar(100)
-  EscalationStageID int [ref: > EscalationStage.EscalationStageID]
-  EscalationTypeID int [ref: > EscalationType.EscalationTypeID]
-  EscalatedTo nvarchar(100)
-  EscalationStartDate date
-  EscalationEndDate date
-  ActionTaken nvarchar(500)
-  CompensationOffered bit
-  CompensationAmount decimal(10,2)
-  AlternativeAccommodationOffered bit
-  AlternativeAccommodationDetails nvarchar(500)
-  TenantAcceptance bit
-  EscalationNotes nvarchar(500)
-
-  Note: 'Tracks escalations made during the investigation or repair process.'
+table escalation_type {
+  escalation_type_id integer [pk, increment]
+  escalation_type nvarchar(30)
 }
+
+table inspector {
+  inspector_id integer [pk, increment]
+  inspector_name nvarchar(100)
+}
+
+// Relationships
+ref: hazard_type.health_risk_rating_id > health_risk_rating.health_risk_rating_id
+//ref: hazard_report.property_id > property.property_id
+//ref: hazard_report.tenant_id > tenant_person.tenant_id
+ref: hazard_report.report_status_id > report_status.report_status_id
+ref: hazard_report.investigation_type_id > investigation_type.investigation_type_id
+//ref: investigation.property_id > property.property_id
+//ref: investigation.tenant_id > tenant_person.tenant_id
+//ref: investigation.tenancy_id > tenancy.tenancy_id
+ref: investigation.hazard_report_id > hazard_report.hazard_report_id
+ref: investigation.trigger_source_id > trigger_source.trigger_source_id
+ref: investigation.investigation_type_id > investigation_type.investigation_type_id
+ref: investigation.escalation_status_id > escalation_status.escalation_status_id
+ref: investigation_hazard.hazard_type_id > hazard_type.hazard_type_id
+ref: investigation_hazard.investigation_id > investigation.investigation_id
+ref: investigation_hazard.hazard_report_id > hazard_report.hazard_report_id
+ref: investigation_hazard.severity_id > severity.severity_id
+ref: notification.investigation_id > investigation.investigation_id
+//ref: notification.tenant_id > tenant_person.tenant_id
+//ref: notification.work_order_id > work_order.work_order_id
+ref: notification.notification_type_id > notification_type.notification_type_id
+ref: notification.notification_method_id > notification_method.notification_method_id
+ref: escalation.investigation_id > investigation.investigation_id
+ref: escalation.escalation_stage_id > escalation_stage.escalation_stage_id
+ref: escalation.escalation_type_id > escalation_type.escalation_type_id
