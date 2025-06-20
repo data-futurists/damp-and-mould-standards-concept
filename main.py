@@ -96,7 +96,7 @@ def tenant_page():
     try:
         # Load SQL file
         sql_path = Path("ddl/tenant_component.sql")
-        with open(sql_path) as f:
+        with open(sql_path, "r", encoding="utf-8") as f:
             sql_content = f.read()
         
         # Display the SQL code
@@ -174,7 +174,7 @@ def all_components_page():
     try:
         # Load SQL file
         sql_path = Path("ddl/all_component.sql")
-        with open(sql_path) as f:
+        with open(sql_path, "r", encoding="utf-8") as f:
             sql_content = f.read()
         
         # Display the SQL code
@@ -254,7 +254,7 @@ def investigation_page():
     try:
         # Load SQL file
         sql_path = Path("ddl/investigation_component.sql")
-        with open(sql_path) as f:
+        with open(sql_path, "r", encoding="utf-8") as f:
             sql_content = f.read()
         
         # Display the SQL code
@@ -337,7 +337,7 @@ def property_page():
     try:
         # Load SQL file
         sql_path = Path("ddl/property_component.sql")
-        with open(sql_path) as f:
+        with open(sql_path, "r", encoding="utf-8") as f:
             sql_content = f.read()
         
         # Display the SQL code
@@ -414,7 +414,7 @@ def work_order_page():
     try:
         # Load SQL file
         sql_path = Path("ddl/work_order_component.sql")
-        with open(sql_path) as f:
+        with open(sql_path, "r", encoding="utf-8") as f:
             sql_content = f.read()
         
         # Display the SQL code

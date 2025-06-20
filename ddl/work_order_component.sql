@@ -1,3 +1,7 @@
+-- --------------------------------------------------
+-- Work Order Lookup Tables
+-- --------------------------------------------------
+
 CREATE TABLE contractor_organisation (
   contractor_organisation_id INTEGER PRIMARY KEY AUTOINCREMENT,
   name VARCHAR(255),
