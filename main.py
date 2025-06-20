@@ -10,13 +10,13 @@ def main():
     st.sidebar.title("Navigation")
     page = st.sidebar.radio(
         "Go to",
-        ["Tenant", "investigation", "Property", "Work Order", "All Components"]
+        ["Tenant", "Investigation", "Property", "Work Order", "All Components"]
     )
     
     # Page routing
     if page == "Tenant":
         tenant_page()
-    elif page == "investigation":
+    elif page == "Investigation":
         investigation_page()
     elif page == "Property":
         property_page()
@@ -38,7 +38,7 @@ def tenant_page():
     with erd_container:
         # Load and display the ERD SVG
         try:
-            svg_path = Path("erd/tenant_component_erd.svg")  # Adjust path as needed
+            svg_path = Path("erd/tenant_component.svg")  # Adjust path as needed
             with open(svg_path, "r") as f:
                 svg_content = f.read()
             
@@ -279,7 +279,7 @@ def property_page():
     with erd_container:
         # Load and display the ERD SVG
         try:
-            svg_path = Path("erd/property-component.svg")  # Adjust path as needed
+            svg_path = Path("erd/property_component.svg")  # Adjust path as needed
             with open(svg_path, "r") as f:
                 svg_content = f.read()
             
@@ -356,7 +356,7 @@ def work_order_page():
     with erd_container:
         # Load and display the ERD SVG
         try:
-            svg_path = Path("erd/work_order_erd.svg")  # Adjust path as needed
+            svg_path = Path("erd/work_order_component.svg")  # Adjust path as needed
             with open(svg_path, "r") as f:
                 svg_content = f.read()
             
@@ -372,7 +372,7 @@ def work_order_page():
 
     try:
         # Load JSON schema
-        schema_path = Path("schemas/workorder_component.JSON")
+        schema_path = Path("schemas/work_order_component.JSON")
         with open(schema_path, 'r') as file:
             schema = json.load(file)
 

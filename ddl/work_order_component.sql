@@ -1,382 +1,371 @@
+CREATE TABLE contractor_organisation (
+  contractor_organisation_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name VARCHAR(255),
+  contractor_portal VARCHAR(255),
+  subcontractors TEXT
+);
+
+CREATE TABLE work_class (
+  work_class_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  code VARCHAR(50) NOT NULL UNIQUE
+);
+INSERT INTO work_class (code)
+VALUES 
+  ('Emergency'), 
+  ('Defect'), 
+  ('Urgent'), 
+  ('Remedial'), 
+  ('Routine'),
+  ('Upgrade'),
+  ('Statutory'), 
+  ('InsuranceClaim'), 
+  ('PreventativePlanned'), 
+  ('PlannedMaintenance'), 
+  ('ReactiveMaintenance'), 
+  ('VoidWorks'), 
+  ('Adaptations'), 
+  ('ImprovementWorks'), 
+  ('ComplianceCheck'), 
+  ('investigationFollowUp'), 
+  ('EscalationWork'), 
+  ('MoveManagement'),
+  ('investigation'),
+  ('Survey'), 
+  ('Cleaning'), 
+  ('GroundsMaintenance'), 
+  ('PestControl'), 
+  ('Security'), 
+  ('FireSafety'), 
+  ('HealthAndSafety'), 
+  ('EnergyEfficiency'),
+  ('EnvironmentalWorks'), 
+  ('Decoration'), 
+  ('Fencing'), 
+  ('Roofing'), 
+  ('Plumbing'), 
+  ('Electrical'),
+  ('HeatingAndVentilation'),
+  ('CarpentryAndJoinery'),
+  ('PaintingAndDecorating'),
+  ('Flooring'),
+  ('Landscaping'),
+  ('Other');
+
+CREATE TABLE trade_code (
+  trade_code_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  code VARCHAR(100)
+);
+INSERT INTO trade_code (code) 
+VALUES 
+  ('Asphalter'),             
+  ('Bricklayer'),
+  ('BricklayingGang'),
+  ('CarpenterJoiner'),
+  ('CarpentryGang'),
+  ('CleanTeam'),
+  ('CleanVoid'),
+  ('CleanGang'),
+  ('CleanOperator'),
+  ('DisabledAdaptation'),
+  ('DrainLayer'),
+  ('ElectricEngineer'),
+  ('Electrician'),
+  ('ElectricianGang'),
+  ('ElectricianOperative'),
+  ('Fencer'),
+  ('FloorLayer'),
+  ('Glazier'),
+  ('GroundWorker'),
+  ('GroundsMaintenanceGardener'),
+  ('GroundsMaintenanceMowGrass'),
+  ('GroundsMaintenanceRemoveGrassByHand'),
+  ('GroundsMaintenanceRemoveLitter'),
+  ('GroundsMaintenanceReplaceGravelMargins'),
+  ('groundsMaintenanceRubbishRefuse'),
+  ('GroundsMaintenanceGang'),
+  ('GroundsMaintenanceOperative'),
+  ('HeatingEngineer'),
+  ('HeatingGasEngineer'),
+  ('MechanicalEngineer'),
+  ('MechanicalLiftCare'),
+  ('MultiSkilledOperative'),
+  ('MultiSkilledOperativeGeneral'),
+  ('MultiSkilledOperativeHandyman'),
+  ('PainterDecorator'),
+  ('PainiterDecoratorGang'),
+  ('Plasterer'),
+  ('Plumber'),
+  ('PlumberDrain'),
+  ('PlumberWaterStorage'),
+  ('PlumberGang'),
+  ('Roofer'),
+  ('RooferFlat'),
+  ('RooferPitch'),
+  ('RoofingGang'),
+  ('Specialist'),
+  ('SpecialistAsbestos'),
+  ('SpecialistCCTV'),
+  ('SpecialistDigitalAerials'),
+  ('SpecialistDoorEntry'),
+  ('SpecialistElectricianPlumber'),
+  ('SpecialistEmergencyLighting'),
+  ('SpecialistFireSafety'),
+  ('SpecialistPestControl'),
+  ('SpecialistRenewables'),
+  ('SpecialistScaffolding'),
+  ('SpecialistSecurity'),
+  ('SpecialistUPVC'),
+  ('StoneMason'),
+  ('TilerWallFloor'),
+  ('Other');
+
+CREATE TABLE rate_schedule_item (
+  rate_schedule_item_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  code VARCHAR(100) NOT NULL UNIQUE
+);
+INSERT INTO rate_schedule_item (code)
+VALUES 
+  ('SOR001'), 
+  ('SOR002'), 
+  ('SOR003'), 
+  ('SOR004'), 
+  ('SOR005'), 
+  ('SOR006'), 
+  ('SOR007'), 
+  ('SOR008'), 
+  ('SOR009'), 
+  ('SOR010'),
+  ('SOR011'),
+  ('SOR012'),
+  ('SOR013'),
+  ('SOR014'),
+  ('SOR015'),
+  ('SOR016'),
+  ('SOR017'),
+  ('SOR018'),
+  ('SOR019'),
+  ('SOR020');
+
+CREATE TABLE person_alert_type (
+  person_alert_type_id INTEGER PRIMARY KEY AUTOINCREMENT, 
+  code VARCHAR(50) NOT NULL UNIQUE
+);
+INSERT INTO person_alert_type (code)
+VALUES 
+  -- from UKHDS
+  ('DoNotVisitAlone'),
+  ('DoNotVisitAloneASB'),
+  ('Disability'),
+  ('HearingImpairment'),
+  ('VisionImpairment'),
+  ('Illness'),
+  ('PhysicalSupport'),
+  ('WheelchairUser'),
+  ('Elderly'),
+  ('OtherSafeguardingConcern'),
+  ('RegularMissingAppointments'),
+  ('LanguageSupport'),
+  ('LimitedCapacity'),
+  -- new codes to consider
+  ('Vulnerable'), 
+  ('HighRisk'), 
+  ('MedicalCondition'), 
+  ('MentalHealthConcern'), 
+  ('ChildProtectionIssue'), 
+  ('ElderlyCareNeed'),
+  ('DomesticAbuseConcern'),
+  ('SubstanceMisuseIssue'),
+  ('FinancialHardship'),
+  ('HousingNeed'),
+  ('CulturalSensitivity'),
+  ('CommunicationBarrier'),
+  ('MobilityImpairment'),
+  ('SensoryImpairment'),
+  ('LearningDisability'),
+  ('AutismSpectrumCondition'),
+  ('RefusedAccess'),
+  ('Other');
+
 -- --------------------------------------------------
--- WorkOrder Main Tables
+-- Work Order Module Tables
 -- --------------------------------------------------
 
--- Table: ContractorOrganisation
-CREATE TABLE ContractorOrganisation (
-    ContractorOrganisationID VARCHAR(50) PRIMARY KEY, -- Unique ID for the contractor organisation
-    Name VARCHAR(100),                                -- Name of the contractor
-    ContractorPortal VARCHAR(255),                    -- Portal used by the contractor
-    Subcontractors TEXT                               -- List of subcontractors used
+CREATE TABLE work_order (
+  work_order_id VARCHAR(255) PRIMARY KEY,
+  work_element_id VARCHAR(255),
+  address_id VARCHAR(255),
+  investigation_id VARCHAR(255),
+  escalation_id VARCHAR(255),
+  tenancy_id VARCHAR(255),
+  tenant_id VARCHAR(255),
+  hazard_report_id VARCHAR(255),
+  work_class_id VARCHAR(255),
+  location_alert_id VARCHAR(255),
+  person_alert_id VARCHAR(255),
+  work_priority_id VARCHAR(255),
+  contractor_organisation_id VARCHAR(255),
+  date_raised DATE,
+  date_reported DATE,
+  planned_start_date DATE,
+  planned_finish_date DATE,
+  actual_start_date_time TIMESTAMP,
+  actual_completion_date_time TIMESTAMP,
+  description_of_work TEXT,
+  estimated_cost DECIMAL(10,2),
+  estimated_labour_hours DECIMAL(5,2),
+  location_of_repair VARCHAR(255),
+  job_status_update VARCHAR(255),
+  repair_sla_breach_flag VARCHAR(10),
+
+  CONSTRAINT fk_work_order_work_class FOREIGN KEY (work_class_id) REFERENCES work_class(work_class_id),
+  CONSTRAINT fk_work_order_work_priority FOREIGN KEY (work_priority_id) REFERENCES work_priority(work_priority_id),
+  CONSTRAINT fk_work_order_contractor_org FOREIGN KEY (contractor_organisation_id) REFERENCES contractor_organisation(contractor_organisation_id),  -- ← Added missing comma
+  CONSTRAINT fk_work_order_location_alert_type FOREIGN KEY (location_alert_id) REFERENCES location_alert_type(location_alert_type_id),
+  CONSTRAINT fk_work_order_person_alert_type FOREIGN KEY (person_alert_id) REFERENCES person_alert_type(person_alert_type_id),
+  CONSTRAINT fk_work_order_address FOREIGN KEY (address_id) REFERENCES address(address_id),
+  CONSTRAINT fk_work_order_investigation FOREIGN KEY (investigation_id) REFERENCES investigation(investigation_id),
+  CONSTRAINT fk_work_order_escalation FOREIGN KEY (escalation_id) REFERENCES escalation(escalation_id),
+  CONSTRAINT fk_work_order_tenancy FOREIGN KEY (tenancy_id) REFERENCES tenancy(tenancy_id),
+  CONSTRAINT fk_work_order_tenant FOREIGN KEY (tenant_id) REFERENCES tenant_person(tenant_id),
+  CONSTRAINT fk_work_order_hazard_report FOREIGN KEY (hazard_report_id) REFERENCES hazard_report(hazard_report_id),
+  -- NOTE: The table `work_element` was not defined in the original script. If it exists, keep this FK; otherwise remove or adjust it.
+  CONSTRAINT fk_work_order_work_element FOREIGN KEY (work_element_id) REFERENCES work_element(work_element_id),
+  CONSTRAINT chk_repair_sla_breach_flag CHECK (repair_sla_breach_flag IN ('Yes', 'No'))
 );
 
--- Table: WorkClass
-CREATE TABLE WorkClass (
-    WorkClassID VARCHAR(50) PRIMARY KEY,              -- Unique ID for the work class
-    WorkClassCodeID VARCHAR(50),                      -- FK to work class code         
-    WorkClassCode VARCHAR(100),                       -- Short code for work class
-    WorkClassDescription TEXT                         -- Detailed description of the work class
-    CONSTRAINT FK_WorkClass_WorkClassCode FOREIGN KEY (WorkClassCodeID) 
-      REFERENCES WorkClassCodes(WorkClassCodeID)
-);                     
-
--- Table: WorkPriority
-CREATE TABLE WorkPriority (
-    WorkPriorityID VARCHAR(50) PRIMARY KEY,           -- Unique ID for work priority
-    WorkPriorityCodeID VARCHAR(50),                   -- FK to work priority code
-    WorkPriorityCode VARCHAR(100),                    -- Code representing the priority
-    WorkPriorityDescription TEXT,                     -- Description of the priority
-    EffectiveDateTime TIMESTAMP,                      -- When this priority became effective
-    NumberOfDays INTEGER,                             -- Number of days to resolve
-    Comments TEXT,                                    -- Additional comments
-    RequiredStartDateTime DATE,                       -- Required start date
-    RequiredCompletionDateTime DATE                   -- Required completion date
-    CONSTRAINT FK_WorkPriority_WorkPriorityCode FOREIGN KEY (WorkPriorityCodeID) 
-      REFERENCES WorkPriorityCodes(WorkPriorityCodeID)
-);
--- Table: RateScheduleItem
-CREATE TABLE RateScheduleItem (
-    RateScheduleItemID VARCHAR(50) PRIMARY KEY,       -- Unique ID for the rate schedule item
-    RateScheduleItemCodeID VARCHAR(50),               -- FK to RateScheduleItemCode
-    M3NHFSORCode VARCHAR(100),                        -- M3 NHF Schedule of Rates code
-    Quantity DECIMAL(10, 2),                          -- Quantity required
-    CustomCode VARCHAR(100),                          -- Custom rate code
-    CustomName VARCHAR(255)                           -- Custom name for rate item
-    CONSTRAINT FK_RateScheduleItem_RateScheduleItemCode FOREIGN KEY (RateScheduleItemCodeID) 
-      REFERENCES RateScheduleItemCodes(RateScheduleItemCodeID)
+CREATE TABLE work_element (
+  work_element_id VARCHAR(50) PRIMARY KEY,          -- Unique ID for the work element  
+  work_order_id VARCHAR(50),                        -- FK to the associated work order
+  rate_schedule_item_id VARCHAR(255),               -- FK to rate_schedule_item
+  trade_code_id VARCHAR(100),                       -- FK to trade_code
+  service_charge_subject VARCHAR(255),              -- Subject to service charge?
+  CONSTRAINT fk_work_element_work_order FOREIGN KEY (work_order_id) 
+    REFERENCES work_order(work_order_id),
+  CONSTRAINT fk_work_element_rate_schedule_item FOREIGN KEY (rate_schedule_item_id) 
+    REFERENCES rate_schedule_item(rate_schedule_item_id),
+  CONSTRAINT fk_work_element_trade_code FOREIGN KEY (trade_code_id) 
+    REFERENCES trade_code(trade_code_id)
 );
 
--- Table: WorkElement
-CREATE TABLE WorkElement (
-    WorkElementID VARCHAR(50) PRIMARY KEY,            -- Unique ID for the work element
-    WorkOrderID VARCHAR(50),                          -- FK to the associated work order
-    RateScheduleItemID VARCHAR(255),                  -- FK to RateScheduleItem
-    TradeCodeID VARCHAR(100),                         -- FK to TradeCode
-    ServiceChargeSubject VARCHAR(255),                -- Subject to service charge?
-    CONSTRAINT FK_WorkElement_WorkOrder FOREIGN KEY (WorkOrderID) 
-      REFERENCES WorkOrder(WorkOrderID),
-    CONSTRAINT FK_WorkElement_RateScheduleItem FOREIGN KEY (RateScheduleItemID) 
-      REFERENCES RateScheduleItem(RateScheduleItemID),
-    CONSTRAINT FK_WorkElement_TradeCode FOREIGN KEY (TradeCodeID) 
-      REFERENCES TradeCodes(TradeCodeID)
+CREATE TABLE work_priority (
+  work_priority_id VARCHAR(255) PRIMARY KEY,
+  priority_code VARCHAR(100),
+  priority_description TEXT,
+  effective_date_time TIMESTAMP,
+  number_of_days INTEGER,
+  comments TEXT,
+  required_start_date_time DATE,
+  required_completion_date_time DATE
 );
 
--- Table: WorkElementDependency
-CREATE TABLE WorkElementDependency (
-    WorkElementID VARCHAR(50) PRIMARY kEY,              -- Unique ID for the work element
-    DependsOnWorkElementID VARCHAR(50),                 -- FK to the required previous element
-    Type VARCHAR(100),                                  -- Type of dependency
-    Timing VARCHAR(255),                                -- Timing constraint or information
-    Description TEXT,                                   -- Description of the dependency
-    CONSTRAINT FK_WorkElementDependency_WorkElement FOREIGN KEY (WorkElementID) 
-      REFERENCES WorkElement(WorkElementID),
-    CONSTRAINT FK_WorkElementDependency_DependsOn FOREIGN KEY (DependsOnWorkElementID) 
-      REFERENCES WorkElement(WorkElementID)
+CREATE TABLE work_element (
+    work_element_id VARCHAR(50) PRIMARY KEY,            -- Unique ID for the work element
+    work_order_id VARCHAR(50),                          -- FK to the associated work order
+    rate_schedule_item_id VARCHAR(255),                  -- FK to RateScheduleItem
+    trade_code_id VARCHAR(100),                         -- FK to TradeCode
+    service_charge_subject VARCHAR(255),                -- Subject to service charge?
+    CONSTRAINT fk_work_element_work_order FOREIGN KEY (work_order_id) REFERENCES work_order(work_order_id), 
+    CONSTRAINT fk_workE_element_rate_schedule_item FOREIGN KEY (rate_schedule_item_id) REFERENCES rate_schedule_item(rate_schedule_item_id), 
+    CONSTRAINT fk_work_element_trade_code FOREIGN KEY (trade_code_id) REFERENCES trade_code(trade_code_id)
 );
 
--- Table: WorkOrder
-CREATE TABLE WorkOrder (
-    WorkOrderID VARCHAR(50) PRIMARY KEY,             -- Unique ID for the work order
-    WorkElementID VARCHAR(50),                       -- Possibly a representative element (optional FK)
-    AddressID VARCHAR(50),                           -- FK to address
-    InspectionID VARCHAR(50),                        -- FK to inspection
-    EscalationID VARCHAR(50),                        -- FK to escalation event
-    TenancyID VARCHAR(50),                           -- FK to tenancy
-    TenantID VARCHAR(50),                            -- FK to tenant
-    HazardReportID VARCHAR(50),                      -- FK to hazard report
-    WorkClassID VARCHAR(50),                         -- FK to WorkClass
-    LocationAlerdID VARCHAR(50),                     -- FK to location alert
-    PersonAlertID VARCHAR(50),                       -- FK to person alert
-    WorkPriorityID VARCHAR(50),                      -- FK to WorkPriority
-    ContractorOrganisationID VARCHAR(50),            -- FK to ContractorOrganisation
-    DateRaised DATE,                                  -- When the work order was raised
-    DateReported DATE,                                -- When it was reported
-    PlannedStartDate DATE,                            -- Planned start date
-    PlannedFinishDate DATE,                           -- Planned finish date
-    ActualStartDateTime TIMESTAMP,                    -- Actual start timestamp
-    ActualCompletionDateTime TIMESTAMP,               -- Actual completion timestamp
-    DescriptionOfWork TEXT,                           -- Detailed work description
-    EstimatedCost DECIMAL(10, 2),                     -- Estimated cost of work
-    EstimatedLabourHours DECIMAL(5, 2),               -- Estimated labour hours
-    LocationOfRepair VARCHAR(255),                    -- Where the repair is happening
-    JobStatusUpdate VARCHAR(255),                     -- Last known job status
-    RepairSLABreachFlag VARCHAR(10),                  -- SLA breach indicator (Y/N/Null)
-    CONSTRAINT FK_WorkOrder_WorkClass FOREIGN KEY (WorkClassID) 
-      REFERENCES WorkClass(WorkClassID),
-    CONSTRAINT FK_WorkOrder_WorkPriority FOREIGN KEY (WorkPriorityID) 
-      REFERENCES WorkPriority(WorkPriorityID),
-    CONSTRAINT FK_WorkOrder_ContractorOrg FOREIGN KEY (ContractorOrganisationID) 
-      REFERENCES ContractorOrganisation(ContractorOrganisationID)
-    CONSTRAINT FK_WorkOrder_PersonAlert FOREIGN KEY (PersonAlertID) 
-      REFERENCES AlertRegardingPerson(PersonAlertID),
-    CONSTRAINT FK_WorkOrder_LocationAlert FOREIGN KEY (LocationAlerdID) 
-      REFERENCES AlertRegardingLocation(LocationAlertID)
+CREATE TABLE work_element_dependency (
+    work_element_id VARCHAR(50) PRIMARY kEY,              -- Unique ID for the work element
+    depends_on_work_element_id VARCHAR(50),                 -- FK to the required previous element
+    type VARCHAR(100),                                  -- Type of dependency
+    timing VARCHAR(255),                                -- Timing constraint or information
+    description TEXT,                                   -- Description of the dependency
+    CONSTRAINT fk_work_element_dependency_work_element FOREIGN KEY (work_element_id) REFERENCES work_element(work_element_id),
+    CONSTRAINT fk_work_element_dependency_depends_on FOREIGN KEY (depends_on_work_element_id) REFERENCES work_element(work_element_id),
 );
 
--- Table: WorkOrderStatusHistory
-CREATE TABLE WorkOrderStatusHistory (
-    WorkOrderStatusHistoryID VARCHAR(50) PRIMARY KEY, -- Unique ID for each status update
-    WorkOrderID VARCHAR(50),                          -- FK to the related work order
-    StatusCode VARCHAR(100),                           -- Code of the current status
-    UpdatedBy VARCHAR(255),                            -- Who updated it
-    Reason TEXT,                                       -- Reason for this status
-    ReasonCode VARCHAR(100),                           -- Code representing reason
-    CreatedDateTime TIMESTAMP,                         -- When status was created
-    EnteredDateTime TIMESTAMP,                         -- When status was entered
-    ExistedDateTime TIMESTAMP,                         -- When status ended
-    Comments TEXT,                                     -- Any extra comments
-    CONSTRAINT FK_WorkOrderStatusHistory_WorkOrder FOREIGN KEY (WorkOrderID) 
-      REFERENCES WorkOrder(WorkOrderID)
+CREATE TABLE work_order_status_history (
+  work_order_status_history_id VARCHAR(255) PRIMARY KEY,
+  work_order_id VARCHAR(255),
+  work_status_id VARCHAR(100),
+  updated_by VARCHAR(255),
+  reason_id TEXT,
+  created_date_time TIMESTAMP,
+  entered_date_time TIMESTAMP,
+  exited_date_time TIMESTAMP,
+  comments TEXT,
+  CONSTRAINT fk_work_order_status_history_work_order FOREIGN KEY (work_order_id) REFERENCES work_order(work_order_id)
+  CONSTRAINT fk_work_order_status_history_work_status FOREIGN KEY (work_status_id) REFERENCES work_status(work_status_id),
+  CONSTRAINT fk_work_order_status_history_reason FOREIGN KEY (reason_id) REFERENCES reason_code(reason_code_id)
 );
 
--- Table: WorkOrderComplete
-CREATE TABLE WorkOrderComplete (
-    WorkOrderCompleteID VARCHAR(50) PRIMARY KEY,      -- Unique ID for completion record
-    WorkOrderID VARCHAR(50),                          -- FK to completed work order
-    BillOfMeterialItem VARCHAR(255),                   -- Bill of materials
-    CompletedWorkElements TEXT,                        -- Description of completed elements
-    OperativesUsed TEXT,                               -- Who completed the work
-    JosStatusUpdate VARCHAR(255),                      -- Status update
-    FollowOnWork VARCHAR(255),                         -- Follow-on work needed
-    CONSTRAINT FK_WorkOrderComplete_WorkOrder FOREIGN KEY (WorkOrderID) 
-      REFERENCES WorkOrder(WorkOrderID)
+CREATE TABLE reason_code (
+  reason_code_id VARCHAR(255) PRIMARY KEY,
+  code VARCHAR(100) NOT NULL UNIQUE,
 );
+INSERT INTO reason_code (code)
+VALUES 
+-- UKHDS codes
+  ('NoBudget'), 
+  ('LowPriority'), 
+  ('FullyFunded'), 
+  ('PartiallyFunded'), 
+  ('ScheduleConflict'), 
+  ('NoApproval'), 
+  ('Approved'), 
+  ('PriorityChange'), 
+ 
+-- new codes to consider
+  ('NoAccess'), 
+  ('TenantUnavailable'), 
+  ('WeatherConditions'), 
+  ('MaterialShortage'), 
+  ('TechnicalIssue'), 
+  ('ResourceAvailability'), 
+  ('SafetyConcern'), 
+  ('RegulatoryCompliance'), 
+  ('Other');
 
--- Table: WorkOrderAccessInformation
-CREATE TABLE WorkOrderAccessInformation (
-    WorkOrderAccessInformationID VARCHAR(50) PRIMARY KEY,      -- Unique ID for access record
-    WorkOrderID VARCHAR(50),                                   -- FK to work order
-    Description VARCHAR(100),                                   -- Type of access (e.g. key, presence)
-    KeySafe TEXT,                                                -- Detailed access info
-    CONSTRAINT FK_WorkOrderAccess_WorkOrder FOREIGN KEY (WorkOrderID) 
-      REFERENCES WorkOrder(WorkOrderID)
+CREATE TABLE work_status (
+  work_status_id VARCHAR(255) PRIMARY KEY,
+  code VARCHAR(100) NOT NULL UNIQUE,
+  description TEXT
 );
-
--- Table: AlertRegardingLocation
-CREATE TABLE AlertRegardingLocation (
-    LocationAlertID VARCHAR(50) PRIMARY KEY,                  -- Unique alert ID
-    LocationAlertCodeID VARCHAR(50),                           -- FK to location alert code
-    AlertType VARCHAR(100),                                    -- Type of location alert
-    Attachments TEXT,                                          -- Attachments related to the alert
-    Comments TEXT,                                             -- Description of the alert
-    CONSTRAINT FK_AlertLocation_LocationAlertCode FOREIGN KEY (LocationAlertCodeID)
-      REFERENCES LocationAlertTypeCodes(LocationAlertCodeID)  
-);
-
--- Table: AlertRegardingPerson
-CREATE TABLE AlertRegardingPerson (
-    PersonAlertID VARCHAR(50) PRIMARY KEY,                     -- Unique alert ID
-    PersonAlertCodeID VARCHAR(50),                           -- FK to personal alert code
-    AlertType VARCHAR(100),                                    -- Type of person alert
-    Comments TEXT,                                             -- Description of the alert
-    CONSTRAINT FK_AlertPerson_PersonAlertCode FOREIGN KEY (PersonAlertCodeID) 
-      REFERENCES PersonAlertTypeCodes(PersonAlertCodeID)
-);
-
--- --------------------------------------------------
--- WorkOrder Lookup Codes Tables
--- --------------------------------------------------
-CREATE TABLE WorkClassCodes (
-  WorkClassCodeID VARCHAR (50) PRIMARY KEY,
-  WorkClassCode VARCHAR(50) NOT NULL UNIQUE,
-  Description TEXT NOT NULL
-);
-
-INSERT INTO WorkClassCodes (WorkClassCodeID, WorkClassCode, Description) 
+INSERT INTO work_status (code)
 VALUES
-  -- Immediate / Urgent Response
-  (1, 'Emergency', 'Immediate response required to prevent danger to life or significant property damage'),
-  (2, 'Defect', 'A defect that is to be repaired/corrected under warranty (either original builder''s warranty, manufacturer''s warranty, or seller''s warranty)'), -- UKHDS
-  (3, 'Urgent', 'Work that requires immediate attention but is not classified as an emergency'),
-  (3, 'Remedial', 'Follow-up work to address issues identified during a previous inspection or audit'),
 
-  -- Statutory & Regulatory
-  (4, 'Statutory', 'Work undertaken to comply with statutory or regulatory obligations'),
-  (5, 'EnvironmentalHealthOrder', 'Repairs mandated by a local authority or environmental health enforcement'),
-  (6, 'InsuranceClaim', 'Work triggered by a damage claim under property insurance'),
+  -- UKHDS codes
+  ('AccountingHold'), 
+  ('Cancelled'), 
+  ('Complete'), 
+  ('Estimating'), 
+  ('Hold'), 
+  ('PendingApproval'), 
+  ('PendingDesign'), 
+  ('PendingMaterial'), 
+  ('Scheduled'),
+  ('Superceded'),
+--new codes to consider
+  ('Open'), 
+  ('InProgress'), 
+  ('Completed'), 
+  ('Cancelled'), 
+  ('OnHold'), 
+  ('AwaitingParts'), 
+  ('AwaitingApproval'), 
+  ('Scheduled'), 
+  ('Delayed');
 
-  -- Planned & Preventative
-  (7, 'PreventativePlanned', 'Scheduled or in response to instrumented testing and analysis'), -- UKHDS
-  (8, 'Routine', 'Regularly scheduled work not classified as preventative or emergency'),
-  (9, 'Upgrade', 'Planned work to improve existing systems or components, not repair'),
-  (10, 'TenantRequestedUpgrade', 'Enhancements or non-essential work requested by the tenant'),
-
-  -- Property Lifecycle & Major Works
-  (11, 'MaintenanceProject', 'Multi-faceted facility repair or renewal project'), -- UKHDS
-  (12, 'VoidWork', 'Work required to bring a property up to standard between tenancies'),
-  (13, 'DecantSupport', 'Work related to supporting tenant relocation due to major repairs or redevelopment'),
-  (14, 'MoveManagement', 'Personnel relocation'), -- UKHDS
-
-  -- Assessment & Diagnostics
-  (15, 'Assessment', 'An inspection that would likely result in either a Demand or Maintenance Project work order'), -- UKHDS
-  (16, 'Inspection', 'Routine or ad-hoc inspection that may or may not result in further work'),
-  (17, 'Survey', 'Technical assessment such as stock condition, energy performance, or asbestos'),
-
-  -- Demand-Based
-  (18, 'Demand', 'In response to a request'), -- UKHDS
-
-  -- Fallback
-  (19, 'Other', 'Work Classification items not covered by a specific code'); -- UKHDS
-
-  
-CREATE TABLE WorkPriorityCodes (
-  WorkPriorityCodeID VARCHAR (50) PRIMARY KEY,
-  WorkPriortityCode VARCHAR(20) NOT NULL UNIQUE,
-  description TEXT NOT NULL
+CREATE TABLE work_order_complete (
+  work_order_complete_id VARCHAR(255) PRIMARY KEY,
+  work_order_id VARCHAR(255),
+  bill_of_material_item VARCHAR(255),
+  completed_work_elements TEXT,
+  operatives_used TEXT,
+  job_status_update VARCHAR(255),
+  follow_on_work VARCHAR(255),
+  CONSTRAINT fk_work_order_complete_work_order FOREIGN KEY (work_order_id) REFERENCES work_order(work_order_id)
 );
 
-INSERT INTO WorkPriorityCodes (WorkPriorityCodeID, WorkPriorityCode, Description) 
-VALUES
-  (1, 'Immediate', 'Critical safety issue requiring response within hours'),
-  (2, 'Emergency', 'Emergency - immediate, maximum 1 day'), -- UKHDS
-  (3, 'High', 'High - as soon as possible, typically within 1 day, maximum 2 days'), -- UKHDS
-  (4, 'Medium', 'Medium - plan and schedule with other priorities, typically maximum 7 days'), -- UKHDS
-  (5, 'Low', 'Low - as fits into schedule, typically a maximum 30 days'), -- UKHDS
-  (6, 'Deferred', 'Deferred - typically will not fit into the work schedule, maximum e.g. 1 year'), -- UKHDS
-  (7, 'Routine', 'Routine task - no urgency but should be completed'),
-  (8, 'Scheduled', 'Scheduled - maintenance or works planned for a specific date range'),
-  (9, 'Statutory', 'Statutory - required for compliance with legal regulations'),
-  (10, 'Reactive', 'Reactive - unplanned work in response to faults or failures');
-
-CREATE TABLE TradeCodes (
-  TradeCodeID VARCHAR (50) PRIMARY KEY,
-  TradeCode VARCHAR(100) NOT NULL UNIQUE,
-  CustomCode VARCHAR(100),                          -- Custom code used by provider
-  CustomName VARCHAR(255)                           -- Custom name for the trade
-  Description VARCHAR(100) NOT NULL
+CREATE TABLE work_order_access_information (
+  access_info_id VARCHAR(255) PRIMARY KEY,
+  work_order_id VARCHAR(255),
+  description VARCHAR(100),
+  key_safe TEXT,
+  CONSTRAINT fk_work_order_access_work_order FOREIGN KEY (work_order_id) REFERENCES work_order(work_order_id)
 );
-
-INSERT INTO TradeCodes (TradeCodeID, TradeCode, Description) 
-VALUES
--- all from UKHDS
-  (1, 'Asphalter', 'Asphalter'),
-  (2, 'Bricklayer', 'Bricklayer'),
-  (3, 'BricklayingGang', 'Bricklaying gang'),
-  (4, 'CarpenterJoiner', 'Carpenter and joiner'),
-  (5, 'CarpentryGang', 'Carpentry gang'),
-  (6, 'CleanTeam', 'Cleaning or clearance team'),
-  (7, 'CleanVoid', 'Cleaning and clearing - void property'),
-  (8, 'CleanGang', 'Cleaning gang'),
-  (9, 'CleanOperative', 'Cleaning operative'),
-  (10, 'DisabledAdaptation', 'Disabled adaptation multi-skilled operative'),
-  (11, 'DrainLayer', 'Drainlayer'),
-  (12, 'ELECENG', 'Electrical engineer'),
-  (13, 'ELEC', 'Electrician'),
-  (14, 'ELECGANG', 'Electrician gang'),
-  (15, 'ELECOP', 'Electrician operative'),
-  (16, 'Fencer', 'Fencer'),
-  (17, 'FloorLayer', 'Floorlayer'),
-  (18, 'Glazier', 'Glazier'),
-  (19, 'GroundWorker', 'Ground worker'),
-  (20, 'GroundsMGardener', 'Grounds maintenance - gardener'),
-  (21, 'MOWGRASS', 'Grounds maintenance - mow/cut grass'),
-  (22, 'REMGRASS', 'Grounds maintenance - remove grass by hand'),
-  (23, 'REMLIT', 'Grounds maintenance - remove litter'),
-  (24, 'GRAVEL', 'Grounds maintenance - replace gravel margins'),
-  (25, 'RUBBISH', 'Grounds maintenance - rubbish/refuse'),
-  (26, 'GRNDGRP', 'Grounds maintenance gang'),
-  (27, 'GRNDOP', 'Grounds maintenance operative'),
-  (28, 'HEATENG', 'Heating engineer'),
-  (29, 'HEATGASENG', 'Heating/Gas engineer'),
-  (30, 'MECHENG', 'Mechanical engineer'),
-  (31, 'MECHLIFT', 'Mechanical engineer - lift contract/care'),
-  (32, 'MULTISKILLOP', 'Multi-skilled operative'),
-  (33, 'MULTSKILLOPGEN', 'Multi-skilled operative - general'),
-  (34, 'MULTSKILLOPHANDY', 'Multi-skilled operative - handyman'),
-  (35, 'Painter', 'Painter and decorator'),
-  (36, 'PaintGang', 'Painting/Decorator gang'),
-  (37, 'Plasterer', 'Plasterer'),
-  (38, 'Plumber', 'Plumber'),
-  (39, 'PlumberDrain', 'Plumber - plumbing/drainage'),
-  (40, 'PlumberWaterStorage', 'Plumber - water storage'),
-  (41, 'PlumberGang', 'Plumber gang'),
-  (42, 'Roofer', 'Roofer'),
-  (43, 'RooferFlat', 'Roofer - roofing flat'),
-  (44, 'RooferPitch', 'Roofer - roofing pitched'),
-  (45, 'RoofGang', 'Roofing gang'),
-  (46, 'SPEC', 'Specialist'),
-  (47, 'SPECASBT', 'Specialist - asbestos'),
-  (48, 'SPECCCTV', 'Specialist - CCTV'),
-  (49, 'SPECDIGI', 'Specialist - digital aerials'),
-  (50, 'SPECDOOR', 'Specialist - door entry'),
-  (51, 'SPECELPL', 'Specialist - electrician/plumber'),
-  (52, 'SPECEMLIGHT', 'Specialist - emergency lighting'),
-  (53, 'SPECFIRE', 'Specialist - fire safety'),
-  (54, 'SPECLIGHTCOND', 'Specialist - lightning conductors'),
-  (55, 'SPECPEST', 'Specialist - pest control'),
-  (56, 'SPECRENEW', 'Specialist - renewables'),
-  (57, 'SPECSCAFF', 'Specialist - scaffolding'),
-  (58, 'SPECSEC', 'Specialist - security'),
-  (59, 'SPECUPVC', 'Specialist - UPVC'),
-  (60, 'StoneMason', 'Stone mason'),
-  (61, 'TILER', 'Tiler wall and floor');
-
-CREATE TABLE RateScheduleItemCodes (
-  RateScheduleItemCodeID VARCHAR (50) PRIMARY KEY,
-  RateScheduleItemCode VARCHAR(10) NOT NULL UNIQUE,
-  Description VARCHAR(100) NOT NULL
-);
--- need to add the actual codes --
-
-CREATE TABLE PersonAlertTypeCodes (
-  PersonAlertCodeID VARCHAR (50) PRIMARY KEY,
-  PersonAlertCode VARCHAR(50) NOT NULL UNIQUE,
-  Description TEXT NOT NULL
-);
-
-INSERT INTO PersonAlertTypeCodes (PersonAlertCodeID, PersonAlertCode, Description) 
-VALUES
--- From UKHDS
-  (1, 'NoVisitAlone', 'Do not visit alone'),
-  (2, 'ASBNoVisitAlone', 'Do not visit alone: anti-social behaviour'),
-  (3, 'DisablityVulnerablity', 'Disability, vulnerability'),
-  (4, 'HearingDifficult', 'Person has hearing difficulties'),
-  (5, 'VisionImpaired', 'Person has impaired vision'),
-  (6, 'Illness', 'Person has illness'),
-  (7, 'PhysicalSupport', 'Person requires physical support'),
-  (8, 'Wheelchair', 'Person requires wheelchair'),
-  (9, 'Elderly', 'Person is elderly'),
-  (10, 'SafeguardOther', 'Other safeguarding alert'),
-  (11, 'MissesAppointments', 'Person regularly misses appointments'),
-  (12, 'LanguageSupport', 'Person may not be fluent in English'),
-  (13, 'LimitedCapacity', 'This person does not have the capacity to make all decisions themselves due to the existence of one or more registered Lasting Power of Attorney'),
- -- New codes
-  (14, 'Respiratory', 'Person has a diagnosed respiratory condition (e.g. asthma, COPD)'),
-  (15, 'ImmunoCompromise', 'Person has a weakened immune system (e.g. cancer treatment, autoimmune diseases)'),
-  (16, 'Infant', 'Infant or very young child in the household'),
-  (17, 'Pregnant', 'Pregnant person resides at the property'),
-  (18, 'MentalHealth', 'Person has mental health conditions that may be worsened by poor housing'),
-  (19, 'LowIncome', 'Household is on low income and may face barriers to heating or ventilation'),
-  (20, 'ChildProtection', 'Child at risk or under child protection services'),
-  (21, 'DomesticViolence', 'Person is a victim of domestic violence or abuse'),
-  (22, 'RefusedAccess', 'Tenant has refused property access for repairs or inspections'),
-
-CREATE TABLE LocationAlertTypeCodes (
-  LocationAlertCodeID VARCHAR (50) PRIMARY KEY,
-  LocationAlertCode VARCHAR(50) NOT NULL UNIQUE,
-  Description TEXT NOT NULL
-);
--- from UKHDS
-  INSERT INTO LocationAlertTypeCodes (LocationAlertCodeID, LocationAlertCode, Description)
-VALUES
-  (1, 'Warranty', 'There may be a warranty applicable to this location'),
-  (2, 'NonMainsSewage', 'The sewage does not go to a main sewer - for example there is a septic tank or mini-treatment plant'),
-  (3, 'Comments', 'Please see comments included for details of alert'),
-  (4, 'ContactForDetails', 'Please contact the instructing party/client contact to obtain details of alerts regarding this location'),
-  (5, 'OperativeGenderRestriction', 'This location has restrictions on the gender of the operative(s) who may attend. See the AlertRegardingLocation comments for details of this restriction.'),
-  (6, 'HeritageBuilding', 'Information about Heritage or Listed Building status of this location'),
- -- New codes
-  (7, 'RecurringDamp', 'Property has a history of recurring damp and mould issues'),
-  (8, 'HealthRiskOccupants', 'One or more occupants are at high health risk from damp or poor air quality'),
-  (9, 'PoorVentilation', 'Location has inadequate natural or mechanical ventilation'),
-  (10, 'StructuralIssues', 'Structural conditions (e.g. cracks, leaks) increase damp/mould risk'),
-  (11, 'PastHHSRSFailure', 'Property has previously failed an HHSRS inspection'),
-  (12, 'ColdProperty', 'Property struggles to retain heat, contributing to condensation and mould'),
-  (13, 'VoidMouldRemediation', 'Void property requires mould remediation before re-letting'),
-  (14, 'AsbestosPresent', 'Asbestos materials present — additional precautions required'),
-  (15, 'RestrictedAccess', 'Restricted physical or legal access to parts of the property'),
-  (16, 'FireRiskZone', 'Property is in a fire-sensitive zone or has elevated fire risk profile'),
-  (17, 'AwaabsLawMonitoring', 'This location is subject to special monitoring under Awaab’s Law due to prior compliance failure');
-
-
-
