@@ -16,199 +16,135 @@
 ----------------------------------------------------------------------------------------
 -- Create HazardType table
 -- Table storing types of hazards.
-CREATE TABLE HazardType (
-  HazardTypeID INT PRIMARY KEY IDENTITY(1, 1), 
-  HazardType NVARCHAR(100) NOT NULL, 
-  HealthRiskRatingID INT NOT NULL, 
-  Category NVARCHAR(500) NULL, 
-  CONSTRAINT fk_hazardtype_healthriskrating FOREIGN KEY (HealthRiskRatingID) REFERENCES HealthRiskRating(HealthRiskRatingID)
+CREATE TABLE hazard_type (
+  hazard_type_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  hazard_type NVARCHAR(100) NOT NULL,
+  health_risk_rating_id INTEGER NOT NULL,
+  category NVARCHAR(500),
+  CONSTRAINT fk_hazard_type_health_risk_rating FOREIGN KEY (health_risk_rating_id) REFERENCES health_risk_rating(health_risk_rating_id)
 );
 -- Create HazardReport table
 -- Table storing hazard reports submitted.
 
 -- how do we do communal areas
 -- GIS field
-
-
-CREATE TABLE HazardReport (
-  HazardReportID INT PRIMARY KEY IDENTITY(1, 1), 
-  PropertyID INT NOT NULL, 
-  TenantID INT NOT NULL, 
-  DateReported DATE NOT NULL, 
-  ReportedBy NVARCHAR(100) NOT NULL, 
-  Description NVARCHAR(500) NULL, 
-  PhotoEvidence NVARCHAR(500) NULL, 
-  LocationDetails NVARCHAR(500) NULL, 
-  InvestigationTypeID INT NOT NULL, 
-  InvestigationDueDate DATE NOT NULL, 
-  EmergencyActionTaken BIT NOT NULL DEFAULT 0, 
-  MadeSafeDate DATE NULL, 
-  -- move further work to work component
-  FurtherWorkRequired BIT NOT NULL DEFAULT 0, 
-  FurtherWorkDueDate DATE NULL, 
-  ReportStatusID INT NOT NULL, 
-  CONSTRAINT fk_hazardreport_property FOREIGN KEY (PropertyID) REFERENCES Property(PropertyID), 
-  CONSTRAINT fk_hazardreport_tenant FOREIGN KEY (TenantID) REFERENCES TenantPerson(TenantID), 
-  CONSTRAINT fk_hazardreport_investigationtype FOREIGN KEY (InvestigationTypeID) REFERENCES InvestigationType(InvestigationTypeID), 
-  CONSTRAINT fk_hazardreport_reportstatus FOREIGN KEY (ReportStatusID) REFERENCES ReportStatus(ReportStatusID), 
-  CONSTRAINT chk_emergency_action CHECK (
-    EmergencyActionTaken IN (0, 1)
-  ), 
-  CONSTRAINT chk_further_work_required CHECK (
-    FurtherWorkRequired IN (0, 1)
-  ), 
-  CONSTRAINT chk_further_work_due_date CHECK (
-    FurtherWorkDueDate IS NULL 
-    OR FurtherWorkDueDate >= InvestigationDueDate
-  ), 
-  CONSTRAINT chk_made_safe_date CHECK (
-    MadeSafeDate IS NULL 
-    OR MadeSafeDate >= DateReported
-  )
+CREATE TABLE hazard_report (
+  hazard_report_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  property_id INTEGER NOT NULL,
+  tenant_id VARCHAR(50) NOT NULL,
+  date_reported DATE NOT NULL,
+  reported_by NVARCHAR(100) NOT NULL,
+  description NVARCHAR(500),
+  photo_evidence NVARCHAR(500),
+  location_details NVARCHAR(500),
+  emergency_action_taken INTEGER NOT NULL DEFAULT 0,
+  made_safe_date DATE,
+  further_work_required INTEGER NOT NULL DEFAULT 0,
+  further_work_due_date DATE,
+  report_status_id INTEGER NOT NULL,
+  CONSTRAINT fk_hazard_report_property FOREIGN KEY (property_id) REFERENCES property(property_id),
+  CONSTRAINT fk_hazard_report_tenant FOREIGN KEY (tenant_id) REFERENCES tenant_person(tenant_id),
+  CONSTRAINT fk_hazard_report_investigation_type FOREIGN KEY (investigation_type_id) REFERENCES investigation_type(investigation_type_id),
+  CONSTRAINT fk_hazard_report_status FOREIGN KEY (report_status_id) REFERENCES report_status(report_status_id),
+  CONSTRAINT chk_emergency_action CHECK (emergency_action_taken IN (0,1)),
+  CONSTRAINT chk_further_work_required CHECK (further_work_required IN (0,1)),
+  CONSTRAINT chk_further_work_due_date CHECK (further_work_due_date IS NULL OR further_work_due_date >= investigation_due_date),
+  CONSTRAINT chk_made_safe_date CHECK (made_safe_date IS NULL OR made_safe_date >= date_reported)
 );
 -- Create investigation table
 -- Table storing investigation details.
 CREATE TABLE investigation (
-  investigationID INT PRIMARY KEY IDENTITY(1, 1), 
-  PropertyID INT NOT NULL, 
-  TenantID INT NOT NULL, -- change to another
-  TenancyID INT NOT NULL, 
-  TriggerSourceID INT NOT NULL, 
-  HazardReportedDate DATE NOT NULL, 
-  investigationScheduledDate DATE NULL, 
-  investigationCompletedDate DATE NULL,
-  InspectorID INT NOT NULL,
-  InspectorName NVARCHAR(100) NULL, 
-  HazardConfirmed BIT NOT NULL DEFAULT 0, 
-  RepairRequired BIT NOT NULL DEFAULT 0, 
-  RepairScheduledDate DATE NULL, 
-  RepairCompletedDate DATE NULL, 
-  SLABreachFlag BIT NOT NULL DEFAULT 0, 
-  EscalationStatusID INT NOT NULL, 
-  NotificationSentToTenant BIT NOT NULL DEFAULT 0, 
-  investigationNotes NVARCHAR(500) NULL, 
-  CONSTRAINT fk_investigation_property FOREIGN KEY (PropertyID) REFERENCES Property(PropertyID), 
-  CONSTRAINT fk_investigation_tenant FOREIGN KEY (TenantID) REFERENCES TenantPerson(TenantID), 
-  CONSTRAINT fk_investigation_tenancy FOREIGN KEY (TenancyID) REFERENCES Tenancy(TenancyID), 
-  CONSTRAINT fk_investigation_triggersource FOREIGN KEY (TriggerSourceID) REFERENCES TriggerSource(TriggerSourceID),
-  CONSTRAINT fk_investigation_inspector FOREIGN KEY (InspectorID) REFERENCES Inspector(InspectorID),
-  CONSTRAINT fk_investigation_escalationstatus FOREIGN KEY (EscalationStatusID) REFERENCES EscalationStatus(EscalationStatusID), 
-  CONSTRAINT chk_hazard_confirmed CHECK (
-    HazardConfirmed IN (0, 1)
-  ), 
-  CONSTRAINT chk_repair_required CHECK (
-    RepairRequired IN (0, 1)
-  ), 
-  CONSTRAINT chk_sla_breach CHECK (
-    SLABreachFlag IN (0, 1)
-  ), 
-  CONSTRAINT chk_notification_sent_tenant CHECK (
-    NotificationSentToTenant IN (0, 1)
-  ), 
-  CONSTRAINT chk_repair_completed_date CHECK (
-    RepairCompletedDate IS NULL 
-    OR RepairScheduledDate IS NULL 
-    OR RepairCompletedDate >= RepairScheduledDate
-  ), 
-  CONSTRAINT chk_investigation_scheduled_date CHECK (
-    investigationScheduledDate IS NULL 
-    OR investigationScheduledDate >= HazardReportedDate
-  ), 
-  CONSTRAINT chk_investigation_completed_date CHECK (
-    investigationCompletedDate IS NULL 
-    OR investigationScheduledDate IS NULL 
-    OR investigationCompletedDate >= investigationScheduledDate
-  )
+  investigation_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  property_id INTEGER NOT NULL,
+  tenant_id VARCHAR(50) NOT NULL,
+  tenancy_id VARCHAR(50) NOT NULL,
+  hazard_report_id INTEGER NOT NULL,
+  trigger_source_id INTEGER NOT NULL,
+  investigation_type_id INTEGER NOT NULL,
+  investigation_scheduled_date DATE,
+  investigation_completed_date DATE,
+  inspector_name NVARCHAR(100),
+  hazard_confirmed INTEGER NOT NULL DEFAULT 0,
+  repair_required INTEGER NOT NULL DEFAULT 0,
+  repair_scheduled_date DATE,
+  repair_completed_date DATE,
+  sla_breach_flag INTEGER NOT NULL DEFAULT 0,
+  escalation_status_id INTEGER NOT NULL,
+  notification_sent_to_tenant INTEGER NOT NULL DEFAULT 0,
+  investigation_notes NVARCHAR(500),
+  CONSTRAINT fk_investigation_property FOREIGN KEY (property_id) REFERENCES property(property_id),
+  CONSTRAINT fk_investigation_tenant FOREIGN KEY (tenant_id) REFERENCES tenant_person(tenant_id),
+  CONSTRAINT fk_investigation_tenancy FOREIGN KEY (tenancy_id) REFERENCES tenancy(tenancy_id),
+  CONSTRAINT fk_investigation_hazard_report FOREIGN KEY (hazard_report_id) REFERENCES hazard_report(hazard_report_id),
+  CONSTRAINT fk_investigation_trigger_source FOREIGN KEY (trigger_source_id) REFERENCES trigger_source(trigger_source_id),
+  CONSTRAINT fk_investigation_escalation_status FOREIGN KEY (escalation_status_id) REFERENCES escalation_status(escalation_status_id),
+  CONSTRAINT chk_hazard_confirmed CHECK (hazard_confirmed IN (0,1)),
+  CONSTRAINT chk_repair_required CHECK (repair_required IN (0,1)),
+  CONSTRAINT chk_sla_breach CHECK (sla_breach_flag IN (0,1)),
+  CONSTRAINT chk_notification_sent_to_tenant CHECK (notification_sent_to_tenant IN (0,1)),
+  CONSTRAINT chk_repair_completed_date CHECK (repair_completed_date IS NULL OR repair_scheduled_date IS NULL OR repair_completed_date >= repair_scheduled_date),
+  CONSTRAINT chk_investigation_scheduled_date CHECK (investigation_scheduled_date IS NULL OR investigation_scheduled_date >= hazard_reported_date),
+  CONSTRAINT chk_investigation_completed_date CHECK (investigation_completed_date IS NULL OR investigation_scheduled_date IS NULL OR investigation_completed_date >= investigation_scheduled_date)
 );
 -- Create investigationHazard table
 -- Table mapping investigations to hazards found.
-CREATE TABLE investigationHazard (
-  investigationHazardID INT PRIMARY KEY IDENTITY(1, 1), 
-  HazardTypeID INT NOT NULL, 
-  investigationID INT NOT NULL, 
-  HazardReportID INT NOT NULL, 
-  SeverityID INT NOT NULL, 
-  Notes NVARCHAR(500) NULL, 
-  CONSTRAINT fk_investigationhazard_hazardtype FOREIGN KEY (HazardTypeID) REFERENCES HazardType(HazardTypeID), 
-  CONSTRAINT fk_investigationhazard_investigation FOREIGN KEY (investigationID) REFERENCES investigation(investigationID), 
-  CONSTRAINT fk_investigationhazard_hazardreport FOREIGN KEY (HazardReportID) REFERENCES HazardReport(HazardReportID), 
-  CONSTRAINT fk_investigationhazard_severity FOREIGN KEY (SeverityID) REFERENCES Severity(SeverityID)
+CREATE TABLE investigation_hazard (
+  investigation_hazard_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  hazard_type_id INTEGER NOT NULL,
+  investigation_id INTEGER NOT NULL,
+  hazard_report_id INTEGER NOT NULL,
+  severity_id INTEGER NOT NULL,
+  notes NVARCHAR(500),
+  CONSTRAINT fk_investigation_hazard_type FOREIGN KEY (hazard_type_id) REFERENCES hazard_type(hazard_type_id),
+  CONSTRAINT fk_investigation_hazard_investigation FOREIGN KEY (investigation_id) REFERENCES investigation(investigation_id),
+  CONSTRAINT fk_investigation_hazard_report FOREIGN KEY (hazard_report_id) REFERENCES hazard_report(hazard_report_id),
+  CONSTRAINT fk_investigation_hazard_severity FOREIGN KEY (severity_id) REFERENCES severity(severity_id)
 );
 -- Create Notification table
 -- Table storing notifications related to investigations.
-CREATE TABLE Notification (
-  NotificationID INT PRIMARY KEY IDENTITY(1, 1), 
-  investigationID INT NOT NULL, 
-  TenantID INT NOT NULL, 
-  WorkOrderID INT NOT NULL, 
-  NotificationTypeID INT NOT NULL, 
-  DateSent DATE NOT NULL, 
-  NotificationMethodID INT NOT NULL, 
-  ContentSummary NVARCHAR(500) NULL, 
-  CONSTRAINT fk_notification_investigation FOREIGN KEY (investigationID) REFERENCES investigation(investigationID), 
-  CONSTRAINT fk_notification_tenant FOREIGN KEY (TenantID) REFERENCES TenantPerson(TenantID), 
-  CONSTRAINT fk_notification_workorder FOREIGN KEY (WorkOrderID) REFERENCES WorkOrder(WorkOrderID), 
-  CONSTRAINT fk_notification_notificationtype FOREIGN KEY (NotificationTypeID) REFERENCES NotificationType(NotificationTypeID), 
-  CONSTRAINT fk_notification_notificationmethod FOREIGN KEY (NotificationMethodID) REFERENCES NotificationMethod(NotificationMethodID)
+CREATE TABLE notification (
+  notification_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  investigation_id INTEGER NOT NULL,
+  tenant_id VARCHAR(50) NOT NULL,
+  work_order_id VARCHAR(255) NOT NULL,
+  notification_type_id INTEGER NOT NULL,
+  date_sent DATE NOT NULL,
+  notification_method_id INTEGER NOT NULL,
+  content_summary NVARCHAR(500),
+  CONSTRAINT fk_notification_investigation FOREIGN KEY (investigation_id) REFERENCES investigation(investigation_id),
+  CONSTRAINT fk_notification_tenant FOREIGN KEY (tenant_id) REFERENCES tenant_person(tenant_id),
+  CONSTRAINT fk_notification_work_order FOREIGN KEY (work_order_id) REFERENCES work_order(work_order_id),
+  CONSTRAINT fk_notification_type FOREIGN KEY (notification_type_id) REFERENCES notification_type(notification_type_id),
+  CONSTRAINT fk_notification_method FOREIGN KEY (notification_method_id) REFERENCES notification_method(notification_method_id)
 );
 -- Create Escalation table
 -- Table storing escalation actions and tracking.
-CREATE TABLE Escalation (
-  EscalationID INT PRIMARY KEY IDENTITY(1, 1), 
-  investigationID INT NOT NULL, 
-  EscalationReason NVARCHAR(100) NULL, 
-  EscalationStageID INT NOT NULL, 
-  EscalationTypeID INT NOT NULL, 
-  EscalatedTo NVARCHAR(100) NOT NULL, 
-  EscalationStartDate DATE NOT NULL, 
-  EscalationEndDate DATE NULL, 
-  ActionTaken NVARCHAR(500) NULL, 
-  CompensationOffered BIT NOT NULL DEFAULT 0, 
-  CompensationAmount DECIMAL(10, 2) NULL, 
-  AlternativeAccommodationOffered BIT NOT NULL DEFAULT 0, 
-  AlternativeAccommodationDetails NVARCHAR(500) NULL, 
-  TenantAcceptance BIT NOT NULL DEFAULT 0, 
-  EscalationNotes NVARCHAR(500) NULL, 
-  CONSTRAINT fk_escalation_investigation FOREIGN KEY (investigationID) REFERENCES investigation(investigationID), 
-  CONSTRAINT fk_escalation_escalationstage FOREIGN KEY (EscalationStageID) REFERENCES EscalationStage(EscalationStageID), 
-  CONSTRAINT fk_escalation_escalationtype FOREIGN KEY (EscalationTypeID) REFERENCES EscalationType(EscalationTypeID), 
-  CONSTRAINT chk_compensation_offered CHECK (
-    CompensationOffered IN (0, 1)
-  ), 
-  CONSTRAINT chk_alternative_accomodation CHECK (
-    AlternativeAccommodationOffered IN (0, 1)
-  ), 
-  CONSTRAINT chk_tenant_acceptance CHECK (
-    TenantAcceptance IN (0, 1)
-  ), 
-  CONSTRAINT chk_compensation_amount CHECK (
-    CompensationAmount IS NULL 
-    OR CompensationAmount >= 0
-  ), 
-  CONSTRAINT chk_escalation_end_date CHECK (
-    EscalationEndDate IS NULL 
-    OR EscalationEndDate >= EscalationStartDate
-  ), 
-  CONSTRAINT chk_compensation_amount_offered CHECK (
-    (
-      CompensationOffered = 0 
-      AND CompensationAmount IS NULL
-    ) 
-    OR (
-      CompensationOffered = 1 
-      AND CompensationAmount IS NOT NULL
-    )
-  ), 
-  CONSTRAINT chk_alternative_accomodation_offered CHECK (
-    (
-      AlternativeAccommodationOffered = 0 
-      AND AlternativeAccommodationDetails IS NULL
-    ) 
-    OR (
-      AlternativeAccommodationOffered = 1 
-      AND AlternativeAccommodationDetails IS NOT NULL
-    )
-  )
+CREATE TABLE escalation (
+  escalation_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  investigation_id INTEGER NOT NULL,
+  escalation_reason NVARCHAR(100),
+  escalation_stage_id INTEGER NOT NULL,
+  escalation_type_id INTEGER NOT NULL,
+  escalated_to NVARCHAR(100) NOT NULL,
+  escalation_start_date DATE NOT NULL,
+  escalation_end_date DATE,
+  action_taken NVARCHAR(500),
+  compensation_offered INTEGER NOT NULL DEFAULT 0,
+  compensation_amount DECIMAL(10,2),
+  alternative_accommodation_offered INTEGER NOT NULL DEFAULT 0,
+  alternative_accommodation_details NVARCHAR(500),
+  tenant_acceptance INTEGER NOT NULL DEFAULT 0,
+  escalation_notes NVARCHAR(500),
+  CONSTRAINT fk_escalation_investigation FOREIGN KEY (investigation_id) REFERENCES investigation(investigation_id),
+  CONSTRAINT fk_escalation_stage FOREIGN KEY (escalation_stage_id) REFERENCES escalation_stage(escalation_stage_id),
+  CONSTRAINT fk_escalation_type FOREIGN KEY (escalation_type_id) REFERENCES escalation_type(escalation_type_id),
+  CONSTRAINT chk_compensation_offered CHECK (compensation_offered IN (0,1)),
+  CONSTRAINT chk_alternative_accommodation_offered CHECK (alternative_accommodation_offered IN (0,1)),
+  CONSTRAINT chk_tenant_acceptance CHECK (tenant_acceptance IN (0,1)),
+  CONSTRAINT chk_compensation_amount CHECK (compensation_amount IS NULL OR compensation_amount >= 0),
+  CONSTRAINT chk_escalation_end_date CHECK (escalation_end_date IS NULL OR escalation_end_date >= escalation_start_date),
+  CONSTRAINT chk_compensation_amount_offered CHECK ((compensation_offered = 0 AND compensation_amount IS NULL) OR (compensation_offered = 1 AND compensation_amount IS NOT NULL)),
+  CONSTRAINT chk_alternative_accommodation_details_offered CHECK ((alternative_accommodation_offered = 0 AND alternative_accommodation_details IS NULL) OR (alternative_accommodation_offered = 1 AND alternative_accommodation_details IS NOT NULL))
 );
 
 ----------------------------------------------------------------------------------------

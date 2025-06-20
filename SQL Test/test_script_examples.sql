@@ -24,7 +24,7 @@ FROM
 SELECT 
   * 
 FROM 
-  hazard_report_id 
+  hazard_report 
 WHERE 
   investigation_type_id NOT IN (
     SELECT 
@@ -45,7 +45,9 @@ SELECT
 FROM 
   investigation 
 WHERE 
-  repair_completed_date < repair_scheduled_date;
+  repair_completed_date IS NOT NULL 
+  AND repair_scheduled_date IS NOT NULL
+  AND repair_completed_date < repair_scheduled_date;
 -- FIELD TYPE CHECKS
 -- This test ensures that data entered respects the field types set in the tables.
 -- The example below checks to make sure the emergency_Action field in the 
@@ -57,7 +59,8 @@ SELECT
 FROM 
   hazard_report 
 WHERE 
-  emergency_action_taken NOT IN (0, 1);
+  emergency_action_taken NOT IN (0, 1)
+  OR emergency_action_taken IS NULL;
 -- Another example testing the length of the description field in the hazard_report
 -- table. Any rows shown in the output are where the description field is too long.
 SELECT 
