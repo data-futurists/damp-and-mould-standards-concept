@@ -232,7 +232,8 @@ VALUES
   ('Scheduled'), 
   ('Result'), 
   ('Advice'), 
-  ('Delay');
+  ('Delay'),
+  ('Escalation');
 -- EscalationStage Table
 -- Code list for stages in escalation lifecycle.
 CREATE TABLE EscalationStage (
