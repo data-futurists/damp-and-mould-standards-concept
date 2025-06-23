@@ -18,7 +18,7 @@ VALUES
 
 CREATE TABLE location_alert_type_code (
   alert_type_id INTEGER PRIMARY KEY,
-  code VARCHAR(50) NOT NULL UNIQUE,
+  code VARCHAR(50) NOT NULL UNIQUE
 );
 
 INSERT INTO location_alert_type_code (alert_type_id, code, display_name)

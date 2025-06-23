@@ -5,6 +5,8 @@
 // Script created for use with dbdiagram.io
 // Links to Property, Tenant and Tenancy tables commented out
 
+// search todo for rows needing updates
+
 // Tables
 
 table hazard_type {
@@ -22,8 +24,8 @@ table hazard_type {
 
 table hazard_report {
   hazard_report_id integer [pk, increment]
-  property_id integer
-  tenant_id varchar(50)
+  uprn integer
+  tenancy_id varchar(50)
   date_reported date
   reported_by nvarchar(100)
   description nvarchar(500)
@@ -41,8 +43,7 @@ table hazard_report {
 
 table investigation {
   investigation_id integer [pk, increment]
-  property_id integer
-  tenant_id varchar(50)
+  uprn integer
   tenancy_id varchar(50)
   hazard_report_id integer
   trigger_source_id integer
@@ -52,10 +53,7 @@ table investigation {
   inspector_name nvarchar(100)
   hazard_confirmed integer [default: 0]
   repair_required integer [default: 0]
-  repair_scheduled_date date
-  repair_completed_date date
   sla_breach_flag integer [default: 0]
-  escalation_status_id integer
   notification_sent_to_tenant integer [default: 0]
   investigation_notes nvarchar(500)
 
@@ -76,9 +74,10 @@ table investigation_hazard {
 table notification {
   notification_id integer [pk, increment]
   investigation_id integer
-  tenant_id varchar(50)
+  tenancy_id integer
   work_order_id varchar(255)
   notification_type_id integer
+  escalation_id integer
   date_sent date
   notification_method_id integer
   content_summary nvarchar(500)
@@ -96,9 +95,7 @@ table escalation {
   escalation_start_date date
   escalation_end_date date
   action_taken nvarchar(500)
-  compensation_offered integer [default: 0]
   compensation_amount decimal(10,2)
-  alternative_accommodation_offered integer [default: 0]
   alternative_accommodation_details nvarchar(500)
   tenant_acceptance integer [default: 0]
   escalation_notes nvarchar(500)
@@ -165,26 +162,25 @@ table inspector {
 
 // Relationships
 ref: hazard_type.health_risk_rating_id > health_risk_rating.health_risk_rating_id
-//ref: hazard_report.property_id > property.property_id
-//ref: hazard_report.tenant_id > tenant_person.tenant_id
+//ref: hazard_report.uprn > property.property_id todo
+//ref: hazard_report.tenancy_id > tenancy.tenancy_id
 ref: hazard_report.report_status_id > report_status.report_status_id
 ref: hazard_report.investigation_type_id > investigation_type.investigation_type_id
 //ref: investigation.property_id > property.property_id
-//ref: investigation.tenant_id > tenant_person.tenant_id
 //ref: investigation.tenancy_id > tenancy.tenancy_id
 ref: investigation.hazard_report_id > hazard_report.hazard_report_id
 ref: investigation.trigger_source_id > trigger_source.trigger_source_id
 ref: investigation.investigation_type_id > investigation_type.investigation_type_id
-ref: investigation.escalation_status_id > escalation_status.escalation_status_id
 ref: investigation_hazard.hazard_type_id > hazard_type.hazard_type_id
 ref: investigation_hazard.investigation_id > investigation.investigation_id
 ref: investigation_hazard.hazard_report_id > hazard_report.hazard_report_id
 ref: investigation_hazard.severity_id > severity.severity_id
 ref: notification.investigation_id > investigation.investigation_id
-//ref: notification.tenant_id > tenant_person.tenant_id
+//ref: notification.tenancy_id > tenancy.tenancy_id
 //ref: notification.work_order_id > work_order.work_order_id
 ref: notification.notification_type_id > notification_type.notification_type_id
 ref: notification.notification_method_id > notification_method.notification_method_id
+ref: notification.escalation_id > escalation.escalation_id
 ref: escalation.investigation_id > investigation.investigation_id
 ref: escalation.escalation_stage_id > escalation_stage.escalation_stage_id
 ref: escalation.escalation_type_id > escalation_type.escalation_type_id
