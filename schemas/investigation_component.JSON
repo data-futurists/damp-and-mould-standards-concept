@@ -1,0 +1,309 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "investigation Module Data Model",
+  "type": "object",
+  "properties": {
+    "hazard_type": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/hazard_type" }
+    },
+    "investigation_hazard": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/investigation_hazard" }
+    },
+    "hazard_report": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/hazard_report" }
+    },
+    "investigation": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/investigation" }
+    },
+    "notification": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/notification" }
+    },
+    "escalation": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/escalation" }
+    },
+    "health_risk_rating": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/health_risk_Rating" }
+    },
+    "severity": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/severity" }
+    },
+    "investigation_type": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/investigation_type" }
+    },
+    "report_status": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/report_status" }
+    },
+    "trigger_source": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/trigger_source" }
+    },
+    "escalation_status": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/escalation_status" }
+    },
+    "notification_type": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/notification_type" }
+    },
+    "notification_method": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/notification_method" }
+    },
+    "escalation_stage": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/escalation_stage" }
+    },
+    "escalation_type": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/escalation_type" }
+    }
+  },
+  "required": [
+    "hazard_type",
+    "investigation_hazard",
+    "hazard_report",
+    "investigation",
+    "notification",
+    "escalation"
+  ],
+  "definitions": {
+    "hazard_type": {
+      "type": "object",
+      "description": "Table storing types of hazards.",
+      "properties": {
+        "hazard_type_id": { "type": "integer", "description": "Unique identifier for the hazard type." },
+        "hazard_type": { "type": "string", "description": "Name of the hazard type." },
+        "health_risk_rating_id": { "type": "integer", "description": "Reference to the health risk rating." },
+        "category": { "type": "string", "description": "Category or grouping for the hazard type." }
+      },
+      "required": ["hazard_type", "health_risk_rating_id"]
+    },
+    "hazard_report": {
+      "type": "object",
+      "description": "Table storing hazard reports submitted.",
+      "properties": {
+        "hazard_report_id": { "type": "integer", "description": "Unique identifier for the hazard report." },
+        "uprn": { "type": "string", "description": "The UPRN of this property according to the applicable national identification scheme." },
+        "tenancy_id": { "type": "integer", "description": "Reference to the tenancy." },
+        "date_reported": { "type": "string", "format": "date", "description": "Date the hazard was reported." },
+        "reported_by": { "type": "string", "description": "ID of the person who reported the hazard." },
+        "description": { "type": "string", "description": "Detailed description of the reported hazard." },
+        "photo_evidence": { "type": "string", "description": "URL or path to photo evidence." },
+        "location_details": { "type": "string", "description": "Details about the location of the hazard." },
+        "emergency_action_taken": { "type": "boolean", "description": "Whether emergency action was taken." },
+        "made_safe_date": { "type": "string", "format": "date", "description": "Date hazard was made safe." },
+        "further_work_required": { "type": "boolean", "description": "Whether further work is required." },
+        "further_work_due_date": { "type": "string", "format": "date", "description": "Due date for further work to be completed." },
+        "report_status_id": { "type": "integer", "description": "Reference to the status of the report." }
+      },
+      "required": [
+        "uprn", "tenancy_id", "date_reported", "reported_by",
+        "emergency_action_taken",
+        "further_work_required", "report_status_id"
+      ]
+    },
+    "investigation": {
+      "type": "object",
+      "description": "Table storing investigation details.",
+      "properties": {
+        "investigation_id": { "type": "integer", "description": "Unique identifier for the investigation." },
+        "uprn": { "type": "string", "description": "The UPRN of this property according to the applicable national identification scheme." },
+        "tenancy_id": { "type": "integer", "description": "Reference to the tenancy." },
+        "trigger_source_id": { "type": "integer", "description": "Reference to what triggered the investigation." },
+        "investigation_type_id": { "type": "integer", "description": "Reference to type of investigation." },
+        "hazard_report_id": { "type": "integer", "description": "Unique identifier for the hazard report." },
+        "investigation_scheduled_date": { "type": "string", "format": "date", "description": "Scheduled date for investigation." },
+        "investigation_completed_date": { "type": "string", "format": "date", "description": "Date investigation was completed." },
+        "investigator_id": { "type": "integer", "description": "Name of the investigator." },
+        "hazard_confirmed": { "type": "boolean", "description": "Whether a hazard was confirmed." },
+        "repair_required": { "type": "boolean", "description": "Whether repair is required." },
+        "sla_breach_flag": { "type": "boolean", "description": "Whether the SLA was breached." },
+        "notification_sent_to_tenant": { "type": "boolean", "description": "Whether tenant was notified." },
+        "investigation_notes": { "type": "string", "description": "Additional notes from investigation." }
+      },
+      "required": [
+        "uprn", "tenancy_id", "trigger_source_id",
+        "hazard_confirmed", "repair_required",
+        "sla_breach_flag", "notification_sent_to_tenant"
+      ]
+    },
+
+    "investigation_hazard": {
+      "type": "object",
+      "description": "Table mapping investigations to hazards found.",
+      "properties": {
+        "investigation_hazard_id": { "type": "integer", "description": "Unique identifier for the investigation hazard." },
+        "hazard_type_id": { "type": "integer", "description": "Reference to the hazard type." },
+        "investigation_id": { "type": "integer", "description": "Reference to the investigation." },
+        "hazard_report_id": { "type": "integer", "description": "Reference to the original hazard report." },
+        "severity_id": { "type": "integer", "description": "Reference to the severity level." },
+        "notes": { "type": "string", "description": "Additional notes about the hazard." }
+      },
+      "required": ["hazard_type_id", "investigation_id", "hazard_report_id", "severity_id"]
+    },
+
+    "notification": {
+      "type": "object",
+      "description": "Table storing notifications related to investigations.",
+      "properties": {
+        "notification_id": { "type": "integer", "description": "Unique identifier for the notification." },
+        "investigation_id": { "type": "integer", "description": "Reference to the investigation." },
+        "tenancy_id": { "type": "integer", "description": "Reference to the tenancy." },
+        "work_order_id": { "type": "integer", "description": "Reference to the work order." },
+        "notification_type_id": { "type": "integer", "description": "Type of notification." },
+        "escalation_id": {"type": "integer", "description": "Referance to the escalation"},
+        "date_sent": { "type": "string", "format": "date", "description": "Date the notification was sent." },
+        "notification_method_id": { "type": "integer", "description": "Method used to send the notification." },
+        "content_summary": { "type": "string", "description": "Summary of the notification content." }
+      },
+      "required": [
+        "investigation_id", "tenancy_id", "work_order_id",
+        "notification_type_id", "date_sent", "notification_method_id"
+      ]
+    },
+
+    "escalation": {
+      "type": "object",
+      "description": "Table storing escalation actions and tracking.",
+      "properties": {
+        "escalation_id": { "type": "integer", "description": "Unique identifier for the escalation." },
+        "investigation_id": { "type": "integer", "description": "Reference to the related investigation." },
+        "escalation_reason": { "type": "string", "description": "Reason for escalation." },
+        "escalation_stage_id": { "type": "integer", "description": "Stage of the escalation." },
+        "escalation_type_id": { "type": "integer", "description": "Type of escalation." },
+        "escalated_to": { "type": "string", "description": "Person or team escalated to." },
+        "escalation_start_date": { "type": "string", "format": "date", "description": "Start date of escalation." },
+        "escalation_end_date": { "type": "string", "format": "date", "description": "End date of escalation (if any)." },
+        "action_taken": { "type": "string", "description": "Actions taken in response to escalation." },
+        "compensation_amount": { "type": "number", "description": "Amount of compensation offered (if any)." },
+        "alternative_accommodation_details": { "type": "string", "description": "Details of the accommodation offered." },
+        "tenant_acceptance": { "type": "boolean", "description": "Whether the tenant accepted the escalation outcome." },
+        "escalation_notes": { "type": "string", "description": "Additional notes about the escalation." }
+      },
+      "required": [
+        "investigation_id", "escalation_stage_id", "escalation_type_id",
+        "escalated_to", "escalation_start_date", "tenant_acceptance"
+      ]
+    },
+
+    "healthriskrating": {
+      "type": "object",
+      "description": "Code list for health risk rating levels.",
+      "properties": {
+        "health_risk_rating_id": { "type": "integer", "description": "ID of the health risk rating." },
+        "health_risk_rating": { "type": "string", "description": "Health risk rating level." }
+      },
+      "required": ["health_risk_rating"]
+    },
+
+    "severity": {
+      "type": "object",
+      "description": "Code list for hazard severity levels.",
+      "properties": {
+        "severity_id": { "type": "integer", "description": "ID of the severity level." },
+        "severity": { "type": "string", "description": "Severity level description." }
+      },
+      "required": ["severity"]
+    },
+
+    "investigation_type": {
+      "type": "object",
+      "description": "Code list for types of investigation.",
+      "properties": {
+        "investigation_type_id": { "type": "integer", "description": "ID of the investigation type." },
+        "investigation_type": { "type": "string", "description": "Description of the investigation type." }
+      },
+      "required": ["investigation_type"]
+    },
+
+    "report_status": {
+      "type": "object",
+      "description": "Code list for report statuses.",
+      "properties": {
+        "report_status_id": { "type": "integer", "description": "ID of the report status." },
+        "report_status": { "type": "string", "description": "Name of the report status." }
+      },
+      "required": ["report_status"]
+    },
+
+    "trigger_source": {
+      "type": "object",
+      "description": "Code list for what triggered investigations.",
+      "properties": {
+        "trigger_source_id": { "type": "integer", "description": "ID of the trigger source." },
+        "trigger_source": { "type": "string", "description": "Source that triggered the investigation." }
+      },
+      "required": ["trigger_source"]
+    },
+
+    "escalation_status": {
+      "type": "object",
+      "description": "Code list for escalation statuses.",
+      "properties": {
+        "escalation_status_id": { "type": "integer", "description": "ID of the escalation status." },
+        "escalation_status": { "type": "string", "description": "Description of escalation status." }
+      },
+      "required": ["escalation_status"]
+    },
+
+    "notification_type": {
+      "type": "object",
+      "description": "Code list for types of notifications.",
+      "properties": {
+        "notification_type_id": { "type": "integer", "description": "ID of the notification type." },
+        "notification_type": { "type": "string", "description": "Type of notification." }
+      },
+      "required": ["notification_type"]
+    },
+
+    "escalation_stage": {
+      "type": "object",
+      "description": "Code list for stages in escalation lifecycle.",
+      "properties": {
+        "escalation_stage_id": { "type": "integer", "description": "ID of the escalation stage." },
+        "escalation_stage": { "type": "string", "description": "Stage name." }
+      },
+      "required": ["escalation_stage"]
+    },
+
+    "notification_method": {
+      "type": "object",
+      "description": "Code list for notification methods.",
+      "properties": {
+        "notification_method_id": { "type": "integer", "description": "ID of the notification method." },
+        "notification_method": { "type": "string", "description": "Type of notification method." }
+      },
+      "required": ["notification_method"]
+    },
+
+    "escalation_type": {
+      "type": "object",
+      "description": "Code list for types of escalations.",
+      "properties": {
+        "escalation_type_id": { "type": "integer", "description": "ID of the escalation type." },
+        "escalation_type": { "type": "string", "description": "Type of escalation." }
+      },
+      "required": ["escalation_type"]
+    },
+
+    "investigator": {
+      "type": "object",
+      "description": "Table storing investigator names.",
+      "properties": {
+        "investigator_id": { "type": "integer", "description": "ID of the investigator." },
+        "investigator_name": { "type": "string", "description": "Name of the investigator." }
+      },
+      "required": ["escalation_type"]
+    }
+  }
+}

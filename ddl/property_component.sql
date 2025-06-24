@@ -18,7 +18,7 @@ VALUES
 
 CREATE TABLE location_alert_type_code (
   alert_type_id INTEGER PRIMARY KEY,
-  code VARCHAR(50) NOT NULL UNIQUE,
+  code VARCHAR(50) NOT NULL UNIQUE
 );
 
 INSERT INTO location_alert_type_code (alert_type_id, code, display_name)
@@ -150,6 +150,7 @@ CREATE TABLE unit (
 CREATE TABLE address (
   address_id INTEGER PRIMARY KEY,
   unit_id INTEGER NOT NULL,
+  uprn INTEGER NOT NULL,
   address_line VARCHAR(255),
   building_name VARCHAR(255),
   street_name VARCHAR(255),
