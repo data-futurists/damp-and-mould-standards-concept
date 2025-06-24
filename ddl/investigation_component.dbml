@@ -162,11 +162,11 @@ table inspector {
 
 // Relationships
 ref: hazard_type.health_risk_rating_id > health_risk_rating.health_risk_rating_id
-//ref: hazard_report.uprn > property.property_id todo
+//ref: hazard_report.uprn > address.uprn
 //ref: hazard_report.tenancy_id > tenancy.tenancy_id
 ref: hazard_report.report_status_id > report_status.report_status_id
 ref: hazard_report.investigation_type_id > investigation_type.investigation_type_id
-//ref: investigation.property_id > property.property_id
+//ref: investigation.uprn > address.uprn
 //ref: investigation.tenancy_id > tenancy.tenancy_id
 ref: investigation.hazard_report_id > hazard_report.hazard_report_id
 ref: investigation.trigger_source_id > trigger_source.trigger_source_id

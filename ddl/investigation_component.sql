@@ -32,7 +32,7 @@ CREATE TABLE hazard_type (
 -- GIS field
 CREATE TABLE hazard_report (
   hazard_report_id INTEGER PRIMARY KEY AUTOINCREMENT,
-  uprn INTEGER NOT NULL,
+  uprn VARCHAR(50) NOT NULL,
   tenancy_id VARCHAR(50) NOT NULL,
   date_reported DATE NOT NULL,
   reported_by NVARCHAR(100) NOT NULL,
@@ -44,7 +44,7 @@ CREATE TABLE hazard_report (
   further_work_required INTEGER NOT NULL DEFAULT 0,
   further_work_due_date DATE,
   report_status_id INTEGER NOT NULL,
-  CONSTRAINT fk_hazard_report_property FOREIGN KEY (uprn) REFERENCES property(property_id), --todo
+  CONSTRAINT fk_hazard_report_property FOREIGN KEY (uprn) REFERENCES address(uprn),
   CONSTRAINT fk_hazard_report_tenancy FOREIGN KEY (tenancy_id) REFERENCES tenancy(tenancy_id),
   CONSTRAINT fk_hazard_report_investigation_type FOREIGN KEY (investigation_type_id) REFERENCES investigation_type(investigation_type_id),
   CONSTRAINT fk_hazard_report_status FOREIGN KEY (report_status_id) REFERENCES report_status(report_status_id),
@@ -57,7 +57,7 @@ CREATE TABLE hazard_report (
 -- Table storing investigation details.
 CREATE TABLE investigation (
   investigation_id INTEGER PRIMARY KEY AUTOINCREMENT,
-  uprn INTEGER NOT NULL,
+  uprn VARCHAR(50) NOT NULL,
   tenancy_id VARCHAR(50) NOT NULL,
   hazard_report_id INTEGER NOT NULL,
   trigger_source_id INTEGER NOT NULL,
@@ -70,7 +70,7 @@ CREATE TABLE investigation (
   sla_breach_flag INTEGER NOT NULL DEFAULT 0,
   notification_sent_to_tenant INTEGER NOT NULL DEFAULT 0,
   investigation_notes NVARCHAR(500),
-  CONSTRAINT fk_investigation_property FOREIGN KEY (uprn) REFERENCES property(property_id), --todo
+  CONSTRAINT fk_investigation_property FOREIGN KEY (uprn) REFERENCES address(uprn),
   CONSTRAINT fk_investigation_tenancy FOREIGN KEY (tenancy_id) REFERENCES tenancy(tenancy_id),
   CONSTRAINT fk_investigation_hazard_report FOREIGN KEY (hazard_report_id) REFERENCES hazard_report(hazard_report_id),
   CONSTRAINT fk_investigation_trigger_source FOREIGN KEY (trigger_source_id) REFERENCES trigger_source(trigger_source_id),

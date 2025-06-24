@@ -178,8 +178,8 @@
       "description": "Table storing hazard reports submitted.",
       "properties": {
         "hazard_report_id": { "type": "integer", "description": "Unique identifier for the hazard report." },
-        "property_id": { "type": "integer", "description": "Reference to the property." },
-        "tenant_id": { "type": "integer", "description": "Reference to the tenant." },
+        "uprn": { "type": "string", "description": "The UPRN of this property according to the applicable national identification scheme." },
+        "tenancy_id": { "type": "integer", "description": "Reference to the tenancy." },
         "date_reported": { "type": "string", "format": "date", "description": "Date the hazard was reported." },
         "reported_by": { "type": "string", "description": "ID of the person who reported the hazard." },
         "description": { "type": "string", "description": "Detailed description of the reported hazard." },
@@ -192,8 +192,8 @@
         "report_status_id": { "type": "integer", "description": "Reference to the status of the report." }
       },
       "required": [
-        "property_id", "tenant_id", "date_reported", "reported_by",
-        "investigation_type_id", "investigation_due_date", "emergency_action_taken",
+        "uprn", "tenancy_id", "date_reported", "reported_by",
+        "emergency_action_taken",
         "further_work_required", "report_status_id"
       ]
     },
@@ -202,8 +202,7 @@
       "description": "Table storing investigation details.",
       "properties": {
         "investigation_id": { "type": "integer", "description": "Unique identifier for the investigation." },
-        "property_id": { "type": "integer", "description": "Reference to the property being inspected." },
-        "tenant_id": { "type": "integer", "description": "Reference to the tenant." },
+        "uprn": { "type": "string", "description": "The UPRN of this property according to the applicable national identification scheme." },
         "tenancy_id": { "type": "integer", "description": "Reference to the tenancy." },
         "trigger_source_id": { "type": "integer", "description": "Reference to what triggered the investigation." },
         "investigation_type_id": { "type": "integer", "description": "Reference to type of investigation." },
@@ -213,17 +212,14 @@
         "inspector_name": { "type": "string", "description": "Name of the inspector." },
         "hazard_confirmed": { "type": "boolean", "description": "Whether a hazard was confirmed." },
         "repair_required": { "type": "boolean", "description": "Whether repair is required." },
-        "repair_scheduled_date": { "type": "string", "format": "date", "description": "Scheduled date for repair." },
-        "repair_completed_date": { "type": "string", "format": "date", "description": "Date repair was completed." },
         "sla_breach_flag": { "type": "boolean", "description": "Whether the SLA was breached." },
-        "escalation_status_id": { "type": "integer", "description": "Reference to escalation status." },
         "notification_sent_to_tenant": { "type": "boolean", "description": "Whether tenant was notified." },
         "investigation_notes": { "type": "string", "description": "Additional notes from investigation." }
       },
       "required": [
-        "property_id", "tenant_id", "tenancy_id", "trigger_source_id",
-        "hazard_reported_date", "hazard_confirmed", "repair_required",
-        "sla_breach_flag", "escalation_status_id", "notification_sent_to_tenant"
+        "uprn", "tenancy_id", "trigger_source_id",
+        "hazard_confirmed", "repair_required",
+        "sla_breach_flag", "notification_sent_to_tenant"
       ]
     },
 
@@ -247,15 +243,16 @@
       "properties": {
         "notification_id": { "type": "integer", "description": "Unique identifier for the notification." },
         "investigation_id": { "type": "integer", "description": "Reference to the investigation." },
-        "tenant_id": { "type": "integer", "description": "Reference to the tenant." },
+        "tenancy_id": { "type": "integer", "description": "Reference to the tenancy." },
         "work_order_id": { "type": "integer", "description": "Reference to the work order." },
         "notification_type_id": { "type": "integer", "description": "Type of notification." },
+        "escalation_id": {"type": "integer", "description": "Referance to the escalation"},
         "date_sent": { "type": "string", "format": "date", "description": "Date the notification was sent." },
         "notification_method_id": { "type": "integer", "description": "Method used to send the notification." },
         "content_summary": { "type": "string", "description": "Summary of the notification content." }
       },
       "required": [
-        "investigation_id", "tenant_id", "work_order_id",
+        "investigation_id", "tenancy_id", "work_order_id",
         "notification_type_id", "date_sent", "notification_method_id"
       ]
     },
@@ -273,17 +270,14 @@
         "escalation_start_date": { "type": "string", "format": "date", "description": "Start date of escalation." },
         "escalation_end_date": { "type": "string", "format": "date", "description": "End date of escalation (if any)." },
         "action_taken": { "type": "string", "description": "Actions taken in response to escalation." },
-        "compensation_offered": { "type": "boolean", "description": "Whether compensation was offered." },
         "compensation_amount": { "type": "number", "description": "Amount of compensation offered (if any)." },
-        "alternative_accommodation_offered": { "type": "boolean", "description": "If alternative accommodation was offered." },
         "alternative_accommodation_details": { "type": "string", "description": "Details of the accommodation offered." },
         "tenant_acceptance": { "type": "boolean", "description": "Whether the tenant accepted the escalation outcome." },
         "escalation_notes": { "type": "string", "description": "Additional notes about the escalation." }
       },
       "required": [
         "investigation_id", "escalation_stage_id", "escalation_type_id",
-        "escalated_to", "escalation_start_date", "compensation_offered",
-        "alternative_accommodation_offered", "tenant_acceptance"
+        "escalated_to", "escalation_start_date", "tenant_acceptance"
       ]
     },
 
@@ -494,6 +488,7 @@
       "properties": {
         "address_id": { "type": "integer", "description": "Unique identifier for the address" },
         "unit_id": { "type": "integer", "description": "Unique reference for this Unit that distinguishes it from other Units." },
+        "uprn": { "type": "string", "description": "The UPRN of this property according to the applicable national identification scheme."},
         "address_line": { "type": "string", "description": "Where the address cannot be separated into the explicit fields, use this as the generic 'address lines' for the address" },
         "building_name": { "type": "string", "description": "The name of the building or house on a street of this address" },
         "street_name": { "type": "string", "description":"Name of a street or thoroughfare" },

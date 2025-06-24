@@ -197,6 +197,7 @@
       "properties": {
         "address_id": { "type": "integer", "description": "Unique identifier for the address" },
         "unit_id": { "type": "integer", "description": "Unique reference for this Unit that distinguishes it from other Units." },
+        "uprn": { "type": "string", "description": "The UPRN of this property according to the applicable national identification scheme."},
         "address_line": { "type": "string", "description": "Where the address cannot be separated into the explicit fields, use this as the generic 'address lines' for the address" },
         "building_name": { "type": "string", "description": "The name of the building or house on a street of this address" },
         "street_name": { "type": "string", "description":"Name of a street or thoroughfare" },

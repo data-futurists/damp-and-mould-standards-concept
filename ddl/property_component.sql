@@ -150,6 +150,7 @@ CREATE TABLE unit (
 CREATE TABLE address (
   address_id INTEGER PRIMARY KEY,
   unit_id INTEGER NOT NULL,
+  uprn INTEGER NOT NULL,
   address_line VARCHAR(255),
   building_name VARCHAR(255),
   street_name VARCHAR(255),
