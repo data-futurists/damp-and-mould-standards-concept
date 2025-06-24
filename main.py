@@ -356,7 +356,7 @@ def work_order_page():
     with erd_container:
         # Load and display the ERD SVG
         try:
-            svg_path = Path("erd/work_order_erd.svg")  # Adjust path as needed
+            svg_path = Path("erd/work_order_component_ERD.svg")  # Adjust path as needed
             with open(svg_path, "r") as f:
                 svg_content = f.read()
             
