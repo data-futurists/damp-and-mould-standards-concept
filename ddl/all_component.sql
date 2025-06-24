@@ -88,11 +88,11 @@ VALUES
   ('Compensation'), 
   ('Alternative Accommodation');
 
-CREATE TABLE NotificationType (
-  NotificationTypeID INT PRIMARY KEY IDENTITY(1, 1), 
-  NotificationType NVARCHAR(20) NOT NULL
+CREATE TABLE notification_type (
+  notification_type_id INT PRIMARY KEY IDENTITY(1, 1), 
+  notification_type NVARCHAR(20) NOT NULL
 );
-INSERT INTO NotificationType (NotificationType) 
+INSERT INTO notification_type (notification_type) 
 VALUES 
   ('Scheduled'), 
   ('Result'), 
@@ -848,7 +848,7 @@ CREATE TABLE investigation (
   investigation_type_id INTEGER NOT NULL,
   investigation_scheduled_date DATE,
   investigation_completed_date DATE,
-  inspector_name NVARCHAR(100),
+  investigator_id INTEGER NOT NULL,
   hazard_confirmed INTEGER NOT NULL DEFAULT 0,
   repair_required INTEGER NOT NULL DEFAULT 0,
   sla_breach_flag INTEGER NOT NULL DEFAULT 0,
@@ -858,6 +858,7 @@ CREATE TABLE investigation (
   CONSTRAINT fk_investigation_tenancy FOREIGN KEY (tenancy_id) REFERENCES tenancy(tenancy_id),
   CONSTRAINT fk_investigation_hazard_report FOREIGN KEY (hazard_report_id) REFERENCES hazard_report(hazard_report_id),
   CONSTRAINT fk_investigation_trigger_source FOREIGN KEY (trigger_source_id) REFERENCES trigger_source(trigger_source_id),
+  CONSTRAINT fk_investigation_investigator FOREIGN KEY (investigator_id) REFERENCES investigator(investigator_id),
   CONSTRAINT chk_hazard_confirmed CHECK (hazard_confirmed IN (0,1)),
   CONSTRAINT chk_repair_required CHECK (repair_required IN (0,1)),
   CONSTRAINT chk_sla_breach CHECK (sla_breach_flag IN (0,1)),

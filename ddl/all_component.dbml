@@ -51,7 +51,7 @@ table investigation {
   investigation_type_id integer
   investigation_scheduled_date date
   investigation_completed_date date
-  inspector_name nvarchar(100)
+  investigator_id integer
   hazard_confirmed integer [default: 0]
   repair_required integer [default: 0]
   sla_breach_flag integer [default: 0]
@@ -156,9 +156,9 @@ table escalation_type {
   escalation_type nvarchar(30)
 }
 
-table inspector {
-  inspector_id integer [pk, increment]
-  inspector_name nvarchar(100)
+table investigator {
+  investigator_id integer [pk, increment]
+  investigator_name nvarchar(100)
 }
 
 // Relationships
@@ -176,6 +176,7 @@ ref: investigation_hazard.hazard_type_id > hazard_type.hazard_type_id
 ref: investigation_hazard.investigation_id > investigation.investigation_id
 ref: investigation_hazard.hazard_report_id > hazard_report.hazard_report_id
 ref: investigation_hazard.severity_id > severity.severity_id
+ref: investigation.investigator_id > investigator.investigator_id
 ref: notification.investigation_id > investigation.investigation_id
 ref: notification.tenancy_id > tenancy.tenancy_id
 ref: notification.work_order_id > work_order.work_order_id

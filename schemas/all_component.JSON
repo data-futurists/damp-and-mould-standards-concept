@@ -380,6 +380,17 @@
       },
       "required": ["escalation_type"]
     },
+
+    "investigator": {
+      "type": "object",
+      "description": "Table storing investigator names.",
+      "properties": {
+        "investigator_id": { "type": "integer", "description": "ID of the investigator." },
+        "investigator_name": { "type": "string", "description": "Name of the investigator." }
+      },
+      "required": ["escalation_type"]
+    },
+    
     "energy_efficiency_band_code": {
       "type": "object",
       "properties": {

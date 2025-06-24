@@ -64,7 +64,7 @@ CREATE TABLE investigation (
   investigation_type_id INTEGER NOT NULL,
   investigation_scheduled_date DATE,
   investigation_completed_date DATE,
-  inspector_name NVARCHAR(100),
+  investigator_id INTEGER NOT NULL,
   hazard_confirmed INTEGER NOT NULL DEFAULT 0,
   repair_required INTEGER NOT NULL DEFAULT 0,
   sla_breach_flag INTEGER NOT NULL DEFAULT 0,
@@ -74,6 +74,7 @@ CREATE TABLE investigation (
   CONSTRAINT fk_investigation_tenancy FOREIGN KEY (tenancy_id) REFERENCES tenancy(tenancy_id),
   CONSTRAINT fk_investigation_hazard_report FOREIGN KEY (hazard_report_id) REFERENCES hazard_report(hazard_report_id),
   CONSTRAINT fk_investigation_trigger_source FOREIGN KEY (trigger_source_id) REFERENCES trigger_source(trigger_source_id),
+  CONSTRAINT fk_investigation_investigator FOREIGN KEY (investigator_id) REFERENCES investigator(investigator_id),
   CONSTRAINT chk_hazard_confirmed CHECK (hazard_confirmed IN (0,1)),
   CONSTRAINT chk_repair_required CHECK (repair_required IN (0,1)),
   CONSTRAINT chk_sla_breach CHECK (sla_breach_flag IN (0,1)),
@@ -145,33 +146,33 @@ CREATE TABLE escalation (
 ----------------------------------------------------------------------------------------
 -- HealthRiskRating Table
 -- Code list for health risk rating levels.
-CREATE TABLE HealthRiskRating (
-  HealthRiskRatingID INT PRIMARY KEY IDENTITY(1, 1), 
-  HealthRiskRating NVARCHAR(20) NOT NULL
+CREATE TABLE health_risk_rating (
+  health_Risk_rating_id INT PRIMARY KEY IDENTITY(1, 1), 
+  health_risk_rating NVARCHAR(20) NOT NULL
 );
-INSERT INTO HealthRiskRating (HealthRiskRating) 
+INSERT INTO health_risk_rating (health_risk_rating) 
 VALUES 
   ('High'), 
   ('Medium'), 
   ('Low');
 -- Severity Table
 -- Code list for hazard severity levels.
-CREATE TABLE Severity (
-  SeverityID INT PRIMARY KEY IDENTITY(1, 1), 
-  Severity NVARCHAR(20) NOT NULL
+CREATE TABLE severity (
+  severity_id INT PRIMARY KEY IDENTITY(1, 1), 
+  severity NVARCHAR(20) NOT NULL
 );
-INSERT INTO Severity (Severity) 
+INSERT INTO severity (severity) 
 VALUES 
   ('High'), 
   ('Medium'), 
   ('Low');
 -- InvestigationType Table
 -- Code list for types of investigation.
-CREATE TABLE InvestigationType (
-  InvestigationTypeID INT PRIMARY KEY IDENTITY(1, 1), 
-  InvestigationType NVARCHAR(20) NOT NULL
+CREATE TABLE investigation_type (
+  investigation_type_id INT PRIMARY KEY IDENTITY(1, 1), 
+  investigation_type NVARCHAR(20) NOT NULL
 );
-INSERT INTO InvestigationType (InvestigationType) 
+INSERT INTO investigation_type (investigation_type) 
 VALUES 
   ('Standard'), 
   ('Renewed'), 
@@ -179,11 +180,11 @@ VALUES
   ('Emergency');
 -- ReportStatus Table
 -- Code list for report statuses.
-CREATE TABLE ReportStatus (
-  ReportStatusID INT PRIMARY KEY IDENTITY(1, 1), 
-  ReportStatus NVARCHAR(20) NOT NULL
+CREATE TABLE report_status (
+  report_status_id INT PRIMARY KEY IDENTITY(1, 1), 
+  report_status NVARCHAR(20) NOT NULL
 );
-INSERT INTO ReportStatus (ReportStatus) 
+INSERT INTO report_status (report_status) 
 VALUES 
   ('Open'), 
   ('Under Review'), 
@@ -191,11 +192,11 @@ VALUES
   ('Closed');
 -- TriggerSource Table
 -- Code list for what triggered investigations.
-CREATE TABLE TriggerSource (
-  TriggerSourceID INT PRIMARY KEY IDENTITY(1, 1), 
-  TriggerSource NVARCHAR(20) NOT NULL
+CREATE TABLE trigger_source (
+  trigger_source_id INT PRIMARY KEY IDENTITY(1, 1), 
+  trigger_source NVARCHAR(20) NOT NULL
 );
-INSERT INTO TriggerSource (TriggerSource) 
+INSERT INTO trigger_source (trigger_Source) 
 VALUES 
   ('Tenant Report'), 
   ('Routine Check'), 
@@ -203,22 +204,22 @@ VALUES
   ('Staff Report');
 -- EscalationStatus Table
 -- Code list for escalation statuses.
-CREATE TABLE EscalationStatus (
-  EscalationStatusID INT PRIMARY KEY IDENTITY(1, 1), 
-  EscalationStatus NVARCHAR(20) NOT NULL
+CREATE TABLE escalation_status (
+  escalation_status_id INT PRIMARY KEY IDENTITY(1, 1), 
+  escalation_status NVARCHAR(20) NOT NULL
 );
-INSERT INTO EscalationStatus (EscalationStatus) 
+INSERT INTO escalation_status (escalation_status) 
 VALUES 
   ('None'), 
   ('In Progress'), 
   ('Escalated');
 -- NotificationType Table
 -- Code list for types of notifications.
-CREATE TABLE NotificationType (
-  NotificationTypeID INT PRIMARY KEY IDENTITY(1, 1), 
-  NotificationType NVARCHAR(20) NOT NULL
+CREATE TABLE notification_type (
+  notification_type_id INT PRIMARY KEY IDENTITY(1, 1), 
+  notification_type NVARCHAR(20) NOT NULL
 );
-INSERT INTO NotificationType (NotificationType) 
+INSERT INTO notification_type (notification_type) 
 VALUES 
   ('Scheduled'), 
   ('Result'), 
@@ -227,11 +228,11 @@ VALUES
   ('Escalation');
 -- EscalationStage Table
 -- Code list for stages in escalation lifecycle.
-CREATE TABLE EscalationStage (
-  EscalationStageID INT PRIMARY KEY IDENTITY(1, 1), 
-  EscalationStage NVARCHAR(20) NOT NULL
+CREATE TABLE escalation_stage (
+  escalation_stage_id INT PRIMARY KEY IDENTITY(1, 1), 
+  escalation_stage NVARCHAR(20) NOT NULL
 );
-INSERT INTO EscalationStage (EscalationStage) 
+INSERT INTO escalation_stage (escalation_stage) 
 VALUES 
   ('Open'), 
   ('In Progress'), 
@@ -239,30 +240,30 @@ VALUES
   ('Rejected');
 -- NotificationMethod Table
 -- Code list for notification methods.
-CREATE TABLE NotificationMethod (
-  NotificationMethodID INT PRIMARY KEY IDENTITY(1, 1), 
-  NotificationMethod NVARCHAR(20) NOT NULL
+CREATE TABLE notification_method (
+  notification_method_id INT PRIMARY KEY IDENTITY(1, 1), 
+  notification_method NVARCHAR(20) NOT NULL
 );
-INSERT INTO NotificationMethod (NotificationMethod) 
+INSERT INTO notification_method (notification_method) 
 VALUES 
   ('Email'), 
   ('SMS'), 
   ('Letter');
 -- EscalationType Table
 -- Code list for types of escalations.
-CREATE TABLE EscalationType (
-  EscalationTypeID INT PRIMARY KEY IDENTITY(1, 1), 
-  EscalationType NVARCHAR(30) NOT NULL
+CREATE TABLE escalation_type (
+  escalation_type_id INT PRIMARY KEY IDENTITY(1, 1), 
+  escalation_type NVARCHAR(30) NOT NULL
 );
-INSERT INTO EscalationType (EscalationType) 
+INSERT INTO escalation_type (escalation_type) 
 VALUES 
   ('Senior Review'), 
   ('Legal Action'), 
   ('Compensation'), 
   ('Alternative Accommodation');
--- Create Inspector table
--- Table storing inspector details.
-CREATE TABLE Inspector (
-  InspectorID INT PRIMARY KEY IDENTITY(1, 1), 
-  InspectorName NVARCHAR(100) NOT NULL, 
+-- Create investigator table
+-- Table storing investigator details.
+CREATE TABLE investigator (
+  investigator_id INT PRIMARY KEY IDENTITY(1, 1), 
+  investigator_name NVARCHAR(100) NOT NULL, 
 );
