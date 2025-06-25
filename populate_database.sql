@@ -123,3 +123,60 @@ INSERT INTO certification (
   (4, 3, 7, '2023-04-12', '2024-04-12', 'EnergyCert', 'Active',  'http://example.com/epc3.pdf'),
   (5, 5, 2, '2022-06-20', '2023-06-20', 'Inspector B','Expired', 'http://example.com/eic2.pdf'),
   (6, 6, 5, '2023-05-05', '2024-05-05', 'PATTesters', 'Active',  'http://example.com/pat6.pdf');
+
+-- --------------------------------------------------
+-- Dummy Data: tenant_person
+-- --------------------------------------------------
+
+ INSERT INTO tenant_person (tenant_id, full_name, person_alert_type_id, date_of_birth, phone_number, email, vulnerability_flag) VALUES
+  (1, 'Paul Hall', '15.0', '2004-01-19', '44335014151', 'paul.hall@housingexample.co.uk', 'False'),
+  (2, 'Mohamed Davies', 'nan', '1939-05-27', '44915395029', 'mohamed.davies@housingexample.co.uk', 'True'),
+  (3, 'Geoffrey Jordan', 'nan', '2004-01-04', '44800538116', 'geoffrey.jordan@housingexample.co.uk', 'False'),
+  (4, 'Beth James', '6.0', '2001-01-28', '44485483217', 'beth.james@housingexample.co.uk', 'False'),
+  (5, 'Natalie Davies', 'nan', '1951-01-28', '44034537410', 'natalie.davies@housingexample.co.uk', 'True'),
+  (6, 'Sam Marsh', 'nan', '1977-02-05', '44688609179', 'sam.marsh@housingexample.co.uk', 'False'),
+  (7, 'Arthur Stevenson', 'nan', '1967-11-30', '44123872011', 'arthur.stevenson@housingexample.co.uk', 'True'),
+  (8, 'Brett Stephens', 'nan', '1990-12-25', '44167605158', 'brett.stephens@housingexample.co.uk', 'True'),
+  (9, 'Ashley Jackson', 'nan', '1977-08-26', '44166189702', 'ashley.jackson@housingexample.co.uk', 'False'),
+  (10, 'Pauline Harding', 'nan', '1989-06-14', '44129522312', 'pauline.harding@housingexample.co.uk', 'False');
+
+-- --------------------------------------------------
+-- Dummy Data: tenancy
+-- -------------------------------------------------- 
+
+INSERT INTO tenancy (tenancy_id, tenant_id, address_id, tenancy_start_date, tenancy_end_date, tenancy_type, tenancy_status) VALUES
+  (1, '1', '1', '2024-04-07', '2025-12-26', 'Secure', 'Active'),
+  (2, '2', '2', '2018-01-17', '2027-01-18', 'Fixed-Term', 'Active'),
+  (3, '3', '3', '2023-03-02', '2025-10-22', 'Fixed-Term', 'Active'),
+  (4, '4', '4', '2017-07-16', '2027-06-17', 'Fixed-Term', 'Active'),
+  (5, '5', '5', '2020-12-22', '2022-10-19', 'Fixed-Term', 'Ended'),
+  (6, '6', '6', '2020-10-25', '2025-07-10', 'Introductory', 'Active'),
+  (7, '7', '7', '2019-03-08', '2028-06-07', 'Secure', 'Active'),
+  (8, '8', '8', '2024-09-05', '2029-03-26', 'Demoted', 'Active'),
+  (9, '9', '9', '2018-11-06', '2024-03-15', 'Assured', 'Ended'),
+  (10, '10', '10', '2018-12-28', '2020-02-27', 'Secure', 'Ended');
+
+-- --------------------------------------------------
+-- Dummy Data: household_member_person 
+-- --------------------------------------------------
+
+INSERT INTO household_member_person (
+  household_member_id, tenant_id, tenancy_id, person_alert_type_id, full_name, date_of_birth, 
+  relationship_to_tenant, is_contract_holder, vulnerability_details, risk_assessment_status, risk_assessment_date
+) VALUES
+  (1, '2', '2', '11.0', 'Eleanor Dean', '2016-12-20', 'Grandchild', 'False', 'RegularMissingAppointments', 'nan', 'nan'),
+  (2, '3', '3', 'nan', 'Scott Roberts', '2024-12-10', 'Grandchild', 'False', 'nan', 'nan', 'nan'),
+  (3, '4', '4', '22.0', 'Sandra Wood', '2021-08-24', 'Child', 'False', 'FinancialHardship', 'Low', '2024-02-02'),
+  (4, '4', '4', 'nan', 'Katy Rose', '1998-12-06', 'Spouse', 'False', 'nan', 'nan', 'nan'),
+  (5, '4', '4', '6.0', 'Geoffrey Murphy', '1989-03-28', 'Lodger', 'False', 'Illness', 'nan', 'nan'),
+  (6, '5', '5', '27.0', 'Georgina Nolan', '1944-01-30', 'Friend', 'False', 'SensoryImpairment', 'Medium', '2023-12-24'),
+  (7, '5', '5', 'nan', 'Kelly Davison', '2005-01-27', 'Friend', 'False', 'nan', 'Low', '2023-06-05'),
+  (8, '5', '5', 'nan', 'Jason Jones', '1930-08-11', 'Parent', 'False', 'nan', 'High', '2024-10-31'),
+  (9, '7', '7', '22.0', 'Irene Little', '1915-08-02', 'Friend', 'False', 'FinancialHardship', 'nan', 'nan'),
+  (10, '7', '7', 'nan', 'Rachel Baldwin', '1978-12-23', 'Friend', 'True', 'nan', 'nan', 'nan'),
+  (11, '7', '7', '9.0', 'Bradley Ward', '1957-10-26', 'Spouse', 'False', 'Elderly', 'Medium', '2024-02-20'),
+  (12, '9', '9', 'nan', 'Angela Walker', '1993-10-26', 'Sibling', 'True', 'nan', 'High', '2024-11-24'),
+  (13, '9', '9', 'nan', 'Jodie Holland', '1990-12-14', 'Friend', 'False', 'nan', 'Medium', '2024-03-05'),
+  (14, '10', '10', '27.0', 'Lewis Johnson', '2025-03-02', 'Grandchild', 'False', 'SensoryImpairment', 'Low', '2024-10-01'),
+  (15, '10', '10', 'nan', 'Kimberley Clements', '1981-07-25', 'Spouse', 'False', 'nan', 'nan', 'nan'),
+  (16, '10', '10', 'nan', 'Damian Johnson', '2019-09-03', 'Child', 'False', 'nan', 'Medium', '2023-06-12');
