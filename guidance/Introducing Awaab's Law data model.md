@@ -1,4 +1,4 @@
-# Introducing the damp and mould data model
+# Introducing Awaab's Law data model
 
 ## Table of contents
 
@@ -6,7 +6,7 @@
 — [Key features of the data model](#key-features-of-the-data-model)   
 — [How the data model can help you in future](#how-the-data-model-can-help-you-in-future)
 
-The damp and mould data model allows you to record, track and respond to health and safety issues caused by damp and mould in social-rented homes.
+The Awaab's Law data model allows you to record, track and respond to health and safety issues caused by damp and mould in social-rented homes.
 
 It structures the way data is stored and validated, and it includes some embedded standards such as code lists and binary checks.
 
