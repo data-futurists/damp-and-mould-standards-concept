@@ -43,6 +43,6 @@ Use this method if you don’t want to run the entire model at once, or if you w
    2. Add or remove fields, rename columns and extend code lists
 
 <div style="border:1px solid #ccc; padding:10px; background-color:#f9f9f9;">
-  <h2><a href="#awaabs-law-data-model" style="text-decoration:none; color:inherit;">Download Awaab’s Law data model</a></h2>
+  <h2><a href="#download-the-data-model" style="text-decoration:none; color:inherit;">Download the data model</a></h2>
 </div>
 
