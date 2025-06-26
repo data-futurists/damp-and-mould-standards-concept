@@ -624,19 +624,19 @@ VALUES
 -- --------------------------------------------------
 
 CREATE TABLE work_order (
-  work_order_id VARCHAR(255) PRIMARY KEY,
-  work_element_id VARCHAR(255),
-  address_id VARCHAR(255),
-  investigation_id VARCHAR(255),
-  escalation_id VARCHAR(255),
-  tenancy_id VARCHAR(255),
-  tenant_id VARCHAR(255),
-  hazard_report_id VARCHAR(255),
-  work_class_id VARCHAR(255),
-  location_alert_id VARCHAR(255),
-  person_alert_id VARCHAR(255),
-  work_priority_id VARCHAR(255),
-  contractor_organisation_id VARCHAR(255),
+  work_order_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  work_element_id INTEGER(50) NOT NULL,  -- FK to work_element
+  address_id INTEGER(50),
+  investigation_id INTEGER(50),
+  escalation_id INTEGER(50),
+  tenancy_id INTEGER(50),
+  tenant_id INTEGER(50),
+  hazard_report_id INTEGER(50),
+  work_class_id INTEGER(50),
+  location_alert_id INTEGER(50),
+  person_alert_id INTEGER(50),
+  work_priority_id INTEGER(50),
+  contractor_organisation_id INTEGER(50),
   date_raised DATE,
   date_reported DATE,
   planned_start_date DATE,
@@ -667,10 +667,10 @@ CREATE TABLE work_order (
 );
 
 CREATE TABLE work_element (
-  work_element_id VARCHAR(50) PRIMARY KEY,          -- Unique ID for the work element  
-  work_order_id VARCHAR(50),                        -- FK to the associated work order
-  rate_schedule_item_id VARCHAR(255),               -- FK to rate_schedule_item
-  trade_code_id VARCHAR(100),                       -- FK to trade_code
+  work_element_id INTEGER PRIMARY KEY AUTOINCREMENT,          -- Unique ID for the work element  
+  work_order_id INTEGER(50),                        -- FK to the associated work order
+  rate_schedule_item_id INTEGER(50),               -- FK to rate_schedule_item
+  trade_code_id INTEGER(50),                       -- FK to trade_code
   service_charge_subject VARCHAR(255),              -- Subject to service charge?
   CONSTRAINT fk_work_element_work_order FOREIGN KEY (work_order_id) 
     REFERENCES work_order(work_order_id),
@@ -681,7 +681,7 @@ CREATE TABLE work_element (
 );
 
 CREATE TABLE work_priority (
-  work_priority_id VARCHAR(255) PRIMARY KEY,
+  work_priority_id INTEGER PRIMARY KEY AUTOINCREMENT,
   priority_code VARCHAR(100),
   priority_description TEXT,
   effective_date_time TIMESTAMP,
@@ -689,17 +689,6 @@ CREATE TABLE work_priority (
   comments TEXT,
   required_start_date_time DATE,
   required_completion_date_time DATE
-);
-
-CREATE TABLE work_element (
-    work_element_id VARCHAR(50) PRIMARY KEY,            -- Unique ID for the work element
-    work_order_id VARCHAR(50),                          -- FK to the associated work order
-    rate_schedule_item_id VARCHAR(255),                  -- FK to RateScheduleItem
-    trade_code_id VARCHAR(100),                         -- FK to TradeCode
-    service_charge_subject VARCHAR(255),                -- Subject to service charge?
-    CONSTRAINT fk_work_element_work_order FOREIGN KEY (work_order_id) REFERENCES work_order(work_order_id), 
-    CONSTRAINT fk_workE_element_rate_schedule_item FOREIGN KEY (rate_schedule_item_id) REFERENCES rate_schedule_item(rate_schedule_item_id), 
-    CONSTRAINT fk_work_element_trade_code FOREIGN KEY (trade_code_id) REFERENCES trade_code(trade_code_id)
 );
 
 CREATE TABLE work_element_dependency (
