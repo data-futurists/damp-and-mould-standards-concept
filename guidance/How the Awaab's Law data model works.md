@@ -2,8 +2,8 @@
 
 ## Table of contents
 
-— [How data flows though the model](#how-data-flows-though-the-model)
-1. [Someone reports a hazard](#1.-someone-reports-a-hazard)  
+— [How data flows through the model](#how-data-flows-through-the-model)
+1. [Someone reports a hazard](#1\.-someone-reports-a-hazard)  
 2. [The information is stored in your database](#2.-the-information-is-stored-in-your-database)  
    1. [You check for vulnerabilities](#2a.-you-check-for-vulnerabilities)  
 3. [An investigation is scheduled](#3.-an-investigation-is-scheduled)  
@@ -25,7 +25,7 @@ You may record and manage data differently, depending on your systems and proces
 
 [Read more about the key features of the Awaab’s Law data model]().
 
-## How data flows though the model
+## How data flows through the model
 
 ### 1\. Someone reports a hazard
 
