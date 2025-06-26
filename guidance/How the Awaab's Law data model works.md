@@ -12,7 +12,6 @@
 
 This guide explains how data flows through the data model, specifically:
 
-* how it’s collected  
 * how it’s structured  
 * how it moves between components
 
