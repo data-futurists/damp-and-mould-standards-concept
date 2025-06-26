@@ -34,32 +34,32 @@ We’ve built this data model using [HACT’s UK Housing Data Standards](https:/
 
 The data model is made up of 4 components:
 
-### [Investigation component]()
+### [Investigation component](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/data%20definition%20language/investigation_component.sql)
 
 * Records property inspections triggered by hazard reports.   
 * Captures data such as property ID, tenant information and reporting date.  
 * Maintains historical records of previous inspections and defines the relationships between inspections and other entities in the system, such as properties and work orders.
 
-### [Property component]()
+### [Property component](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/data%20definition%20language/property_component.sql)
 
 * Used to link hazards to the properties they relate to.  
 * Serves as a central reference for other processes in the data model.  
 * Tracks hierarchical data related to a property, including property ID and address ID.  
 * Includes attributes like construction type — for example, timber frame or steel frame.
 
-### [Work order component]()
+### [Work order component](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/data%20definition%20language/work_order_component.sql)
 
 * Records maintenance and repair tasks, as well as a schedule of rates (SoR) — a document that lists predefined unit costs for various construction tasks and elements.  
 * Allows tracking of multiple work orders within a single case.  
 * Includes various attributes such as work order ID, date, type and status.
 
-### [Tenant component]()
+### [Tenant component](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/data%20definition%20language/tenant_component.sql)
 
 * Captures tenant and household member details, including attributes such as vulnerabilities.  
 * Includes various attributes such as person ID, name and contact information.  
 * Links to person alert codes to identify specific vulnerabilities.
 
-[Read more about how Awaab’s Law data model works]()
+[Read more about how Awaab’s Law data model works](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/guidance/How%20the%20Awaab's%20Law%20data%20model%20works.md)
 
 ## Key features of the data model
 
@@ -74,7 +74,7 @@ The data model comes with suggested options for things like risk levels and inve
 | For example, if your team uses a rating like “Extremely High Risk” or has specific investigation types that aren’t included by default, you can add them in. |
 | :---- |
 
-The same applies to the [tenant component](), allowing for the inclusion of additional vulnerability details or classifications. You can extend these with input from domain-specific experts, such as health professionals.
+The same applies to the [tenant component](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/data%20definition%20language/tenant_component.sql), allowing for the inclusion of additional vulnerability details or classifications. You can extend these with input from domain-specific experts, such as health professionals.
 
 ### It’s easy to maintain, manage and query
 
@@ -104,7 +104,7 @@ By 2027, Awaab’s Law is expected to cover more types of housing hazards listed
 
 We’ve designed it so future hazards can be added as additional entries in the hazard type code list.
 
-[Explore the investigation component entity relationship diagram (ERD).]()
+[Explore the investigation component entity relationship diagram (ERD).](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/entity-relationship%20diagrams/investigation_component.svg)
 
 ## How the data model can help you in future
 
