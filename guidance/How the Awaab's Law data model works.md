@@ -3,12 +3,12 @@
 ## Table of contents
 
 — [How data flows through the model](#how-data-flows-through-the-model)
-1. [Someone reports a hazard](#1\.-someone-reports-a-hazard)  
-2. [The information is stored in your database](#2.-the-information-is-stored-in-your-database)  
-   1. [You check for vulnerabilities](#2a.-you-check-for-vulnerabilities)  
-3. [An investigation is scheduled](#3.-an-investigation-is-scheduled)  
-4. [A work order is created](#4.-a-work-order-is-created)  
-5. [Issues may be escalated](#5.-issues-may-be-escalated)
+1. [Someone reports a hazard](#1-someone-reports-a-hazard)  
+2. [The information is stored in your database](#2-the-information-is-stored-in-your-database)  
+   1. [You check for vulnerabilities](#2a-you-check-for-vulnerabilities)  
+3. [An investigation is scheduled](#3-an-investigation-is-scheduled)  
+4. [A work order is created](#4-a-work-order-is-created)  
+5. [Issues may be escalated](#5-issues-may-be-escalated)
 
 This guide explains how data flows through the data model, specifically:
 
