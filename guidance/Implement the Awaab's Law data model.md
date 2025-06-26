@@ -6,7 +6,7 @@ You can choose to run the full model at once or review and adapt specific compon
 
 [Read more about the key features of the Awaab’s Law data model]().
 
-## What’s included {#what’s-included}
+## What’s included
 
 The SQL files contain [Data Definition Language (DDL)]() scripts, which serve as setup scripts to:
 
@@ -36,6 +36,6 @@ Use this method if you don’t want to run the entire model at once, or if you w
    1. Copy individual table definitions and run them in your database  
    2. Add or remove fields, rename columns and extend code lists
 
-| ## Download Awaab’s Law data model ()|
+## | Download Awaab’s Law data model | ()
 | :---- |
 
