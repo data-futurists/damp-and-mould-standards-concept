@@ -850,7 +850,6 @@ CREATE TABLE investigation (
   investigation_completed_date DATE,
   investigator_id INTEGER NOT NULL,
   hazard_confirmed INTEGER NOT NULL DEFAULT 0,
-  repair_required INTEGER NOT NULL DEFAULT 0,
   sla_breach_flag INTEGER NOT NULL DEFAULT 0,
   notification_sent_to_tenant INTEGER NOT NULL DEFAULT 0,
   investigation_notes NVARCHAR(500),
