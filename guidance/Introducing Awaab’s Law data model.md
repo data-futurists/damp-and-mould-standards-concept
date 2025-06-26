@@ -1,4 +1,4 @@
-# Introducing damp and mould data model
+# Introducing the damp and mould data model
 
 ## Table of contents
 
