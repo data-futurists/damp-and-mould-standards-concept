@@ -36,8 +36,6 @@ Use this method if you don’t want to run the entire model at once, or if you w
    1. Copy individual table definitions and run them in your database  
    2. Add or remove fields, rename columns and extend code lists
 
-## Download the data model
-
-| Download Awaab’s Law data model  SQL, 15 MB ⬇ |
+| ## Download Awaab’s Law data model ()|
 | :---- |
 
