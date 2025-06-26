@@ -59,7 +59,7 @@ The data model is made up of 4 components:
 * Includes various attributes such as person ID, name and contact information.  
 * Links to person alert codes to identify specific vulnerabilities.
 
-[Read more about how Awaab’s Law data model works](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/guidance/How%20the%20Awaab's%20Law%20data%20model%20works.md)
+[Read more about how Awaab’s Law data model works](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/guidance/How%20the%20Awaab's%20Law%20data%20model%20works.md).
 
 ## Key features of the data model
 
