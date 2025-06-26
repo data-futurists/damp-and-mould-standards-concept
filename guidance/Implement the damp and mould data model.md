@@ -1,6 +1,12 @@
-# Implement the Awaab's Law data model
+# Implement the damp and mould data model
 
-This page explains how to set up the Awaab’s Law data model using SQL files.
+## Table of contents
+
+— [What’s included](#whats-included)  
+— [How to implement the data model](#how-to-implement-the-data-model)  
+— [Download the data model](#download-the-data-model)
+
+This page explains how to set up the damp and mould data model using SQL files.
 
 You can choose to run the full model at once or review and adapt specific components to fit your own database setup.
 
@@ -36,6 +42,6 @@ Use this method if you don’t want to run the entire model at once, or if you w
    1. Copy individual table definitions and run them in your database  
    2. Add or remove fields, rename columns and extend code lists
 
-| [Download Awaab’s Law data model]() |
+| [## Download Awaab’s Law data model]() |
 | :---- |
 
