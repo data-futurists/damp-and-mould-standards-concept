@@ -1,9 +1,8 @@
 # How the Awaab's Law data model works
 
-## Contents
+## Table of contents
 
 — [How data flows though the model](#how-data-flows-though-the-model)
-
 1. [Someone reports a hazard](#1.-someone-reports-a-hazard)  
 2. [The information is stored in your database](#2.-the-information-is-stored-in-your-database)  
    1. [You check for vulnerabilities](#2a.-you-check-for-vulnerabilities)  
@@ -24,11 +23,11 @@ It describes the ideal way the model is designed to work.
 
 You may record and manage data differently, depending on your systems and processes. However, the data model is built to be modular, allowing you to pick and choose the components you need.
 
-[Read more about the key features of the Awaab’s Law data model](http://keyfeat).
+[Read more about the key features of the Awaab’s Law data model]().
 
-## How data flows though the model {#how-data-flows-though-the-model}
+## How data flows though the model
 
-### 1\. Someone reports a hazard {#1.-someone-reports-a-hazard}
+### 1\. Someone reports a hazard
 
 A tenant, household member or staff member raises an issue related to damp and mould. Key details should be captured at this stage, including:
 
@@ -40,7 +39,7 @@ Once a hazard is reported, logic can be applied to determine the required respon
 * Emergency hazards must be investigated and made safe within 24 hours.  
 * Significant hazards must be investigated within 10 working days and, if necessary, be made safe within 5 working days after the investigation.
 
-### 2\. The information is stored in your database {#2.-the-information-is-stored-in-your-database}
+### 2\. The information is stored in your database
 
 The information is captured and stored in your database using the structure provided by the data model. That information is then used to populate the relevant tables, such as tenant, property and HazardReport.
 
@@ -59,7 +58,7 @@ For example:
 * The work order table is filled in once repair work is identified.  
   * There may be more than one work order depending on what’s needed.
 
-### 2a. You check for vulnerabilities {#2a.-you-check-for-vulnerabilities}
+### 2a. You check for vulnerabilities
 
 The data model sets out how information about tenants and household members should be structured.
 
@@ -73,7 +72,7 @@ To support this process, the model includes:
 | In future, this step could be automated. With the right pipelines and stored procedures, your systems could check for vulnerabilities automatically and determine whether a new report is an emergency or a significant hazard. |
 | :---- |
 
-### 3\. An investigation is scheduled {#3.-an-investigation-is-scheduled}
+### 3\. An investigation is scheduled
 
 The investigation must be completed within a set timeframe, depending on the priority of the hazard:
 
@@ -87,7 +86,7 @@ The data model doesn’t schedule investigations itself, but it provides a clear
 * Investigation information (dates and if further work required)  
 * Notifications sent to tenants
 
-### 4\. A work order is created {#4.-a-work-order-is-created}
+### 4\. A work order is created
 
 A work order is created to initiate and track the repair process. The data model helps you track the status of each work order to monitor progress.
 
@@ -99,7 +98,7 @@ If repairs aren’t completed within the expected timeframe, you may need to:
 * create an additional work order, depending on what’s needed  
 * take further action if the tenant is not satisfied with the outcome
 
-### 5\. Issues may be escalated {#5.-issues-may-be-escalated}
+### 5\. Issues may be escalated
 
 You may need to take further action when a hazard has not been resolved within the expected timeframe.
 
