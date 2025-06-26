@@ -211,7 +211,6 @@
         "investigation_completed_date": { "type": "string", "format": "date", "description": "Date investigation was completed." },
         "inspector_name": { "type": "string", "description": "Name of the inspector." },
         "hazard_confirmed": { "type": "boolean", "description": "Whether a hazard was confirmed." },
-        "repair_required": { "type": "boolean", "description": "Whether repair is required." },
         "sla_breach_flag": { "type": "boolean", "description": "Whether the SLA was breached." },
         "notification_sent_to_tenant": { "type": "boolean", "description": "Whether tenant was notified." },
         "investigation_notes": { "type": "string", "description": "Additional notes from investigation." }

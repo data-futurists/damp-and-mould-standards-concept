@@ -53,7 +53,6 @@ table investigation {
   investigation_completed_date date
   investigator_id integer
   hazard_confirmed integer [default: 0]
-  repair_required integer [default: 0]
   sla_breach_flag integer [default: 0]
   notification_sent_to_tenant integer [default: 0]
   investigation_notes nvarchar(500)
