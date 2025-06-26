@@ -2,7 +2,7 @@
 
 ## Table of contents
 
-— [What’s included in the data model](#what’s-included-in-the-data-model)  
+— [What’s included in the data model](#whats-included-in-the-data-model)  
 — [Key features of the data model](#key-features-of-the-data-model)   
 — [How the data model can help you in future](#how-the-data-model-can-help-you-in-future)
 
