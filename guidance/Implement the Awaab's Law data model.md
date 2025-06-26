@@ -1,27 +1,21 @@
 # Implement the Awaab's Law data model
 
-## Contents
-
-— [What’s included](#what’s-included)  
-— [How to implement the data model](#how-to-implement-the-data-model)  
-— [Download the data model](#download-the-data-model)
-
 This page explains how to set up the Awaab’s Law data model using SQL files.
 
 You can choose to run the full model at once or review and adapt specific components to fit your own database setup.
 
-[Read more about the key features of the Awaab’s Law data model](http://keyfeat).
+[Read more about the key features of the Awaab’s Law data model]().
 
 ## What’s included {#what’s-included}
 
-The SQL files contain [Data Definition Language (DDL)](https://en.wikipedia.org/wiki/Data_definition_language) scripts, which serve as setup scripts to:
+The SQL files contain [Data Definition Language (DDL)]() scripts, which serve as setup scripts to:
 
 * create tables  
 * define relationships using foreign keys  
 * insert pre-defined values like code lists  
 * apply constraints and checks
 
-## How to implement the data model {#how-to-implement-the-data-model}
+## How to implement the data model
 
 There are 2 different methods you can use to implement the data model:
 
@@ -42,8 +36,8 @@ Use this method if you don’t want to run the entire model at once, or if you w
    1. Copy individual table definitions and run them in your database  
    2. Add or remove fields, rename columns and extend code lists
 
-## Download the data model {#download-the-data-model}
+## Download the data model
 
-| Download Awaab’s Law data model  JSON, 15 MB ⬇ |
+| Download Awaab’s Law data model  SQL, 15 MB ⬇ |
 | :---- |
 
