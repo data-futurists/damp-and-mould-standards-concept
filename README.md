@@ -1,5 +1,7 @@
 # Awaab’s Law data model
 
+> **Updated:** 27 June 2025
+
 ## About this project
 
 The Awaab's Law data model allows you to record, track and respond to health and safety issues caused by damp and mould in social-rented homes.
@@ -11,8 +13,6 @@ It was developed by the social housing data team at [Local Digital](https://www.
 * [TPXimpact](https://www.tpximpact.com/)  
 * [Data Futurists](https://www.datafuturists.co.uk/)  
 * [Housing Associations Charitable Trust (HACT)](https://hact.org.uk/)
-
-> **Updated:** 27 June 2025
 
 ## Get started
 
