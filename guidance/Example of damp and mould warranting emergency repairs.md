@@ -10,12 +10,11 @@ A resident has reported that their property is affected by extensive wide-spread
 
 The living room has both rising and penetrating dampness with visible tide marks. The kitchen has condensation damp surrounding the wall with the window and visible mould growth as well as mould spots throughout the walls and on the ceiling.
 
-| This maps to the [investigation component](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/Data%20Definition%20Language%20(DDL)/investigation_component.sql) of our data model, giving you the information you need to investigate the issue by: 
-
-* recording property ID, tenant ID and date reported 
-* storing investigation notes, photos and links to support documents, such as hazard reports 
-* connecting to other components such as [work order](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/Data%20Definition%20Language%20(DDL)/work_order_component.sql) to show what was done, when and why |
-| :---- |
+> This maps to the [investigation component](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/Data%20Definition%20Language%20(DDL)/investigation_component.sql) of our data model, giving you the information you need to investigate the issue by:
+>
+> * recording property ID, tenant ID and date reported  
+> * storing investigation notes, photos and links to support documents, such as hazard reports  
+> * connecting to other components such as [work order](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/Data%20Definition%20Language%20(DDL)/work_order_component.sql) to show what was done, when and why
 
 The exterior of the property shows some cracking on the back wall with the kitchen, the pattern of dampness is consistent with the cracking of the exterior wall. The second bedroom of the property has visible penetrating damp and mould growth linked to the cracked exterior wall.
 
