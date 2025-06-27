@@ -1,4 +1,4 @@
-# How the Awaab's Law data model works
+# How the damp and mould data model works
 
 ## Table of contents
 
@@ -22,7 +22,7 @@ It describes the ideal way the model is designed to work.
 
 You may record and manage data differently, depending on your systems and processes. However, the data model is built to be modular, allowing you to pick and choose the components you need.
 
-[Read more about the key features of the Awaab’s Law data model](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/guidance/Introducing%20Awaab's%20Law%20data%20model.md#key-features-of-the-data-model).
+[Read more about the key features of the damp and mould data model](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/guidance/Introducing%20Awaab's%20Law%20data%20model.md#key-features-of-the-data-model).
 
 ## How data flows through the model
 
