@@ -1,10 +1,10 @@
-# Awaab’s Law data model
+# Damp and mould data model
 
 > **Updated:** 27 June 2025
 
 ## About this project
 
-The Awaab's Law data model allows you to record, track and respond to health and safety issues caused by damp and mould in social-rented homes.
+The damp and mould data model allows you to record, track and respond to health and safety issues caused by damp and mould in social-rented homes.
 
 This is a proof of concept for a data standard designed to support compliance with Awaab’s Law regulations, due to be introduced in October 2025\.
 
