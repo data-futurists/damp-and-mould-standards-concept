@@ -36,7 +36,8 @@ As there is a significant level of mould growth on all walls of the property inc
 
 It is worth noting that because dampness and mould accumulates over time (unlike other emergency hazards that can materialise suddenly) the Government expects that damp and mould would never be allowed to deteriorate to this level.
 
-| Our data model makes it easier to spot patterns in your properties. For example, if you notice recurring damp issues in homes built with concrete panels, you can quickly identify other properties that might have the same risk. This allows you to take preventative action, plan inspections and prioritise maintenance based on the patterns you identify. |
-| :---- |
+> Our data model makes it easier to spot patterns in your properties. For example, if you notice recurring damp issues in homes built with concrete panels, you can quickly identify other properties that might have the same risk.
+> 
+> This allows you to take preventative action, plan inspections and prioritise maintenance based on the patterns you identify.
 
 Unfortunately, as we know from the tragic death of Awaab Ishak, some social properties do have widespread and dangerous levels of dampness.
