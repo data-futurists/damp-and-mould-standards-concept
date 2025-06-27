@@ -22,8 +22,15 @@ The property is poorly ventilated with ill-fitting and poorly installed double-g
 
 A child with asthma lives in the property and their parents have reported that they are struggling to breathe. The lack of extract ventilation, inadequate insulation, structural damage and an inefficient heating system is exacerbating the condensation, dampness and mould growth in the affected rooms.
 
-| The presence of a child with asthma triggers Awaab’s Law emergency repairs requirement. To support this process, the model includes: a vulnerability flag to indicate whether a person is vulnerable code lists to help define different types of vulnerability This maps to the [tenant](http://ten) and [investigation](http://inv) components of our data model by: linking the investigation component to a high health risk rating and severity code automatically connecting to work order to make sure repairs are logged and prioritised correctly |
-| :---- |
+> The presence of a child with asthma triggers Awaab’s Law emergency repairs requirement. To support this process, the model includes:
+>
+> * a vulnerability flag to indicate whether a person is vulnerable  
+> * code lists to help define different types of vulnerability  
+>
+> This maps to the [tenant](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/Data%20Definition%20Language%20(DDL)/tenant_component.sql) and [investigation](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/Data%20Definition%20Language%20(DDL)/investigation_component.sql) components of our data model by:
+>
+> * linking the investigation component to a high health risk rating and severity code  
+> * automatically connecting to work order to make sure repairs are logged and prioritised correctly
 
 As there is a significant level of mould growth on all walls of the property including in a risk room, and a vulnerable individual is struggling to breath, this property would warrant emergency repairs. 
 
