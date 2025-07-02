@@ -32,6 +32,7 @@ CREATE TABLE hazard_type (
 -- GIS field
 CREATE TABLE hazard_report (
   hazard_report_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  reference VARCHAR(20) NOT NULL,
   uprn VARCHAR(50) NOT NULL,
   tenancy_id VARCHAR(50) NOT NULL,
   date_reported DATE NOT NULL,
@@ -57,6 +58,7 @@ CREATE TABLE hazard_report (
 -- Table storing investigation details.
 CREATE TABLE investigation (
   investigation_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  reference VARCHAR(20) NOT NULL,
   uprn VARCHAR(50) NOT NULL,
   tenancy_id VARCHAR(50) NOT NULL,
   hazard_report_id INTEGER NOT NULL,
@@ -118,6 +120,7 @@ CREATE TABLE notification (
 -- Table storing escalation actions and tracking.
 CREATE TABLE escalation (
   escalation_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  reference VARCHAR(20) NOT NULL,
   investigation_id INTEGER NOT NULL,
   escalation_reason NVARCHAR(100),
   escalation_stage_id INTEGER NOT NULL,

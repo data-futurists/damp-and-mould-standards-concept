@@ -24,6 +24,7 @@ table hazard_type {
 
 table hazard_report {
   hazard_report_id integer [pk, increment]
+  reference varchar(20)
   uprn integer
   tenancy_id varchar(50)
   date_reported date
@@ -43,6 +44,7 @@ table hazard_report {
 
 table investigation {
   investigation_id integer [pk, increment]
+  reference varchar(20)
   uprn integer
   tenancy_id varchar(50)
   hazard_report_id integer
@@ -86,6 +88,7 @@ table notification {
 
 table escalation {
   escalation_id integer [pk, increment]
+  reference varchar(20)
   investigation_id integer
   escalation_reason nvarchar(100)
   escalation_stage_id integer

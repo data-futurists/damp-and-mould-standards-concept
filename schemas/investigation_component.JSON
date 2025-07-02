@@ -93,6 +93,7 @@
       "description": "Table storing hazard reports submitted.",
       "properties": {
         "hazard_report_id": { "type": "integer", "description": "Unique identifier for the hazard report." },
+        "reference": { "type": "string", "description": "Unique reference to the hazard report."},
         "uprn": { "type": "string", "description": "The UPRN of this property according to the applicable national identification scheme." },
         "tenancy_id": { "type": "integer", "description": "Reference to the tenancy." },
         "date_reported": { "type": "string", "format": "date", "description": "Date the hazard was reported." },
@@ -107,7 +108,7 @@
         "report_status_id": { "type": "integer", "description": "Reference to the status of the report." }
       },
       "required": [
-        "uprn", "tenancy_id", "date_reported", "reported_by",
+        "reference", "uprn", "tenancy_id", "date_reported", "reported_by",
         "emergency_action_taken",
         "further_work_required", "report_status_id"
       ]
@@ -117,6 +118,7 @@
       "description": "Table storing investigation details.",
       "properties": {
         "investigation_id": { "type": "integer", "description": "Unique identifier for the investigation." },
+        "reference": { "type": "string", "description": "Unique reference to the investigation."},
         "uprn": { "type": "string", "description": "The UPRN of this property according to the applicable national identification scheme." },
         "tenancy_id": { "type": "integer", "description": "Reference to the tenancy." },
         "trigger_source_id": { "type": "integer", "description": "Reference to what triggered the investigation." },
@@ -131,7 +133,7 @@
         "investigation_notes": { "type": "string", "description": "Additional notes from investigation." }
       },
       "required": [
-        "uprn", "tenancy_id", "trigger_source_id",
+        "reference", "uprn", "tenancy_id", "trigger_source_id",
         "hazard_confirmed", "repair_required",
         "sla_breach_flag", "notification_sent_to_tenant"
       ]
@@ -176,6 +178,7 @@
       "description": "Table storing escalation actions and tracking.",
       "properties": {
         "escalation_id": { "type": "integer", "description": "Unique identifier for the escalation." },
+        "reference": { "type": "string", "description": "Unique reference to the escalation."},
         "investigation_id": { "type": "integer", "description": "Reference to the related investigation." },
         "escalation_reason": { "type": "string", "description": "Reason for escalation." },
         "escalation_stage_id": { "type": "integer", "description": "Stage of the escalation." },
@@ -190,7 +193,7 @@
         "escalation_notes": { "type": "string", "description": "Additional notes about the escalation." }
       },
       "required": [
-        "investigation_id", "escalation_stage_id", "escalation_type_id",
+        "reference", "investigation_id", "escalation_stage_id", "escalation_type_id",
         "escalated_to", "escalation_start_date", "tenant_acceptance"
       ]
     },

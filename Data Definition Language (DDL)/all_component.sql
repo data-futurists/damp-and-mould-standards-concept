@@ -806,6 +806,7 @@ CREATE TABLE hazard_type (
 
 CREATE TABLE hazard_report (
   hazard_report_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  reference VARCHAR(20) NOT NULL,
   uprn INTEGER NOT NULL,
   tenancy_id VARCHAR(50) NOT NULL,
   date_reported DATE NOT NULL,
@@ -830,6 +831,7 @@ CREATE TABLE hazard_report (
 
 CREATE TABLE investigation (
   investigation_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  reference VARCHAR(20) NOT NULL,
   uprn INTEGER NOT NULL,
   tenancy_id VARCHAR(50) NOT NULL,
   hazard_report_id INTEGER NOT NULL,
@@ -870,6 +872,7 @@ CREATE TABLE investigation_hazard (
 
 CREATE TABLE escalation (
   escalation_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  reference VARCHAR(20) NOT NULL,
   investigation_id INTEGER NOT NULL,
   escalation_reason NVARCHAR(100),
   escalation_stage_id INTEGER NOT NULL,
