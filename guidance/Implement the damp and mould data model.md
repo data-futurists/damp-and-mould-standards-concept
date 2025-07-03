@@ -9,11 +9,11 @@ This page explains how to set up the damp and mould data model using SQL files.
 
 You can choose to run the full model at once or review and adapt specific components to fit your own database setup.
 
-[Read more about the key features of the Awaab’s Law data model]().
+[Read more about the key features of the damp and mould data model](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/guidance/Introducing%20Awaab's%20Law%20data%20model.md#key-features-of-the-data-model).
 
 ## What’s included
 
-The SQL files contain [Data Definition Language (DDL)]() scripts, which serve as setup scripts to:
+The SQL files contain [Data Definition Language (DDL) scripts](https://github.com/data-futurists/damp-and-mould-standards-concept/tree/main/data%20definition%20language), which serve as setup scripts to:
 
 * create tables  
 * define relationships using foreign keys  

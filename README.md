@@ -1,36 +1,34 @@
-# Damp and Mould Data Standards Concept
+# Damp and mould data model
 
-A proof-of-concept implementation for data standards compliance with Awaab's Law regulations, developed in collaboration with TPX Impact and MHCLG.
+> **Updated:** 27 June 2025
 
-**Last Updated: May 15, 2025**
+## About this project
 
-## Project Objectives
+The damp and mould data model allows you to record, track and respond to health and safety issues caused by damp and mould in social-rented homes.
 
-### Primary Deliverables
+This is a proof of concept for a data standard designed to support compliance with Awaab’s Law regulations, due to be introduced in October 2025\.
 
-1. Develop initial schema framework for stakeholder review
-2. Generate SQL DDL (Data Definition Language) for the damp and mould module
-3. Create comprehensive data dictionary aligned with HACT UKHDS standards
-4. Design and implement schema validation methodology
+It was developed by the social housing data team at [Local Digital](https://www.localdigital.gov.uk/) (a team within the [UK Ministry of Housing, Communities and Local Government](https://www.gov.uk/government/organisations/ministry-of-housing-communities-local-government)) in partnership with:
 
-### Interactive Demo Application
+* [TPXimpact](https://www.tpximpact.com/)  
+* [Data Futurists](https://www.datafuturists.co.uk/)  
+* [Housing Associations Charitable Trust (HACT)](https://hact.org.uk/)
 
-The project includes a Streamlit-based demonstration with three key components:
+## Get started
 
-#### 1. Overview Dashboard
-- Project summary
-- GitHub repository access
-- Schema version control tracking
+* [Introducing the damp and mould data model](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/guidance/Introducing%20Awaab's%20Law%20data%20model.md)  
+* [How the damp and mould data model works](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/guidance/How%20the%20Awaab's%20Law%20data%20model%20works.md)  
+* [Implement the damp and mould data model](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/guidance/Implement%20the%20Awaab's%20Law%20data%20model.md)  
+* [Test the damp and mould data model](https://github.com/data-futurists/damp-and-mould-standards-concept/tree/main/SQL%20Test)
 
+## Explore our demo built with Streamlit
 
-#### 3. Schema Documentation
-- Interactive schema explorer
-- Field specifications:
-    - Name
-    - Data type/format
-    - Description
-    - Required status
-- Controlled vocabulary reference tables
+The demo includes:
+
+* a project summary  
+* a link to the project’s code on GitHub  
+* tracking of changes to the data model  
+* documentation explaining the data model
 
 
 

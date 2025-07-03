@@ -1,0 +1,54 @@
+# Awaab’s Law Data Model Test Plan
+
+## 1. Create Dummy Data
+
+Create several scenarios that test all different options.
+
+### Forms Involved:
+- Hazard Report form  
+- Investigation form
+
+## 2. Database Setup
+
+- Create the database and run the SQL code to create tables.
+- Insert dummy data into code lists and tables that should be prepopulated.
+
+### Tables to Prepopulate:
+- Property  
+- Tenant  
+- Household member  
+- Any other already known information  
+
+> **Note:** Code lists can be included in the provided SQL code.
+
+## 3. Data Ingestion
+
+### From Hazard Report Form:
+- Map standard fields to DB table fields.
+- Include logic to determine investigation type and dates.
+- Query to determine tenant and household members of the property with a vulnerability (person alert code).
+- Add logic to compare the hazard raised with the list of vulnerabilities and determine the correct investigation type.
+
+### From Investigation Form:
+- Map fields to DB tables.
+
+## 4. Work Order Process
+
+- Step through each stage of data.
+- Ensure fields are populated and data makes sense.
+- Note any steps that require additional fields not currently available.
+
+## 5. What to Check
+
+- At each stage of the mock process, assess whether there are fields that aren't used.
+- Flag unused fields for review:
+  - Why haven’t they been used?
+  - Would they be used in a different scenario?
+- Confirm whether the code lists fulfill requirements by providing all possible options.
+
+## 6. Notes
+
+- Check whether a schedule table/entity would be preferred.
+- Test where an escalation would arise from.
+- Determine if an escalation owner is needed.
+- Test via Excel.

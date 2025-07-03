@@ -25,6 +25,7 @@ table hazard_type {
 
 table hazard_report {
   hazard_report_id integer [pk, increment]
+  hazard_report_reference varchar(36)
   uprn integer
   tenancy_id varchar(50)
   date_reported date
@@ -44,6 +45,7 @@ table hazard_report {
 
 table investigation {
   investigation_id integer [pk, increment]
+  investigation_reference varchar(36)
   uprn integer
   tenancy_id varchar(50)
   hazard_report_id integer
@@ -87,6 +89,7 @@ table notification {
 
 table escalation {
   escalation_id integer [pk, increment]
+  escalation_reference varchar(36)
   investigation_id integer
   escalation_reason nvarchar(100)
   escalation_stage_id integer
@@ -101,6 +104,16 @@ table escalation {
   escalation_notes nvarchar(500)
 
   Note: "Tracks escalation actions"
+}
+
+table reference {
+  id varchar(36) [pk]
+  allocated_by_code integer
+  allocated_by_description varchar(50)
+  description varchar(200)
+  allocated_by varchar(50)
+
+  Note: "References for hazard reports, investigations and escalations"
 }
 
 // Code Lists
@@ -184,6 +197,9 @@ ref: notification.notification_method_id > notification_method.notification_meth
 ref: escalation.investigation_id > investigation.investigation_id
 ref: escalation.escalation_stage_id > escalation_stage.escalation_stage_id
 ref: escalation.escalation_type_id > escalation_type.escalation_type_id
+ref: hazard_report.hazard_report_reference > reference.id
+ref: investigation.investigation_reference > reference.id
+ref: escalation.escalation_reference > reference.id
 
 // --------------------------------------
 // Property Component
