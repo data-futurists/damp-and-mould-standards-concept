@@ -1,0 +1,304 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.org/schemas/AppointmentModule.schema.json",
+  "title": "Appointments",
+  "description": "Schema for managing appointments and preferences for damp and mould inspections in compliance with HACT UK Housing Data Standards.",
+  "type": "object",
+  "properties": {
+    "request_appointment": {
+      "$ref": "#/definitions/request_appointment"
+    },
+    "request_appointment_response": {
+      "$ref": "#/definitions/request_appointment_response"
+    },
+    "request_available_appointments": {
+      "$ref": "#/definitions/request_available_appointments"
+    },
+    "available_appointment": {
+      "$ref": "#/definitions/available_appointment"
+    },
+    "request_additional_work_approval": {
+      "$ref": "#/definitions/request_additional_work_approval"
+    },
+    "customer_appointment_preference": {
+      "$ref": "#/definitions/customer_appointment_preference"
+    },
+    "customer_appointment_preference_day_of_week": {
+      "$ref": "#/definitions/customer_appointment_preference_day_of_week"
+    }
+  },
+  "definitions": {
+    "request_appointment": {
+      "type": "object",
+      "description": "A request made to book an appointment linked to either a work order or an investigation.",
+      "properties": {
+        "request_appointment_id": {
+          "type": "integer",
+          "description": "Unique identifier for the appointment request."
+        },
+        "work_order_id": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "Identifier for the work order (if applicable)."
+        },
+        "investigation_id": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "Identifier for the investigation (if applicable)."
+        },
+        "appointment_type": {
+          "type": "string",
+          "description": "Type of appointment being requested."
+        },
+        "requested_date": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Date the appointment was requested for."
+        },
+        "requested_time_start": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Requested start time of the appointment."
+        },
+        "requested_time_end": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Requested end time of the appointment."
+        },
+        "notes": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Optional notes provided with the appointment request."
+        }
+      }
+    },
+    "request_appointment_response": {
+      "type": "object",
+      "description": "Response to an appointment request, indicating status and details.",
+      "properties": {
+        "request_appointment_response_id": {
+          "type": "integer",
+          "description": "Unique identifier for the appointment response."
+        },
+        "request_appointment_id": {
+          "type": "integer",
+          "description": "Foreign key to the original appointment request."
+        },
+        "response_status": {
+          "type": "string",
+          "description": "Status of the response (e.g., ACCEPT, REJECT)."
+        },
+        "response_date": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when the response was made."
+        },
+        "notes": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Optional response notes."
+        }
+      }
+    },
+    "request_available_appointments": {
+      "type": "object",
+      "description": "A request to fetch a list of available appointment slots for either a work order or investigation.",
+      "properties": {
+        "request_available_appointments_id": {
+          "type": "integer",
+          "description": "Unique identifier for the available appointments request."
+        },
+        "work_order_id": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "Work order ID if applicable."
+        },
+        "investigation_id": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "Investigation ID if applicable."
+        },
+        "requested_from_date": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Start of the requested availability window."
+        },
+        "requested_to_date": {
+          "type": "string",
+          "format": "date-time",
+          "description": "End of the requested availability window."
+        },
+        "notes": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Optional notes about the request."
+        }
+      }
+    },
+    "available_appointment": {
+      "type": "object",
+      "description": "Details of an available appointment slot in response to a request.",
+      "properties": {
+        "available_appointment_id": {
+          "type": "integer",
+          "description": "Unique identifier for the available appointment slot."
+        },
+        "request_available_appointments_id": {
+          "type": "integer",
+          "description": "ID of the request that this availability is responding to."
+        },
+        "available_date": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Date of the available appointment."
+        },
+        "available_time_start": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Start time of the available appointment."
+        },
+        "available_time_end": {
+          "type": "string",
+          "format": "date-time",
+          "description": "End time of the available appointment."
+        },
+        "notes": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Notes associated with this availability."
+        }
+      }
+    },
+    "request_additional_work_approval": {
+      "type": "object",
+      "description": "Request for approval of additional work beyond the scope of the initial appointment.",
+      "properties": {
+        "request_additional_work_approval_id": {
+          "type": "integer",
+          "description": "Unique ID for the additional work approval request."
+        },
+        "request_appointment_id": {
+          "type": "integer",
+          "description": "Associated appointment request ID."
+        },
+        "approval_status": {
+          "type": "string",
+          "description": "Status of the approval request (e.g., APPROVED, DENIED)."
+        },
+        "approval_date": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time",
+          "description": "Date the approval was made, if applicable."
+        },
+        "notes": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Additional notes for the approval request."
+        }
+      }
+    },
+    "customer_appointment_preference": {
+      "type": "object",
+      "description": "Tenant's preferences for booking appointments.",
+      "properties": {
+        "customer_appointment_preference_id": {
+          "type": "integer",
+          "description": "Unique ID for the preference record."
+        },
+        "tenant_id": {
+          "type": "integer",
+          "description": "Identifier for the tenant."
+        },
+        "specific_date": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time",
+          "description": "Specific date requested by the tenant."
+        },
+        "excluded_period_start": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time",
+          "description": "Start time of excluded period."
+        },
+        "excluded_period_end": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time",
+          "description": "End time of excluded period."
+        },
+        "degree_of_preference": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "Indicates priority or preference level."
+        },
+        "time_of_day_start": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time",
+          "description": "Preferred start time of day."
+        },
+        "time_of_day_end": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time",
+          "description": "Preferred end time of day."
+        },
+        "notes": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Free-text notes about the tenant's preferences."
+        }
+      }
+    },
+    "customer_appointment_preference_day_of_week": {
+      "type": "object",
+      "description": "Link table to capture tenant preferences on specific days of the week.",
+      "properties": {
+        "customer_appointment_preference_id": {
+          "type": "integer",
+          "description": "Foreign key to customer_appointment_preference."
+        },
+        "days_of_week_code_id": {
+          "type": "integer",
+          "description": "Foreign key to a predefined code representing a day of the week."
+        }
+      }
+    }
+  }
+}
