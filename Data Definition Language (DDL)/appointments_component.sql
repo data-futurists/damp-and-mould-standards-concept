@@ -114,103 +114,8 @@ CREATE TABLE customer_appointment_preference_day_of_week (
 
   CONSTRAINT fk_days_of_week_code FOREIGN KEY (days_of_week_code_id)
     REFERENCES days_of_week_code(days_of_week_code_id)
-);
-Full DBML Script (including codes and relations)
-dbml
-Copy
-Edit
-Table appointment_type_code {
-  appointment_type_code_id integer [pk, increment]
-  code varchar(20) [unique, not null]
-  description varchar(100) [not null]
-}
+)
 
-Table response_status_code {
-  response_status_code_id integer [pk, increment]
-  code varchar(20) [unique, not null]
-  description varchar(100) [not null]
-}
-
-Table days_of_week_code {
-  days_of_week_code_id integer [pk, increment]
-  code varchar(10) [unique, not null]
-  description varchar(50) [not null]
-}
-
-Table approval_status_code {
-  approval_status_code_id integer [pk, increment]
-  code varchar(20) [unique, not null]
-  description varchar(100) [not null]
-}
-
-Table request_appointment {
-  request_appointment_id integer [pk, increment]
-  work_order_id integer [null]
-  investigation_id integer [null]
-  appointment_type varchar(20) [not null, ref: > appointment_type_code.code]
-  requested_date datetime [not null]
-  requested_time_start datetime [not null]
-  requested_time_end datetime [not null]
-  notes varchar(255) [null]
-
-  Note: "CHECK constraint: either work_order_id or investigation_id must be present, but not both"
-}
-
-Table request_appointment_response {
-  request_appointment_response_id integer [pk, increment]
-  request_appointment_id integer [not null, ref: > request_appointment.request_appointment_id]
-  response_status varchar(20) [not null, ref: > response_status_code.code]
-  response_date datetime [not null]
-  notes varchar(255) [null]
-}
-
-Table request_available_appointments {
-  request_available_appointments_id integer [pk, increment]
-  work_order_id integer [null]
-  investigation_id integer [null]
-  requested_from_date datetime [not null]
-  requested_to_date datetime [not null]
-  notes varchar(255) [null]
-
-  Note: "CHECK constraint: either work_order_id or investigation_id must be present, but not both"
-}
-
-Table available_appointment {
-  available_appointment_id integer [pk, increment]
-  request_available_appointments_id integer [not null, ref: > request_available_appointments.request_available_appointments_id]
-  available_date datetime [not null]
-  available_time_start datetime [not null]
-  available_time_end datetime [not null]
-  notes varchar(255) [null]
-}
-
-Table request_additional_work_approval {
-  request_additional_work_approval_id integer [pk, increment]
-  request_appointment_id integer [not null, ref: > request_appointment.request_appointment_id]
-  approval_status varchar(20) [not null, ref: > approval_status_code.code]
-  approval_date datetime [null]
-  notes varchar(255) [null]
-}
-
-Table customer_appointment_preference {
-  customer_appointment_preference_id integer [pk, increment]
-  tenant_id integer [not null]
-  specific_date datetime [null]
-  excluded_period_start datetime [null]
-  excluded_period_end datetime [null]
-  degree_of_preference integer [null]
-  time_of_day_start datetime [null]
-  time_of_day_end datetime [null]
-  notes varchar(255) [null]
-}
-
-Table customer_appointment_preference_day_of_week {
-  customer_appointment_preference_id integer [not null, ref: > customer_appointment_preference.customer_appointment_preference_id]
-  days_of_week_code_id integer [not null, ref: > days_of_week_code.days_of_week_code_id]
-  indexes {
-    (customer_appointment_preference_id, days_of_week_code_id) [pk]
-  }
-}
 
 -- CODE TABLES
 
@@ -220,10 +125,16 @@ CREATE TABLE appointment_type_code (
   description NVARCHAR(100) NOT NULL
 );
 
-INSERT INTO appointment_type_code (code, description) VALUES
-  ('STANDARD', 'Standard appointment'),
-  ('EMERGENCY', 'Emergency appointment'),
-  ('FOLLOWUP', 'Follow-up appointment');
+INSERT INTO appointment_type_code (appointment_type_code_id, code, description) VALUES
+  ('1', 'EMERGENCY', 'Emergency appointment'),
+  ('2', 'INVESTIGATION', 'Investigation appointment'),
+  ('3', 'WORK_ORDER', 'Work order appointment'),
+  ('4', 'REPAIR', 'Repair appointment'),
+  ('5', 'INSPECTION', 'Inspection appointment'),
+  ('6', 'MAINTENANCE', 'Maintenance appointment'),
+  ('7','FOLLOWUP', 'Follow-up appointment'),
+  ('8','STANDARD', 'Standard appointment'),
+  ('9','FOLLOWUP', 'Follow-up appointment');
 
 CREATE TABLE response_status_code (
   response_status_code_id INTEGER PRIMARY KEY AUTOINCREMENT,
