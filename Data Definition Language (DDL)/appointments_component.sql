@@ -1,18 +1,18 @@
 -- WORKFLOW DIAGRAM (Text-based representation)
 --
--- [AvailableAppointment] <-- created by landlord or contractor
---          |
---          v
--- [RequestAvailableAppointments] <-- triggered to query available slots
---          |
---          v
--- [CustomerAppointmentPreference] <-- tenant preferences (date, time, excluded periods)
---          |
---          v
--- [RequestAppointment] <-- appointment requested, linked to WorkOrder OR Investigation
---          |
---          v
--- [RequestAppointmentResponse] <-- appointment confirmed/declined/rescheduled
+-- Tenant provides appointment preferences (customer_appointment_preference)
+--          ↓
+-- Landlord queries available slots (available_appointment) filtered by preferences
+--          ↓
+-- Landlord sends available appointment options (request_available_appointments)
+--          ↓
+-- Tenant selects/pre-approves appointment (request_appointment)
+--          ↓
+-- Landlord responds (request_appointment_response) - confirm or reject
+--          ↓
+-- If confirmed → Appointment scheduled for work_order or investigation
+-- If rejected → Restart negotiation or propose new slots
+
 
 
 -- SQL DDL -----------------------------
