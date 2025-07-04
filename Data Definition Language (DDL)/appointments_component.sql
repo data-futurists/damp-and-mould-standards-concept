@@ -132,9 +132,8 @@ INSERT INTO appointment_type_code (appointment_type_code_id, code, description) 
   ('4', 'REPAIR', 'Repair appointment'),
   ('5', 'INSPECTION', 'Inspection appointment'),
   ('6', 'MAINTENANCE', 'Maintenance appointment'),
-  ('7','FOLLOWUP', 'Follow-up appointment'),
-  ('8','STANDARD', 'Standard appointment'),
-  ('9','FOLLOWUP', 'Follow-up appointment');
+  ('7','STANDARD', 'Standard appointment'),
+  ('8','FOLLOWUP', 'Follow-up appointment');
 
 CREATE TABLE response_status_code (
   response_status_code_id INTEGER PRIMARY KEY AUTOINCREMENT,

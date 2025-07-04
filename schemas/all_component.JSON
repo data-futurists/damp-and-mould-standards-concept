@@ -238,7 +238,75 @@
       "required": ["hazard_type_id", "investigation_id", "hazard_report_id", "severity_id"]
     },
 
-    "notification": {
+  "investigation_status": {
+    "type": "object",
+    "description": "Investigation status codes, such as 'open', 'closed', 'pending'.",
+    "properties": {
+      "investigation_status_id": {
+        "type": "string",
+        "description": "Primary key: Unique identifier for the investigation status."
+      },
+      "code": {
+        "type": "string",
+        "description": "Short code for the investigation status.",
+        "minLength": 1
+      },
+      "description": {
+        "type": "string",
+        "description": "Text description of the investigation status."
+      }
+    },
+    "required": ["investigation_status_id", "code"]
+  },
+
+  "investigation_status_history": {
+    "type": "object",
+    "description": "Tracks the status history of an investigation, including when a status was entered or exited and why.",
+    "properties": {
+      "investigation_status_history_id": {
+        "type": "string",
+        "description": "Primary key: Unique identifier for the investigation status history record."
+      },
+      "investigation_id": {
+        "type": "string",
+        "description": "Foreign key referencing the investigation."
+      },
+      "investigation_status_id": {
+        "type": "string",
+        "description": "Foreign key referencing the investigation_status."
+      },
+      "updated_by": {
+        "type": "string",
+        "description": "User or system that updated the status."
+      },
+      "reason_code_id": {
+        "type": "string",
+        "description": "Foreign key referencing a reason code for the status change."
+      },
+      "created_date_time": {
+        "type": "string",
+        "format": "date-time",
+        "description": "Timestamp when this history record was created."
+      },
+      "entered_date_time": {
+        "type": "string",
+        "format": "date-time",
+        "description": "Timestamp when the status was entered."
+      },
+      "exited_date_time": {
+        "type": "string",
+        "format": "date-time",
+        "description": "Timestamp when the status was exited."
+      },
+      "comments": {
+        "type": "string",
+        "description": "Optional comments related to the status change."
+      }
+    },
+    "required": ["investigation_status_history_id", "investigation_id", "investigation_status_id"]
+  },
+
+  "notification": {
       "type": "object",
       "description": "Table storing notifications related to investigations.",
       "properties": {

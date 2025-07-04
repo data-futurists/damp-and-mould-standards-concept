@@ -116,6 +116,31 @@ table reference {
   Note: "References for hazard reports, investigations and escalations"
 }
 
+Table investigation_status {
+  investigation_status_id varchar [pk]
+  code varchar [not null, unique]
+  description text
+}
+
+Table investigation_status_history {
+  investigation_status_history_id varchar [pk]
+  investigation_id varchar
+  investigation_status_id varchar
+  updated_by varchar
+  reason_code_id text
+  created_date_time timestamp
+  entered_date_time timestamp
+  exited_date_time timestamp
+  comments text
+
+  Note: "Tracks the status changes of an investigation, including timestamps and reasons."
+}
+
+Ref: investigation_status_history.investigation_id > investigation.investigation_id
+Ref: investigation_status_history.investigation_status_id > investigation_status.investigation_status_id
+Ref: investigation_status_history.reason_code_id > reason_code.reason_code_id
+
+
 // Code Lists
 
 table health_risk_rating {

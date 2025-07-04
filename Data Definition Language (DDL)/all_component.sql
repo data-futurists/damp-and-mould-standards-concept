@@ -706,15 +706,18 @@ CREATE TABLE work_order_status_history (
   work_order_id VARCHAR(255),
   work_status_id VARCHAR(100),
   updated_by VARCHAR(255),
-  reason_id TEXT,
+  reason_code_id TEXT,
   created_date_time TIMESTAMP,
   entered_date_time TIMESTAMP,
   exited_date_time TIMESTAMP,
   comments TEXT,
   CONSTRAINT fk_work_order_status_history_work_order FOREIGN KEY (work_order_id) REFERENCES work_order(work_order_id)
   CONSTRAINT fk_work_order_status_history_work_status FOREIGN KEY (work_status_id) REFERENCES work_status(work_status_id),
-  CONSTRAINT fk_work_order_status_history_reason FOREIGN KEY (reason_id) REFERENCES reason_code(reason_code_id)
+  CONSTRAINT fk_work_order_status_history_reason FOREIGN KEY (reason_code_id) REFERENCES reason_code(reason_code_id)
 );
+
+
+
 
 CREATE TABLE reason_code (
   reason_code_id VARCHAR(255) PRIMARY KEY,
@@ -871,6 +874,38 @@ CREATE TABLE investigation_hazard (
   CONSTRAINT fk_investigation_hazard_report FOREIGN KEY (hazard_report_id) REFERENCES hazard_report(hazard_report_id),
   CONSTRAINT fk_investigation_hazard_severity FOREIGN KEY (severity_id) REFERENCES severity(severity_id)
 );
+
+CREATE TABLE investigation_status_history (
+  investigation_status_history_id VARCHAR(255) PRIMARY KEY,
+  investigation_id VARCHAR(255),
+  investigation_status_id VARCHAR(100),
+  updated_by VARCHAR(255),
+  reason_code_id TEXT,
+  created_date_time TIMESTAMP,
+  entered_date_time TIMESTAMP,
+  exited_date_time TIMESTAMP,
+  comments TEXT,
+  CONSTRAINT fk_ivestigation_status_history_investigation FOREIGN KEY (investigation_id) REFERENCES investigation(investigation_id)
+  CONSTRAINT fk_investigation_status_history_investigation_status FOREIGN KEY (investigation_status_id) REFERENCES investigation_status(investigation_status_id),
+  CONSTRAINT fk_investigation_status_history_reason FOREIGN KEY (reason_code_id) REFERENCES reason_code(reason_code_id)
+);
+
+CREATE TABLE investigation_status (
+  investigation_status_id VARCHAR(255) PRIMARY KEY,
+  code VARCHAR(100) NOT NULL UNIQUE,
+  description TEXT
+);
+INSERT INTO work_status (code)
+VALUES
+
+  ('Open'), 
+  ('InProgress'), 
+  ('Completed'), 
+  ('Cancelled'), 
+  ('OnHold'),
+  ('AwaitingApproval'), 
+  ('Scheduled'), 
+  ('Delayed');
 
 CREATE TABLE escalation (
   escalation_id INTEGER PRIMARY KEY AUTOINCREMENT,
