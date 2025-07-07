@@ -26,7 +26,7 @@ def main():
         all_components_page()
 
 def tenant_page():
-    st.title("tenant component")
+    st.title("Tenant Component")
     st.write("This page provides an overview of the person component of the data model. This refers to the data model that is used to manage persons, including their attributes and relationships.\n This component is crucial for understanding how persons are represented in the system and how they relate to other components, such as properties and work orders.\n\n")
     st.write("The person component includes various attributes such as person ID, name, contact information, and role. It also defines the relationships between persons and other entities in the system, such as properties and work orders.\n\n")
     # Create a container for the ERD
@@ -38,7 +38,7 @@ def tenant_page():
     with erd_container:
         # Load and display the ERD SVG
         try:
-            svg_path = Path("erd/tenant_component.svg")  # Adjust path as needed
+            svg_path = Path("Entity Relationship Diagrams (ERDs)/tenant_component.svg")  # Adjust path as needed
             with open(svg_path, "r") as f:
                 svg_content = f.read()
             
@@ -55,7 +55,7 @@ def tenant_page():
 
     try:
         # Load JSON schema
-        schema_path = Path("schemas/tenant_component.JSON")
+        schema_path = Path("Schemas/tenant_component.JSON")
         with open(schema_path, 'r') as file:
             schema = json.load(file)
 
@@ -95,7 +95,7 @@ def tenant_page():
 
     try:
         # Load SQL file
-        sql_path = Path("ddl/tenant_component.sql")
+        sql_path = Path("Data Definition Language (DDL)/tenant_component.sql")
         with open(sql_path, "r", encoding="utf-8") as f:
             sql_content = f.read()
         
@@ -117,7 +117,7 @@ def all_components_page():
     with erd_container:
         # Load and display the ERD SVG
         try:
-            svg_path = Path("erd/all_component.svg")  # Adjust path as needed
+            svg_path = Path("Entity Relationship Diagrams (ERDs)/all_component.svg")  # Adjust path as needed
             with open(svg_path, "r") as f:
                 svg_content = f.read()
             
@@ -133,7 +133,7 @@ def all_components_page():
 
     try:
         # Load JSON schema
-        schema_path = Path("schemas/all_component.JSON")
+        schema_path = Path("Schemas/all_component.JSON")
         with open(schema_path, 'r') as file:
             schema = json.load(file)
 
@@ -173,7 +173,7 @@ def all_components_page():
 
     try:
         # Load SQL file
-        sql_path = Path("ddl/all_component.sql")
+        sql_path = Path("Data Definition Language (DDL)/all_component.sql")
         with open(sql_path, "r", encoding="utf-8") as f:
             sql_content = f.read()
         
@@ -185,7 +185,7 @@ def all_components_page():
     
 
 def investigation_page():
-    st.title("investigation")
+    st.title("Investigation Component")
     st.write("This page provides an overview of the investigation component of the data model. This refers to the data model that is used to manage investigations, including their attributes and relationships.\n This component is crucial for understanding how investigations are represented in the system and how they relate to other components, such as properties and work orders.\n\n")
     st.write("The investigation component includes various attributes such as investigation ID, date, type, and status. It also defines the relationships between investigations and other entities in the system, such as properties and work orders.\n\n")
 
@@ -197,7 +197,7 @@ def investigation_page():
     with erd_container:
         # Load and display the ERD SVG
         try:
-            svg_path = Path("erd/investigation_component.svg")  # Adjust path as needed
+            svg_path = Path("Entity Relationship Diagrams (ERDs)/investigation_component.svg")  # Adjust path as needed
             with open(svg_path, "r") as f:
                 svg_content = f.read()
             
@@ -213,7 +213,7 @@ def investigation_page():
 
     try:
         # Load JSON schema
-        schema_path = Path("schemas/investigation_component.JSON")
+        schema_path = Path("Schemas/investigation_component.JSON")
         with open(schema_path, 'r') as file:
             schema = json.load(file)
 
@@ -253,7 +253,7 @@ def investigation_page():
 
     try:
         # Load SQL file
-        sql_path = Path("ddl/investigation_component.sql")
+        sql_path = Path("Data Definition Language (DDL)/investigation_component.sql")
         with open(sql_path, "r", encoding="utf-8") as f:
             sql_content = f.read()
         
@@ -279,7 +279,7 @@ def property_page():
     with erd_container:
         # Load and display the ERD SVG
         try:
-            svg_path = Path("erd/property_component.svg")  # Adjust path as needed
+            svg_path = Path("Entity Relationship Diagrams (ERDs)/property_component.svg")  # Adjust path as needed
             with open(svg_path, "r") as f:
                 svg_content = f.read()
             
@@ -295,7 +295,7 @@ def property_page():
 
     try:
         # Load JSON schema
-        schema_path = Path("schemas/property_component.JSON")
+        schema_path = Path("Schemas/property_component.JSON")
         with open(schema_path, 'r') as file:
             schema = json.load(file)
 
@@ -336,7 +336,7 @@ def property_page():
 
     try:
         # Load SQL file
-        sql_path = Path("ddl/property_component.sql")
+        sql_path = Path("Data Definition Language (DDL)/property_component.sql")
         with open(sql_path, "r", encoding="utf-8") as f:
             sql_content = f.read()
         
@@ -347,7 +347,7 @@ def property_page():
         st.error("DDL SQL file not found. Please ensure the file exists in the ddl directory.")
 
 def work_order_page():
-    st.title("Work Order")
+    st.title("Work Order Component")
     st.write("This page provides an overview of the work order component of the data model. This refers to the data model that is used to manage work orders, including their attributes and relationships.\n This component is crucial for understanding how work orders are represented in the system and how they relate to other components, such as properties and investigations.\n\n")
     st.write("The work order component includes various attributes such as work order ID, date, type, and status. It also defines the relationships between work orders and other entities in the system, such as properties and investigations.\n\n")
 
@@ -356,11 +356,7 @@ def work_order_page():
     with erd_container:
         # Load and display the ERD SVG
         try:
-<<<<<<< HEAD
-            svg_path = Path("erd/work_order_component_ERD.svg")  # Adjust path as needed
-=======
-            svg_path = Path("erd/work_order_component.svg")  # Adjust path as needed
->>>>>>> 940736306fb32163c9676776d742b568801d03eb
+            svg_path = Path("Entity Relationship Diagrams (ERDs)/work_order_component.svg")  # Adjust path as needed
             with open(svg_path, "r") as f:
                 svg_content = f.read()
             
@@ -376,7 +372,7 @@ def work_order_page():
 
     try:
         # Load JSON schema
-        schema_path = Path("schemas/work_order_component.JSON")
+        schema_path = Path("Schemas/work_order_component.JSON")
         with open(schema_path, 'r') as file:
             schema = json.load(file)
 
@@ -417,7 +413,7 @@ def work_order_page():
 
     try:
         # Load SQL file
-        sql_path = Path("ddl/work_order_component.sql")
+        sql_path = Path("Data Definition Language (DDL)/work_order_component.sql")
         with open(sql_path, "r", encoding="utf-8") as f:
             sql_content = f.read()
         
