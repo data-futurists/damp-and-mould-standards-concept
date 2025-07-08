@@ -16,9 +16,9 @@ It was developed by the social housing data team at [Local Digital](https://www.
 
 ## Get started
 
-* [Introducing the damp and mould data model](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/guidance/Introducing%20Awaab's%20Law%20data%20model.md)  
-* [How the damp and mould data model works](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/guidance/How%20the%20Awaab's%20Law%20data%20model%20works.md)  
-* [Implement the damp and mould data model](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/guidance/Implement%20the%20Awaab's%20Law%20data%20model.md)  
+* [Introducing the damp and mould data model](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/Guidance/Introducing%20Awaab's%20Law%20data%20model.md)  
+* [How the damp and mould data model works](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/Guidance/How%20the%20Awaab's%20Law%20data%20model%20works.md)  
+* [Implement the damp and mould data model](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/Guidance/Implement%20the%20Awaab's%20Law%20data%20model.md)  
 * [Test the damp and mould data model](https://github.com/data-futurists/damp-and-mould-standards-concept/tree/main/SQL%20Test)
 
 ## Explore our demo built with Streamlit
