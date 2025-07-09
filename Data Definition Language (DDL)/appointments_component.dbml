@@ -30,6 +30,7 @@ Table request_appointment {
   request_appointment_id integer [pk, increment]
   work_order_id integer [null]
   investigation_id integer [null]
+  notification_id integer [null, ref: > notification.notification_id]
   appointment_type varchar(20) [not null, ref: > appointment_type_code.code]
   requested_date datetime [not null]
   requested_time_start datetime [not null]
@@ -42,6 +43,7 @@ Table request_appointment {
 Table request_appointment_response {
   request_appointment_response_id integer [pk, increment]
   request_appointment_id integer [not null, ref: > request_appointment.request_appointment_id]
+  notification_id integer [null, ref: > notification.notification_id]
   response_status varchar(20) [not null, ref: > response_status_code.code]
   response_date datetime [not null]
   notes varchar(255) [null]
@@ -51,6 +53,7 @@ Table request_available_appointments {
   request_available_appointments_id integer [pk, increment]
   work_order_id integer [null]
   investigation_id integer [null]
+  notification_id integer [null, ref: > notification.notification_id]
   requested_from_date datetime [not null]
   requested_to_date datetime [not null]
   notes varchar(255) [null]
