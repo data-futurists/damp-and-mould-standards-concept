@@ -8,6 +8,8 @@ The damp and mould data model allows you to record, track and respond to health 
 
 This is a proof of concept for a data standard designed to support compliance with Awaab’s Law regulations, due to be introduced in October 2025\.
 
+Note this is not a final product; it is ready for testing with the social housing sector.
+
 It was developed by the social housing data team at [Local Digital](https://www.localdigital.gov.uk/) (a team within the [UK Ministry of Housing, Communities and Local Government](https://www.gov.uk/government/organisations/ministry-of-housing-communities-local-government)) in partnership with:
 
 * [TPXimpact](https://www.tpximpact.com/)  
