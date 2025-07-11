@@ -23,6 +23,7 @@ CREATE TABLE request_appointment (
   request_appointment_id INTEGER PRIMARY KEY AUTOINCREMENT,
   work_order_id INTEGER NULL,
   investigation_id INTEGER NULL,
+  notification_id INTEGER,
   appointment_type NVARCHAR(20) NOT NULL,
   requested_date DATETIME NOT NULL,
   requested_time_start DATETIME NOT NULL,
@@ -31,6 +32,8 @@ CREATE TABLE request_appointment (
 
   CONSTRAINT fk_appointment_type FOREIGN KEY (appointment_type)
     REFERENCES appointment_type_code(code),
+  CONSTRAINT fk_notification FOREIGN KEY (notification_id)
+    REFERENCES notification(notification_id),
 
   CONSTRAINT chk_workorder_or_investigation CHECK (
     (work_order_id IS NOT NULL AND investigation_id IS NULL)
@@ -41,12 +44,15 @@ CREATE TABLE request_appointment (
 CREATE TABLE request_appointment_response (
   request_appointment_response_id INTEGER PRIMARY KEY AUTOINCREMENT,
   request_appointment_id INTEGER NOT NULL,
+  notification_id INTEGER,
   response_status NVARCHAR(20) NOT NULL,
   response_date DATETIME NOT NULL,
   notes NVARCHAR(255),
 
   CONSTRAINT fk_request_appointment FOREIGN KEY (request_appointment_id)
     REFERENCES request_appointment(request_appointment_id),
+  CONSTRAINT fk_notification_response FOREIGN KEY (notification_id) 
+    REFERENCES notification(notification_id),
 
   CONSTRAINT fk_response_status FOREIGN KEY (response_status)
     REFERENCES response_status_code(code)
@@ -56,9 +62,13 @@ CREATE TABLE request_available_appointments (
   request_available_appointments_id INTEGER PRIMARY KEY AUTOINCREMENT,
   work_order_id INTEGER NULL,
   investigation_id INTEGER NULL,
+  notification_id INTEGER,
   requested_from_date DATETIME NOT NULL,
   requested_to_date DATETIME NOT NULL,
   notes NVARCHAR(255),
+
+  CONSTRAINT fk_notification_available FOREIGN KEY (notification_id)
+    REFERENCES notification(notification_id),
 
   CONSTRAINT chk_workorder_or_investigation CHECK (
     (work_order_id IS NOT NULL AND investigation_id IS NULL)

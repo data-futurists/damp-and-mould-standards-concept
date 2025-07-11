@@ -50,6 +50,11 @@
           ],
           "description": "Identifier for the investigation (if applicable)."
         },
+        "notification_id": {
+          "type": 
+            "integer",
+          "description": "Identifier for the notification associated with this appointment request."
+        },
         "appointment_type": {
           "type": "string",
           "description": "Type of appointment being requested."
@@ -90,6 +95,11 @@
           "type": "integer",
           "description": "Foreign key to the original appointment request."
         },
+        "notification_id": {
+          "type": 
+            "integer",
+          "description": "Identifier for the notification associated with this appointment request."
+        },
         "response_status": {
           "type": "string",
           "description": "Status of the response (e.g., ACCEPT, REJECT)."
@@ -129,6 +139,11 @@
             "null"
           ],
           "description": "Investigation ID if applicable."
+        },
+        "notification_id": {
+          "type": 
+            "integer",
+          "description": "Identifier for the notification associated with this appointment request."
         },
         "requested_from_date": {
           "type": "string",
