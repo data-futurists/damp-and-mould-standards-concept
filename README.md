@@ -10,15 +10,15 @@ This is a proof of concept for a data standard designed to support compliance wi
 
 Note this is not a final product; it is ready for testing with the social housing sector.
 
-## Disclaimer
-
-This repository contains a proof of concept that is currently under development and testing. We welcome housing providers to download and explore its functionality. However, please note that this solution has not yet been finalised or assured. As such, we do not recommend adopting it as part of any live service at this stage.
-
 It was developed by the social housing data team at [Local Digital](https://www.localdigital.gov.uk/) (a team within the [UK Ministry of Housing, Communities and Local Government](https://www.gov.uk/government/organisations/ministry-of-housing-communities-local-government)) in partnership with:
 
 * [TPXimpact](https://www.tpximpact.com/)  
 * [Data Futurists](https://www.datafuturists.co.uk/)  
 * [Housing Associations Charitable Trust (HACT)](https://hact.org.uk/)
+
+## Disclaimer
+
+This repository contains a proof of concept that is currently under development and testing. We welcome housing providers to download and explore its functionality. However, please note that this solution has not yet been finalised or assured. As such, we do not recommend adopting it as part of any live service at this stage.
 
 ## Get started
 
