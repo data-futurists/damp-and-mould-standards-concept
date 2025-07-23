@@ -22,10 +22,10 @@ This repository contains a proof of concept that is currently under development 
 
 ## Get started
 
-* [Introducing the damp and mould data model](Guidance/Introducing%20the%20damp%20and%20mould%20data%20model.md)  
-* [How the damp and mould data model works](Guidance/How%20the%20damp%20and%20mould%20data%20model%20works.md)   
-* [Implement the damp and mould data model](Guidance/Implement%20the%20damp%20and%20mould%20data%20model.md)  
-* [Example of damp and mould warranting emergency repairs](Guidance/Example%20of%20damp%20and%20mould%20warranting%20emergency%20repairs.md)
+* [Introducing the damp and mould data model](guidance/Introducing%20the%20damp%20and%20mould%20data%20model.md)  
+* [How the damp and mould data model works](guidance/How%20the%20damp%20and%20mould%20data%20model%20works.md)   
+* [Implement the damp and mould data model](guidance/Implement%20the%20damp%20and%20mould%20data%20model.md)  
+* [Example of damp and mould warranting emergency repairs](guidance/Example%20of%20damp%20and%20mould%20warranting%20emergency%20repairs.md)
 
 ## Explore our demo built with Streamlit
 
