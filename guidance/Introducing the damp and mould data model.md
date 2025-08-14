@@ -40,7 +40,7 @@ The data model is made up of 5 components:
 * Captures data such as property ID, tenant information and reporting date.  
 * Maintains historical records of previous inspections and defines the relationships between inspections and other entities in the system, such as properties and work orders.
 
-### [Property component](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/data%20definition%20language%20(DDL)/property_component.sql)
+### [Property component](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/Data%20Definition%20Language%20(DDL)/property_component.sql)
 
 * Used to link hazards to the properties they relate to.  
 * Serves as a central reference for other processes in the data model.  
