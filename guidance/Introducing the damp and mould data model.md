@@ -110,7 +110,7 @@ By 2027, Awaab’s Law is expected to cover more types of housing hazards listed
 
 We’ve designed it so future hazards can be added as additional entries in the hazard type code list.
 
-[Explore the investigation component entity relationship diagram (ERD).](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/entity-relationship%20diagrams/investigation_component.svg)
+[Explore the investigation component entity relationship diagram (ERD).](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/Entity%20Relationship%20Diagrams%20(ERDs)/investigation_component.svg)
 
 ## How the data model can help you in future
 
