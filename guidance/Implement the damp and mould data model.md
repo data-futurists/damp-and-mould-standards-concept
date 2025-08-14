@@ -13,7 +13,7 @@ You can choose to run the full model at once or review and adapt specific compon
 
 ## What’s included
 
-The SQL files contain [Data Definition Language (DDL) scripts](https://github.com/data-futurists/damp-and-mould-standards-concept/tree/main/data%20definition%20language), which serve as setup scripts to:
+The SQL files contain [Data Definition Language (DDL) scripts](https://github.com/data-futurists/damp-and-mould-standards-concept/tree/main/Data%20Definition%20Language%20(DDL)), which serve as setup scripts to:
 
 * create tables  
 * define relationships using foreign keys  
