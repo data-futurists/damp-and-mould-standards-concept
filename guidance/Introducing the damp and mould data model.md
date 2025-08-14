@@ -34,26 +34,26 @@ We’ve built this data model using [HACT’s UK Housing Data Standards](https:/
 
 The data model is made up of 5 components:
 
-### [Investigation component](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/data%20definition%20language/investigation_component.sql)
+### [Investigation component](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/Data%20Definition%20Language%20(DDL)/investigation_component.sql)
 
 * Records property inspections triggered by hazard reports.   
 * Captures data such as property ID, tenant information and reporting date.  
 * Maintains historical records of previous inspections and defines the relationships between inspections and other entities in the system, such as properties and work orders.
 
-### [Property component](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/data%20definition%20language/property_component.sql)
+### [Property component](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/data%20definition%20language%20(DDL)/property_component.sql)
 
 * Used to link hazards to the properties they relate to.  
 * Serves as a central reference for other processes in the data model.  
 * Tracks hierarchical data related to a property, including property ID and address ID.  
 * Includes attributes like construction type — for example, timber frame or steel frame.
 
-### [Work order component](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/data%20definition%20language/work_order_component.sql)
+### [Work order component](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/data%20definition%20language%20(DDL)/work_order_component.sql)
 
 * Records maintenance and repair tasks, as well as a schedule of rates (SoR) — a document that lists predefined unit costs for various construction tasks and elements.  
 * Allows tracking of multiple work orders within a single case.  
 * Includes various attributes such as work order ID, date, type and status.
 
-### [Tenant component](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/data%20definition%20language/tenant_component.sql)
+### [Tenant component](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/data%20definition%20language%20(DDL)/tenant_component.sql)
 
 * Captures tenant and household member details, including attributes such as vulnerabilities.  
 * Includes various attributes such as person ID, name and contact information.  
