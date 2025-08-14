@@ -59,7 +59,7 @@ The data model is made up of 5 components:
 * Includes various attributes such as person ID, name and contact information.  
 * Links to person alert codes to identify specific vulnerabilities.
 
-### [Appointments component](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/data%20definition%20language/appointments_component.sql)
+### [Appointments component](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/Data%20Definition%20Language%20(DDL)/appointments_component.sql)
 
 * Schedules and records appointments related to investigations, property inspections, and work orders. 
 * Captures details such as appointment ID, date, time, location, and status.  
