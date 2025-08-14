@@ -32,7 +32,7 @@ Manages investigations, repairs and escalation processes within the required tim
 
 We’ve built this data model using [HACT’s UK Housing Data Standards](https://hact.org.uk/) to stay aligned with sector best practices. This means we’re following common definitions and processes for things like properties, tenants and repairs.
 
-The data model is made up of 4 components:
+The data model is made up of 5 components:
 
 ### [Investigation component](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/data%20definition%20language/investigation_component.sql)
 
