@@ -47,7 +47,7 @@ The data model is made up of 5 components:
 * Tracks hierarchical data related to a property, including property ID and address ID.  
 * Includes attributes like construction type — for example, timber frame or steel frame.
 
-### [Work order component](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/data%20definition%20language%20(DDL)/work_order_component.sql)
+### [Work order component](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/Data%20Definition%20Language%20(DDL)/work_order_component.sql)
 
 * Records maintenance and repair tasks, as well as a schedule of rates (SoR) — a document that lists predefined unit costs for various construction tasks and elements.  
 * Allows tracking of multiple work orders within a single case.  
