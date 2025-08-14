@@ -59,6 +59,12 @@ The data model is made up of 4 components:
 * Includes various attributes such as person ID, name and contact information.  
 * Links to person alert codes to identify specific vulnerabilities.
 
+### [Appointments component](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/data%20definition%20language/appointments_component.sql)
+
+* Schedules and records appointments related to investigations, property inspections, and work orders. 
+* Captures details such as appointment ID, date, time, location, and status.  
+* Links to related entities such as property, investigation, or work order for tracking and history.
+
 [Read more about how the damp and mould data model works](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/guidance/How%20the%20Awaab's%20Law%20data%20model%20works.md).
 
 ## Key features of the data model
