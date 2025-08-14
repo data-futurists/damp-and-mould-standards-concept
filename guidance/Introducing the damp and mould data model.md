@@ -80,7 +80,7 @@ The data model comes with suggested options for things like risk levels and inve
 | For example, if your team uses a rating like “Extremely High Risk” or has specific investigation types that aren’t included by default, you can add them in. |
 | :---- |
 
-The same applies to the [tenant component](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/data%20definition%20language/tenant_component.sql), allowing for the inclusion of additional vulnerability details or classifications. You can extend these with input from domain-specific experts, such as health professionals.
+The same applies to the [tenant component](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/Data%20Definition%20Language%20(DDL)/tenant_component.sql), allowing for the inclusion of additional vulnerability details or classifications. You can extend these with input from domain-specific experts, such as health professionals.
 
 ### It’s easy to maintain, manage and query
 
