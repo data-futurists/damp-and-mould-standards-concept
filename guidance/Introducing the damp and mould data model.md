@@ -65,7 +65,7 @@ The data model is made up of 5 components:
 * Captures details such as appointment ID, date, time, location, and status.  
 * Links to related entities such as property, investigation, or work order for tracking and history.
 
-[Read more about how the damp and mould data model works](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/guidance/How%20the%20Awaab's%20Law%20data%20model%20works.md).
+[Read more about how the damp and mould data model works](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/guidance/How%20the%20damp%20and%20mould%20data%20model%20works.md).
 
 ## Key features of the data model
 
