@@ -9,7 +9,7 @@ This page explains how to set up the damp and mould data model using SQL files.
 
 You can choose to run the full model at once or review and adapt specific components to fit your own database setup.
 
-[Read more about the key features of the damp and mould data model](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/guidance/Introducing%20Awaab's%20Law%20data%20model.md#key-features-of-the-data-model).
+[Read more about the key features of the damp and mould data model](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/guidance/Introducing%20the%20damp%20and%20mould%20data%20model.md).
 
 ## What’s included
 
