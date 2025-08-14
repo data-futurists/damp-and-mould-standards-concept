@@ -53,7 +53,7 @@ The data model is made up of 5 components:
 * Allows tracking of multiple work orders within a single case.  
 * Includes various attributes such as work order ID, date, type and status.
 
-### [Tenant component](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/data%20definition%20language%20(DDL)/tenant_component.sql)
+### [Tenant component](https://github.com/data-futurists/damp-and-mould-standards-concept/blob/main/Data%20Definition%20Language%20(DDL)/property_component.sql)
 
 * Captures tenant and household member details, including attributes such as vulnerabilities.  
 * Includes various attributes such as person ID, name and contact information.  
