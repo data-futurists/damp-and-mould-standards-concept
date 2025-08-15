@@ -281,3 +281,67 @@ CREATE TABLE investigator (
   investigator_id INT PRIMARY KEY IDENTITY(1, 1), 
   investigator_name NVARCHAR(100) NOT NULL, 
 );
+
+
+CRECREATE TABLE investigation_history (
+    history_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    investigation_id INTEGER NOT NULL,
+    
+    -- Snapshot of related entities at the time
+    hazard_id INTEGER NOT NULL,
+    tenant_id INTEGER NOT NULL,
+    property_id INTEGER NOT NULL,
+    work_order_id INTEGER,
+    appointment_id INTEGER,
+    
+    -- Previous vs new types
+    previous_hazard_type_id INTEGER,
+    new_hazard_type_id INTEGER,
+    previous_investigation_type_id INTEGER,
+    new_investigation_type_id INTEGER,
+    
+    reason TEXT NOT NULL,
+    action_taken TEXT NOT NULL,
+    
+    -- Audit metadata
+    recorded_by INTEGER NOT NULL,  -- user who made the change
+    recorded_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    
+    -- Constraints
+    CONSTRAINT fk_investigation
+        FOREIGN KEY (investigation_id) REFERENCES investigation(investigation_id),
+    CONSTRAINT fk_hazard
+        FOREIGN KEY (hazard_id) REFERENCES hazard(hazard_id),
+    CONSTRAINT fk_tenant
+        FOREIGN KEY (tenant_id) REFERENCES tenant(tenant_id),
+    CONSTRAINT fk_property
+        FOREIGN KEY (property_id) REFERENCES property(property_id),
+    CONSTRAINT fk_work_order
+        FOREIGN KEY (work_order_id) REFERENCES work_order(work_order_id),
+    CONSTRAINT fk_appointment
+        FOREIGN KEY (appointment_id) REFERENCES appointment(appointment_id),
+    CONSTRAINT fk_prev_hazard_type
+        FOREIGN KEY (previous_hazard_type_id) REFERENCES hazard_type(hazard_type_id),
+    CONSTRAINT fk_new_hazard_type
+        FOREIGN KEY (new_hazard_type_id) REFERENCES hazard_type(hazard_type_id),
+    CONSTRAINT fk_prev_inv_type
+        FOREIGN KEY (previous_investigation_type_id) REFERENCES investigation_type(investigation_type_id),
+    CONSTRAINT fk_new_inv_type
+        FOREIGN KEY (new_investigation_type_id) REFERENCES investigation_type(investigation_type_id),
+    CONSTRAINT fk_recorded_by
+        FOREIGN KEY (recorded_by) REFERENCES person(person_id),
+        
+    -- Prevent "changes" that are actually the same
+    CONSTRAINT chk_hazard_type_change
+        CHECK (
+            previous_hazard_type_id IS NULL
+            OR new_hazard_type_id IS NULL
+            OR previous_hazard_type_id <> new_hazard_type_id
+        ),
+    CONSTRAINT chk_investigation_type_change
+        CHECK (
+            previous_investigation_type_id IS NULL
+            OR new_investigation_type_id IS NULL
+            OR previous_investigation_type_id <> new_investigation_type_id
+        )
+);
