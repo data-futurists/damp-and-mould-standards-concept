@@ -1,213 +1,243 @@
-// DBML script for investigation Module schema
-// Author: George Foster (TPXImpact)
-// Email: george.foster@tpximpact.com
+/////////////////////////////////////////////////////
+// HAZARD TYPE
+/////////////////////////////////////////////////////
 
-// Script created for use with dbdiagram.io
-// Links to Property, Tenant and Tenancy tables commented out
-
-// search todo for rows needing updates
-
-// Tables
-
-table hazard_type {
+Table hazard_type {
   hazard_type_id integer [pk, increment]
-  hazard_type nvarchar(100)
-  health_risk_rating_id integer
-  category nvarchar(500)
-
-  Note: "Stores types of hazards"
-  Indexes {
-    (health_risk_rating_id)
-  }
+  hazard_type varchar(100) [not null]
+  health_risk_rating_id integer [not null, ref: > health_risk_rating.health_Risk_rating_id] // matches column name in health_risk_rating
+  category varchar(500)
 }
 
+/////////////////////////////////////////////////////
+// HAZARD REPORT
+/////////////////////////////////////////////////////
 
-table hazard_report {
+Table hazard_report {
   hazard_report_id integer [pk, increment]
-  hazard_report_reference varchar(36)
-  uprn integer
-  tenancy_id varchar(50)
-  date_reported date
-  reported_by_id integer
-  description nvarchar(500)
-  location_details nvarchar(500)
-  emergency_action_taken integer [default: 0]
+  hazard_report_reference varchar(36) [not null, ref: > reference.id]
+  uprn varchar(50) [not null, ref: > address.uprn]
+  tenancy_id varchar(50) [not null, ref: > tenancy.tenancy_id]
+  hazard_type_id integer [not null, ref: > hazard_type.hazard_type_id]
+  date_reported date [not null]
+  reported_by_id integer [not null, ref: > person.person_id]
+  description varchar(500)
+  location_details varchar(500)
+  emergency_action_taken integer [not null, default: `0`, note: 'CHECK (emergency_action_taken IN (0,1))']
   made_safe_date date
-  report_status_id integer
-  investigation_type_id integer
-
-  Note: "Stores hazard reports"
+  report_status_id integer [not null, ref: > report_status.report_status_id]
 }
 
-table investigation {
+/////////////////////////////////////////////////////
+// INVESTIGATION
+/////////////////////////////////////////////////////
+
+Table investigation {
   investigation_id integer [pk, increment]
-  investigation_reference varchar(36)
-  uprn integer
-  tenancy_id varchar(50)
-  hazard_report_id integer
-  trigger_source_id integer
-  investigation_type_id integer
+  investigation_reference varchar(36) [not null, ref: > reference.id]
+  uprn varchar(50) [not null, ref: > address.uprn]
+  tenancy_id varchar(50) [not null, ref: > tenancy.tenancy_id]
+  hazard_report_id integer [not null, ref: > hazard_report.hazard_report_id]
+  trigger_source_id integer [not null, ref: > trigger_source.trigger_source_id]
+  investigation_type_id integer [not null, ref: > investigation_type.investigation_type_id]
   investigation_scheduled_date date
   investigation_completed_date date
-  investigator_id integer
-  hazard_confirmed integer [default: 0]
-  sla_breach_flag integer [default: 0]
-  notification_sent_to_tenant integer [default: 0]
-  investigation_notes nvarchar(500)
-
-  Note: "Stores investigation details"
+  investigator_id integer [not null, ref: > investigator.investigator_id]
+  hazard_confirmed integer [not null, default: `0`, note: 'CHECK (hazard_confirmed IN (0,1))']
+  repair_required integer [not null, default: `0`, note: 'CHECK (repair_required IN (0,1))']
+  sla_breach_flag integer [not null, default: `0`, note: 'CHECK (sla_breach_flag IN (0,1))']
+  notification_sent_to_tenant integer [not null, default: `0`, note: 'CHECK (notification_sent_to_tenant IN (0,1))']
+  investigation_notes varchar(500)
 }
 
-table investigation_hazard {
+/////////////////////////////////////////////////////
+// INVESTIGATION_HAZARD
+/////////////////////////////////////////////////////
+
+Table investigation_hazard {
   investigation_hazard_id integer [pk, increment]
-  hazard_type_id integer
-  investigation_id integer
-  hazard_report_id integer
-  severity_id integer
-  notes nvarchar(500)
-
-  Note: "Maps investigations to hazards"
+  hazard_type_id integer [not null, ref: > hazard_type.hazard_type_id]
+  investigation_id integer [not null, ref: > investigation.investigation_id]
+  hazard_report_id integer [not null, ref: > hazard_report.hazard_report_id]
+  severity_id integer [not null, ref: > severity.severity_id]
+  notes varchar(500)
 }
 
-table notification {
+/////////////////////////////////////////////////////
+// NOTIFICATION
+/////////////////////////////////////////////////////
+
+Table notification {
   notification_id integer [pk, increment]
-  investigation_id integer
-  tenancy_id integer
-  work_order_id varchar(255)
-  notification_type_id integer
-  escalation_id integer
-  date_sent date
-  notification_method_id integer
-  content_summary nvarchar(500)
-
-  Note: "Notifications related to investigations"
+  investigation_id integer [ref: > investigation.investigation_id]
+  tenancy_id integer [not null, ref: > tenancy.tenancy_id]
+  work_order_id integer [ref: > work_order.work_order_id]
+  notification_type_id integer [not null, ref: > notification_type.notification_type_id]
+  escalation_id integer [ref: > escalation.escalation_id]
+  date_sent date [not null]
+  communication_method_id integer [not null, ref: > communication_method.communication_method_id]
+  content_summary varchar(500)
 }
 
-table escalation {
+/////////////////////////////////////////////////////
+// COMMUNICATION
+/////////////////////////////////////////////////////
+
+Table communication {
+  communication_id integer [pk, increment]
+  notification_id integer [ref: > notification.notification_id]
+  hazard_report_id integer [ref: > hazard_report.hazard_report_id]
+  investigation_id integer [ref: > investigation.investigation_id]
+  tenancy_id varchar(50) not null // ref: > tenancy.tenancy_id
+  sender_type varchar(20) [not null, note: 'CHECK (sender_type IN (''Tenant'',''Landlord'',''System''))']
+  sender_id integer // ref: > person.person_id
+  receiver_type varchar(20) [not null, note: 'CHECK (receiver_type IN (''Tenant'',''Landlord'',''System''))']
+  receiver_id integer //ref: > person.person_id
+  communication_method_id integer [not null, ref: > communication_method.communication.method_id]
+  communication_date datetime [not null, default: `CURRENT_TIMESTAMP`]
+  content_summary varchar(500)
+  media_id integer [ref: > media.media_id]
+}
+
+/////////////////////////////////////////////////////
+// ESCALATION
+/////////////////////////////////////////////////////
+
+Table escalation {
   escalation_id integer [pk, increment]
-  escalation_reference varchar(36)
-  investigation_id integer
-  escalation_reason nvarchar(100)
-  escalation_stage_id integer
-  escalation_type_id integer
-  escalated_to nvarchar(100)
-  escalation_start_date date
+  escalation_reference varchar(36) [not null, ref: > reference.id]
+  investigation_id integer [not null, ref: > investigation.investigation_id]
+  escalation_reason varchar(100)
+  escalation_stage_id integer [not null, ref: > escalation_stage.escalation_stage_id]
+  escalation_type_id integer [not null, ref: > escalation_type.escalation_type_id]
+  escalated_to varchar(100) [not null]
+  escalation_start_date date [not null]
   escalation_end_date date
-  action_taken nvarchar(500)
+  action_taken varchar(500)
   compensation_amount decimal(10,2)
-  alternative_accommodation_details nvarchar(500)
-  tenant_acceptance integer [default: 0]
-  escalation_notes nvarchar(500)
+  alternative_accommodation_details varchar(500)
+  tenant_acceptance integer [not null, default: `0`, note: 'CHECK (tenant_acceptance IN (0,1))']
+  escalation_notes varchar(500)
 
-  Note: "Tracks escalation actions"
+  Note: 'CHECK (escalation_end_date IS NULL OR escalation_end_date >= escalation_start_date); CHECK (compensation_amount IS NULL OR compensation_amount >= 0).'
 }
 
-table reference {
-  id varchar(36) [pk]
-  allocated_by_code integer
-  allocated_by_description varchar(50)
+/////////////////////////////////////////////////////
+// REFERENCE
+/////////////////////////////////////////////////////
+
+Table reference {
+  id integer [pk, increment]
+  allocated_by_code integer [not null]
+  allocated_by_description varchar(50) [not null]
   description varchar(200)
-  allocated_by varchar(50)
-
-  Note: "References for hazard reports, investigations and escalations"
+  allocated_by varchar(50) [not null]
 }
 
-table media {
+/////////////////////////////////////////////////////
+// CODE LISTS
+/////////////////////////////////////////////////////
+
+Table health_risk_rating {
+  health_Risk_rating_id integer [pk, increment] // capital R per DDL
+  health_risk_rating varchar(20) [not null]
+}
+
+Table severity {
+  severity_id integer [pk, increment]
+  severity varchar(20) [not null]
+}
+
+Table investigation_type {
+  investigation_type_id integer [pk, increment]
+  investigation_type varchar(20) [not null]
+}
+
+Table report_status {
+  report_status_id integer [pk, increment]
+  report_status varchar(20) [not null]
+}
+
+Table trigger_source {
+  trigger_source_id integer [pk, increment]
+  trigger_source varchar(20) [not null]
+}
+
+Table escalation_status {
+  escalation_status_id integer [pk, increment]
+  escalation_status varchar(20) [not null]
+}
+
+Table notification_type {
+  notification_type_id integer [pk, increment]
+  notification_type varchar(20) [not null]
+}
+
+Table escalation_stage {
+  escalation_stage_id integer [pk, increment]
+  escalation_stage varchar(20) [not null]
+}
+
+Table communication_method {
+  communication_method_id integer [pk, increment]   // spelled exactly as in DDL
+  communication_method varchar(20) [not null]       // spelled exactly as in DDL
+
+}
+
+Table escalation_type {
+  escalation_type_id integer [pk, increment]
+  escalation_type varchar(30) [not null]
+}
+
+Table investigator {
+  investigator_id integer [pk, increment]
+  investigator_name varchar(100) [not null]
+}
+
+/////////////////////////////////////////////////////
+// MEDIA
+/////////////////////////////////////////////////////
+
+Table media {
   media_id integer [pk, increment]
-  hazard_report_id integer not null 
-  media_type varchar(10) [not null, note: "photo or video"]
+  hazard_report_id integer [not null, ref: > hazard_report.hazard_report_id]
+  media_type varchar(10) [not null, note: 'CHECK (media_type IN (''photo'',''video''))']
   media_attachment attachment [not null]
-  uploaded_by_id integer not null 
+  uploaded_by_id integer [not null, ref: > person.person_id]
   date_uploaded datetime [not null, default: `CURRENT_TIMESTAMP`]
 }
 
+/////////////////////////////////////////////////////
+// INVESTIGATION HISTORY
+/////////////////////////////////////////////////////
 
-// Code Lists
+Table investigation_history {
+  history_id integer [pk, increment]
+  investigation_id integer [not null, ref: > investigation.investigation_id]
 
-table health_risk_rating {
-  health_risk_rating_id integer [pk, increment]
-  health_risk_rating nvarchar(20)
+  // Snapshot of related entities at the time
+  hazard_id integer [not null, ref: > hazard.hazard_id]
+  tenant_id integer [not null, ref: > tenant.tenant_id]
+  property_id integer [not null, ref: > property.property_id]
+
+  // Previous vs new types
+  previous_hazard_type_id integer [ref: > hazard_type.hazard_type_id]
+  new_hazard_type_id integer [ref: > hazard_type.hazard_type_id]
+
+  previous_investigation_type_id integer [ref: > investigation_type.investigation_type_id]
+  new_investigation_type_id integer [ref: > investigation_type.investigation_type_id]
+
+  previous_escalation_status_id integer
+  new_escalation_status_id integer
+
+  reason text [not null]
+  action_taken text [not null]
+
+  // Audit metadata
+  recorded_by integer [not null, ref: > person.person_id]
+  recorded_at timestamp [not null, default: `CURRENT_TIMESTAMP`]
+
+  // Optional links per DDL constraints
+  work_order_id integer [ref: > work_order.work_order_id]
+  appointment_id integer [ref: > appointment.appointment_id]
 }
-
-table severity {
-  severity_id integer [pk, increment]
-  severity nvarchar(20)
-}
-
-table investigation_type {
-  investigation_type_id integer [pk, increment]
-  investigation_type nvarchar(20)
-}
-
-table report_status {
-  report_status_id integer [pk, increment]
-  report_status nvarchar(20)
-}
-
-table trigger_source {
-  trigger_source_id integer [pk, increment]
-  trigger_source nvarchar(20)
-}
-
-table escalation_status {
-  escalation_status_id integer [pk, increment]
-  escalation_status nvarchar(20)
-}
-
-table notification_type {
-  notification_type_id integer [pk, increment]
-  notification_type nvarchar(20)
-}
-
-table escalation_stage {
-  escalation_stage_id integer [pk, increment]
-  escalation_stage nvarchar(20)
-}
-
-table notification_method {
-  notification_method_id integer [pk, increment]
-  notification_method nvarchar(20)
-}
-
-table escalation_type {
-  escalation_type_id integer [pk, increment]
-  escalation_type nvarchar(30)
-}
-
-table investigator {
-  investigator_id integer [pk, increment]
-  investigator_name nvarchar(100)
-}
-
-// Relationships
-ref: hazard_type.health_risk_rating_id > health_risk_rating.health_risk_rating_id
-//ref: hazard_report.uprn > address.uprn
-//ref: hazard_report.tenancy_id > tenancy.tenancy_id
-ref: hazard_report.report_status_id > report_status.report_status_id
-ref: hazard_report.investigation_type_id > investigation_type.investigation_type_id
-//ref: investigation.uprn > address.uprn
-//ref: investigation.tenancy_id > tenancy.tenancy_id
-ref: investigation.hazard_report_id > hazard_report.hazard_report_id
-ref: investigation.trigger_source_id > trigger_source.trigger_source_id
-ref: investigation.investigation_type_id > investigation_type.investigation_type_id
-ref: investigation_hazard.hazard_type_id > hazard_type.hazard_type_id
-ref: investigation_hazard.investigation_id > investigation.investigation_id
-ref: investigation_hazard.hazard_report_id > hazard_report.hazard_report_id
-ref: investigation_hazard.severity_id > severity.severity_id
-ref: investigation.investigator_id > investigator.investigator_id
-ref: notification.investigation_id > investigation.investigation_id
-//ref: notification.tenancy_id > tenancy.tenancy_id
-//ref: notification.work_order_id > work_order.work_order_id
-ref: notification.notification_type_id > notification_type.notification_type_id
-ref: notification.notification_method_id > notification_method.notification_method_id
-ref: notification.escalation_id > escalation.escalation_id
-ref: escalation.investigation_id > investigation.investigation_id
-ref: escalation.escalation_stage_id > escalation_stage.escalation_stage_id
-ref: escalation.escalation_type_id > escalation_type.escalation_type_id
-ref: hazard_report.hazard_report_reference > reference.id
-ref: investigation.investigation_reference > reference.id
-ref: escalation.escalation_reference > reference.id
-// ref: media.uploaded_by_id > person.person_id
-// ref: hazard_report.reported_by_id > person.person_id
-ref: media.hazard_report_id > hazard_report.hazard_report_id
-

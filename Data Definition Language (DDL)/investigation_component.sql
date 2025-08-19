@@ -46,10 +46,9 @@ CREATE TABLE hazard_report (
   CONSTRAINT fk_hazard_report_reference FOREIGN KEY (hazard_report_reference) REFERENCES reference(id),
   CONSTRAINT fk_hazard_report_property FOREIGN KEY (uprn) REFERENCES address(uprn),
   CONSTRAINT fk_hazard_report_tenancy FOREIGN KEY (tenancy_id) REFERENCES tenancy(tenancy_id),
-  CONSTRAINT fk_hazard_report_investigation_type FOREIGN KEY (investigation_type_id) REFERENCES investigation_type(investigation_type_id),
   CONSTRAINT fk_hazard_report_status FOREIGN KEY (report_status_id) REFERENCES report_status(report_status_id),
   CONSTRAINT chk_emergency_action CHECK (emergency_action_taken IN (0,1)),
-  CONSTRAINT chk_made_safe_date CHECK (made_safe_date IS NULL OR made_safe_date >= date_reported)
+  CONSTRAINT chk_made_safe_date CHECK (made_safe_date IS NULL OR made_safe_date >= date_reported),
   CONSTRAINT fk_hazard_report_hazard_type FOREIGN KEY (hazard_type_id) REFERENCES hazard_type(hazard_type_id),
   CONSTRAINT fk_reported_by FOREIGN KEY (reported_by_id) REFERENCES person(person_id),
 );
@@ -80,7 +79,7 @@ CREATE TABLE investigation (
   CONSTRAINT chk_hazard_confirmed CHECK (hazard_confirmed IN (0,1)),
   CONSTRAINT chk_repair_required CHECK (repair_required IN (0,1)),
   CONSTRAINT chk_sla_breach CHECK (sla_breach_flag IN (0,1)),
-  CONSTRAINT chk_notification_sent_to_tenant CHECK (notification_sent_to_tenant IN (0,1)),,
+  CONSTRAINT chk_notification_sent_to_tenant CHECK (notification_sent_to_tenant IN (0,1)),
   CONSTRAINT chk_investigation_scheduled_date CHECK (investigation_scheduled_date IS NULL OR investigation_scheduled_date >= hazard_reported_date),
   CONSTRAINT chk_investigation_completed_date CHECK (investigation_completed_date IS NULL OR investigation_scheduled_date IS NULL OR investigation_completed_date >= investigation_scheduled_date)
 );
@@ -115,7 +114,7 @@ CREATE TABLE notification (
   CONSTRAINT fk_notification_work_order FOREIGN KEY (work_order_id) REFERENCES work_order(work_order_id),
   CONSTRAINT fk_notification_type FOREIGN KEY (notification_type_id) REFERENCES notification_type(notification_type_id),
   CONSTRAINT fk_notification_escalation FOREIGN KEY (escalation_id) REFERENCES escalation(escalation_id),
-  CONSTRAINT fk_notification_method FOREIGN KEY (notification_method_id) REFERENCES communication_method(notification_method_id)
+  CONSTRAINT fk_notification_communication_method FOREIGN KEY (communication_method_id) REFERENCES communication_method(communication_method_id)
 );
 
 CREATE TABLE communication (
@@ -191,7 +190,7 @@ CREATE TABLE reference (
 -- HealthRiskRating Table
 -- Code list for health risk rating levels.
 CREATE TABLE health_risk_rating (
-  health_Risk_rating_id INTEGER PRIMARY  KEY AUTOINCREMENT, 
+  health_risk_rating_id INTEGER PRIMARY  KEY AUTOINCREMENT, 
   health_risk_rating VARCHAR(20) NOT NULL
 );
 INSERT INTO health_risk_rating (health_risk_rating) 
@@ -307,8 +306,8 @@ VALUES
 -- NotificationMethod Table
 -- Code list for notification methods.
 CREATE TABLE communication_method (
-  communicaiton_method_id INTEGER PRIMARY KEY AUTOINCREMENT, 
-  communicaiton_method VARCHAR(20) NOT NULL
+  communication_method_id INTEGER PRIMARY KEY AUTOINCREMENT, 
+  communication_method VARCHAR(20) NOT NULL
 );
 INSERT INTO communication_method (communication_method) 
 VALUES 
