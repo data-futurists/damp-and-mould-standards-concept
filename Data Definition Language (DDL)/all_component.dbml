@@ -393,49 +393,99 @@ Ref: certification.certification_type_id > certification_type_code.certification
 // Tenant Component
 // --------------------------------------
 
-// Main Tables
+// --------------------------------------
+// CORE PERSON & TENANCY STRUCTURE
+// --------------------------------------
 
-table tenant_person {
+Table tenant_person {
   tenant_id integer [pk, increment]
   full_name varchar(255) [not null]
-  person_alert_type_id integer
   date_of_birth date
-  phone_number integer
-  email integer
-  vulnerability_flag boolean [default: false]
+  phone_number varchar(50)
+  email varchar(255)
 }
 
-table tenancy {
+Table tenancy {
   tenancy_id integer [pk, increment]
-  tenant_id integer [not null]
+  tenant_id integer [not null, ref: > tenant_person.tenant_id]
   address_id integer [not null]
   start_date date [not null]
-  end_date date [not null]
-  tenancy_type varchar(100)
-  tenancy_status varchar(100)
-}
+  end_date date
+  tenancy_type varchar(100) [not null]
+  tenancy_status varchar(100) [not null]
+ }
 
-table household_member_person {
+Table household_member_person {
   household_member_id integer [pk, increment]
-  tenant_id integer [not null]
-  tenancy_id integer [not null]
-  person_alert_type_id integer
+  tenant_id integer [not null, ref: > tenant_person.tenant_id]
+  tenancy_id integer [not null, ref: > tenancy.tenancy_id]
   full_name varchar(255) [not null]
   date_of_birth date
   relationship_to_tenant varchar(100)
   is_contract_holder boolean [default: false]
-  vulnerability_details text
-  risk_assessment_status varchar(100)
-  risk_assessment_date date
 }
 
-// Relationships 
-Ref: tenancy.tenant_id > tenant_person.tenant_id
-Ref: household_member_person.tenancy_id > tenancy.tenancy_id
-Ref: household_member_person.person_alert_type_id > person_alert_type.person_alert_type_id
-Ref: household_member_person.tenant_id > tenant_person.tenant_id
-Ref: tenancy.address_id > address.address_id
-Ref: tenant_person.person_alert_type_id > person_alert_type.person_alert_type_id
+// --------------------------------------
+// ALERT STRUCTURE
+// --------------------------------------
+
+Table alert_category {
+  alert_category_id integer [pk, increment]
+  name varchar(100) [not null, unique]
+  description text
+}
+
+Table person_alert_code {
+  person_alert_code_id integer [pk, increment]
+  code varchar(50) [not null, unique]
+  name varchar(255) [not null]
+  description text
+  alert_category_id integer [ref: > alert_category.alert_category_id]
+}
+
+// --------------------------------------
+// ALERT ASSIGNMENTS (UNIFIED)
+// --------------------------------------
+
+Table person_alert_assignment {
+  person_alert_assignment_id integer [pk, increment]
+  tenant_id integer [ref: > tenant_person.tenant_id] // nullable, only one of these is filled
+  household_member_id integer [ref: > household_member_person.household_member_id] // nullable
+  person_alert_code_id integer [not null, ref: > person_alert_code.person_alert_code_id]
+  severity_level varchar(50)
+  source_type varchar(100)
+  start_date date [not null, default: `current_date`]
+  end_date date
+  is_active boolean [default: true]
+
+  indexes {
+    (tenant_id, person_alert_code_id, start_date) [unique]
+    (household_member_id, person_alert_code_id, start_date) [unique]
+  }
+  //checks {
+  //  "tenant_id IS NOT NULL OR household_member_id IS NOT NULL"
+  // "NOT (tenant_id IS NOT NULL AND household_member_id IS NOT NULL)"
+  //}
+}
+
+// --------------------------------------
+// ALERT HISTORY / AUDIT TRAIL
+// --------------------------------------
+
+Table person_alert_history {
+  alert_history_id integer [pk, increment]
+  person_alert_assignment_id integer [not null, ref: > person_alert_assignment.person_alert_assignment_id]
+  old_severity_level varchar(50)
+  new_severity_level varchar(50)
+  old_end_date date
+  new_end_date date
+  old_is_active boolean
+  new_is_active boolean
+  change_reason text
+  changed_by int // links to a user_id in an external person table
+  changed_at timestamp [default: `current_timestamp`]
+}
+
 
 // --------------------------------------
 // WorkOrder Component
@@ -463,11 +513,6 @@ Table trade_code {
 Table rate_schedule_item {
   rate_schedule_item_id integer [pk, increment]
   code varchar(100) [not null, unique]
-}
-
-Table person_alert_type {
-  person_alert_type_id integer [pk, increment]
-  code varchar(50) [not null, unique]
 }
 
 Table work_priority {
@@ -503,7 +548,6 @@ Table work_order {
   hazard_report_id varchar(255)
   work_class_id varchar(255)
   location_alert_id varchar(255)
-  person_alert_id varchar(255)
   work_priority_id varchar(255)
   contractor_organisation_id varchar(255)
   date_raised date
@@ -572,7 +616,6 @@ Ref: work_order.work_class_id > work_class.work_class_id
 Ref: work_order.work_priority_id > work_priority.work_priority_id
 Ref: work_order.contractor_organisation_id > contractor_organisation.contractor_organisation_id
 Ref: work_order.location_alert_id > location_alert_type_code.alert_type_id
-Ref: work_order.person_alert_id > person_alert_type.person_alert_type_id
 Ref: work_order.address_id > address.address_id
 Ref: work_order.investigation_id > investigation.investigation_id
 Ref: work_order.escalation_id > escalation.escalation_id

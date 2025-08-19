@@ -20,10 +20,6 @@ Table rate_schedule_item {
   code varchar(100) [not null, unique]
 }
 
-Table person_alert_type {
-  person_alert_type_id integer [pk, increment]
-  code varchar(50) [not null, unique]
-}
 
 Table work_priority {
   work_priority_id varchar(255) [pk]
@@ -58,7 +54,6 @@ Table work_order {
   hazard_report_id varchar(255)
   work_class_id varchar(255)
   location_alert_id varchar(255)
-  person_alert_id varchar(255)
   work_priority_id varchar(255)
   contractor_organisation_id varchar(255)
   date_raised date
@@ -127,7 +122,6 @@ Ref: work_order.work_class_id > work_class.work_class_id
 Ref: work_order.work_priority_id > work_priority.work_priority_id
 Ref: work_order.contractor_organisation_id > contractor_organisation.contractor_organisation_id
 //Ref: work_order.location_alert_id > location_alert_type.location_alert_type_id
-Ref: work_order.person_alert_id > person_alert_type.person_alert_type_id
 //Ref: work_order.address_id > address.address_id
 //Ref: work_order.investigation_id > investigation.investigation_id
 //Ref: work_order.escalation_id > escalation.escalation_id
