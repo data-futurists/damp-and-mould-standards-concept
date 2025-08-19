@@ -28,14 +28,11 @@ table hazard_report {
   uprn integer
   tenancy_id varchar(50)
   date_reported date
-  reported_by nvarchar(100)
+  reported_by_id integer
   description nvarchar(500)
-  photo_evidence nvarchar(500)
   location_details nvarchar(500)
   emergency_action_taken integer [default: 0]
   made_safe_date date
-  further_work_required integer [default: 0]
-  further_work_due_date date
   report_status_id integer
   investigation_type_id integer
 
@@ -114,6 +111,16 @@ table reference {
 
   Note: "References for hazard reports, investigations and escalations"
 }
+
+table media {
+  media_id integer [pk, increment]
+  hazard_report_id integer not null 
+  media_type varchar(10) [not null, note: "photo or video"]
+  media_attachment attachment [not null]
+  uploaded_by_id integer not null 
+  date_uploaded datetime [not null, default: `CURRENT_TIMESTAMP`]
+}
+
 
 // Code Lists
 
@@ -200,3 +207,7 @@ ref: escalation.escalation_type_id > escalation_type.escalation_type_id
 ref: hazard_report.hazard_report_reference > reference.id
 ref: investigation.investigation_reference > reference.id
 ref: escalation.escalation_reference > reference.id
+// ref: media.uploaded_by_id > person.person_id
+// ref: hazard_report.reported_by_id > person.person_id
+ref: media.hazard_report_id > hazard_report.hazard_report_id
+

@@ -20,9 +20,9 @@
 -- Table storing types of hazards.
 CREATE TABLE hazard_type (
   hazard_type_id INTEGER PRIMARY KEY AUTOINCREMENT,
-  hazard_type NVARCHAR(100) NOT NULL,
+  hazard_type VARCHAR(100) NOT NULL,
   health_risk_rating_id INTEGER NOT NULL,
-  category NVARCHAR(500),
+  category VARCHAR(500),
   CONSTRAINT fk_hazard_type_health_risk_rating FOREIGN KEY (health_risk_rating_id) REFERENCES health_risk_rating(health_risk_rating_id)
 );
 -- Create HazardReport table
@@ -35,25 +35,23 @@ CREATE TABLE hazard_report (
   hazard_report_reference VARCHAR(36) NOT NULL,
   uprn VARCHAR(50) NOT NULL,
   tenancy_id VARCHAR(50) NOT NULL,
+  hazard_type_id INTEGER NOT NULL,
   date_reported DATE NOT NULL,
-  reported_by NVARCHAR(100) NOT NULL,
-  description NVARCHAR(500),
-  photo_evidence NVARCHAR(500),
-  location_details NVARCHAR(500),
+  reported_by_id INTEGER NOT NULL,
+  description VARCHAR(500),
+  location_details VARCHAR(500),
   emergency_action_taken INTEGER NOT NULL DEFAULT 0,
   made_safe_date DATE,
-  further_work_required INTEGER NOT NULL DEFAULT 0,
-  further_work_due_date DATE,
   report_status_id INTEGER NOT NULL,
-  CONSTRAINT fk_hazard_report_reference FOREGIN KEY (hazard_report_reference) REFERENCES reference(id),
+  CONSTRAINT fk_hazard_report_reference FOREIGN KEY (hazard_report_reference) REFERENCES reference(id),
   CONSTRAINT fk_hazard_report_property FOREIGN KEY (uprn) REFERENCES address(uprn),
   CONSTRAINT fk_hazard_report_tenancy FOREIGN KEY (tenancy_id) REFERENCES tenancy(tenancy_id),
   CONSTRAINT fk_hazard_report_investigation_type FOREIGN KEY (investigation_type_id) REFERENCES investigation_type(investigation_type_id),
   CONSTRAINT fk_hazard_report_status FOREIGN KEY (report_status_id) REFERENCES report_status(report_status_id),
   CONSTRAINT chk_emergency_action CHECK (emergency_action_taken IN (0,1)),
-  CONSTRAINT chk_further_work_required CHECK (further_work_required IN (0,1)),
-  CONSTRAINT chk_further_work_due_date CHECK (further_work_due_date IS NULL OR further_work_due_date >= investigation_due_date),
   CONSTRAINT chk_made_safe_date CHECK (made_safe_date IS NULL OR made_safe_date >= date_reported)
+  CONSTRAINT fk_hazard_report_hazard_type FOREIGN KEY (hazard_type_id) REFERENCES hazard_type(hazard_type_id),
+  CONSTRAINT fk_reported_by FOREIGN KEY (reported_by_id) REFERENCES person(person_id),
 );
 -- Create investigation table
 -- Table storing investigation details.
@@ -69,10 +67,11 @@ CREATE TABLE investigation (
   investigation_completed_date DATE,
   investigator_id INTEGER NOT NULL,
   hazard_confirmed INTEGER NOT NULL DEFAULT 0,
+  repair_required INTEGER NOT NULL DEFAULT 0,
   sla_breach_flag INTEGER NOT NULL DEFAULT 0,
   notification_sent_to_tenant INTEGER NOT NULL DEFAULT 0,
-  investigation_notes NVARCHAR(500),
-  CONSTRAINT fk_investigation_reference FOREGIN KEY (investigation_reference) REFERENCES reference(id),
+  investigation_notes VARCHAR(500),
+  CONSTRAINT fk_investigation_reference FOREIGN KEY (investigation_reference) REFERENCES reference(id),
   CONSTRAINT fk_investigation_property FOREIGN KEY (uprn) REFERENCES address(uprn),
   CONSTRAINT fk_investigation_tenancy FOREIGN KEY (tenancy_id) REFERENCES tenancy(tenancy_id),
   CONSTRAINT fk_investigation_hazard_report FOREIGN KEY (hazard_report_id) REFERENCES hazard_report(hazard_report_id),
@@ -93,7 +92,7 @@ CREATE TABLE investigation_hazard (
   investigation_id INTEGER NOT NULL,
   hazard_report_id INTEGER NOT NULL,
   severity_id INTEGER NOT NULL,
-  notes NVARCHAR(500),
+  notes VARCHAR(500),
   CONSTRAINT fk_investigation_hazard_type FOREIGN KEY (hazard_type_id) REFERENCES hazard_type(hazard_type_id),
   CONSTRAINT fk_investigation_hazard_investigation FOREIGN KEY (investigation_id) REFERENCES investigation(investigation_id),
   CONSTRAINT fk_investigation_hazard_report FOREIGN KEY (hazard_report_id) REFERENCES hazard_report(hazard_report_id),
@@ -103,39 +102,70 @@ CREATE TABLE investigation_hazard (
 -- Table storing notifications related to investigations.
 CREATE TABLE notification (
   notification_id INTEGER PRIMARY KEY AUTOINCREMENT,
-  investigation_id INTEGER NOT NULL,
-  tenancy_id VARCHAR(50) NOT NULL,
-  work_order_id VARCHAR(255) NOT NULL,
+  investigation_id INTEGER NULL,
+  tenancy_id INTEGER NOT NULL,
+  work_order_id INTEGER NULL,
   notification_type_id INTEGER NOT NULL,
   escalation_id INTEGER NULL,
   date_sent DATE NOT NULL,
-  notification_method_id INTEGER NOT NULL,
-  content_summary NVARCHAR(500),
+  communication_method_id INTEGER NOT NULL,
+  content_summary VARCHAR(500),
   CONSTRAINT fk_notification_investigation FOREIGN KEY (investigation_id) REFERENCES investigation(investigation_id),
   CONSTRAINT fk_notification_tenancy FOREIGN KEY (tenancy_id) REFERENCES tenancy(tenancy_id),
   CONSTRAINT fk_notification_work_order FOREIGN KEY (work_order_id) REFERENCES work_order(work_order_id),
   CONSTRAINT fk_notification_type FOREIGN KEY (notification_type_id) REFERENCES notification_type(notification_type_id),
   CONSTRAINT fk_notification_escalation FOREIGN KEY (escalation_id) REFERENCES escalation(escalation_id),
-  CONSTRAINT fk_notification_method FOREIGN KEY (notification_method_id) REFERENCES notification_method(notification_method_id)
+  CONSTRAINT fk_notification_method FOREIGN KEY (notification_method_id) REFERENCES communication_method(notification_method_id)
 );
+
+CREATE TABLE communication (
+    communication_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    notification_id INTEGER NULL,  -- optional link to a system notification
+    hazard_report_id INTEGER NULL, -- optional link to a hazard report
+    investigation_id INTEGER NULL, -- optional link to an investigation
+    tenancy_id VARCHAR(50) NOT NULL,
+    sender_type VARCHAR(20) NOT NULL CHECK (sender_type IN ('Tenant', 'Landlord', 'System')),
+    sender_id INTEGER NULL,        -- links to person table if applicable
+    receiver_type VARCHAR(20) NOT NULL CHECK (receiver_type IN ('Tenant', 'Landlord', 'System')),
+    receiver_id INTEGER NULL,      -- links to person table if applicable
+    communication_method_id INTEGER NOT NULL, -- e.g., email, WhatsApp, call
+    communication_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    content_summary VARCHAR(500),
+    media_id INTEGER NULL,         -- optional link to media table
+    CONSTRAINT fk_communication_notification FOREIGN KEY (notification_id)
+        REFERENCES notification(notification_id),
+    CONSTRAINT fk_communication_hazard_report FOREIGN KEY (hazard_report_id)
+        REFERENCES hazard_report(hazard_report_id),
+    CONSTRAINT fk_communication_investigation FOREIGN KEY (investigation_id)
+        REFERENCES investigation(investigation_id),
+    CONSTRAINT fk_communication_sender FOREIGN KEY (sender_id)
+        REFERENCES person(person_id),
+    CONSTRAINT fk_communication_receiver FOREIGN KEY (receiver_id)
+        REFERENCES person(person_id),
+    CONSTRAINT fk_communication_method FOREIGN KEY (communication_method_id)
+        REFERENCES communication_method(communication_method_id),
+    CONSTRAINT fk_communication_media FOREIGN KEY (media_id)
+        REFERENCES media(media_id)
+);
+
 -- Create Escalation table
 -- Table storing escalation actions and tracking.
 CREATE TABLE escalation (
   escalation_id INTEGER PRIMARY KEY AUTOINCREMENT,
   escalation_reference VARCHAR(36) NOT NULL,
   investigation_id INTEGER NOT NULL,
-  escalation_reason NVARCHAR(100),
+  escalation_reason VARCHAR(100),
   escalation_stage_id INTEGER NOT NULL,
   escalation_type_id INTEGER NOT NULL,
-  escalated_to NVARCHAR(100) NOT NULL,
+  escalated_to VARCHAR(100) NOT NULL,
   escalation_start_date DATE NOT NULL,
   escalation_end_date DATE,
-  action_taken NVARCHAR(500),
+  action_taken VARCHAR(500),
   compensation_amount DECIMAL(10,2),
-  alternative_accommodation_details NVARCHAR(500),
+  alternative_accommodation_details VARCHAR(500),
   tenant_acceptance INTEGER NOT NULL DEFAULT 0,
-  escalation_notes NVARCHAR(500),
-  CONSTRAINT fk_escalation_reference FOREGIN KEY (escalation_reference) REFERENCES reference(id),
+  escalation_notes VARCHAR(500),
+  CONSTRAINT fk_escalation_reference FOREIGN KEY (escalation_reference) REFERENCES reference(id),
   CONSTRAINT fk_escalation_investigation FOREIGN KEY (investigation_id) REFERENCES investigation(investigation_id),
   CONSTRAINT fk_escalation_stage FOREIGN KEY (escalation_stage_id) REFERENCES escalation_stage(escalation_stage_id),
   CONSTRAINT fk_escalation_type FOREIGN KEY (escalation_type_id) REFERENCES escalation_type(escalation_type_id),
@@ -146,7 +176,7 @@ CREATE TABLE escalation (
 -- Create Reference table
 -- Table storing all references for hazard reports, investigations and escalations.
 CREATE TABLE reference (
-    id VARCHAR(36) NOT NULL PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     allocated_by_code INTEGER NOT NULL,
     allocated_by_description VARCHAR(50) NOT NULL,
     description VARCHAR(200) NULL,
@@ -161,8 +191,8 @@ CREATE TABLE reference (
 -- HealthRiskRating Table
 -- Code list for health risk rating levels.
 CREATE TABLE health_risk_rating (
-  health_Risk_rating_id INT PRIMARY KEY IDENTITY(1, 1), 
-  health_risk_rating NVARCHAR(20) NOT NULL
+  health_Risk_rating_id INTEGER PRIMARY  KEY AUTOINCREMENT, 
+  health_risk_rating VARCHAR(20) NOT NULL
 );
 INSERT INTO health_risk_rating (health_risk_rating) 
 VALUES 
@@ -171,20 +201,38 @@ VALUES
   ('Low');
 -- Severity Table
 -- Code list for hazard severity levels.
+
 CREATE TABLE severity (
-  severity_id INT PRIMARY KEY IDENTITY(1, 1), 
-  severity NVARCHAR(20) NOT NULL
+  severity_id INTEGER PRIMARY  KEY AUTOINCREMENT, 
+  severity VARCHAR(20) NOT NULL
 );
 INSERT INTO severity (severity) 
 VALUES 
   ('High'), 
   ('Medium'), 
   ('Low');
+
+-- New table to store media for hazard reports
+CREATE TABLE media (
+    media_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    hazard_report_id INTEGER NOT NULL,
+    media_type VARCHAR(10) NOT NULL CHECK (media_type IN ('photo', 'video')),
+    media_attachment ATTACHMENT NOT NULL,
+    uploaded_by_id INTEGER NOT NULL,
+    date_uploaded DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_media_hazard_report FOREIGN KEY (hazard_report_id)
+        REFERENCES hazard_report(hazard_report_id),
+    CONSTRAINT fk_media_uploaded_by FOREIGN KEY (uploaded_by_id)
+        REFERENCES person(person_id)
+);
+
+
 -- InvestigationType Table
 -- Code list for types of investigation.
+
 CREATE TABLE investigation_type (
-  investigation_type_id INT PRIMARY KEY IDENTITY(1, 1), 
-  investigation_type NVARCHAR(20) NOT NULL
+  investigation_type_id INTEGER PRIMARY KEY AUTOINCREMENT, 
+  investigation_type VARCHAR(20) NOT NULL
 );
 INSERT INTO investigation_type (investigation_type) 
 VALUES 
@@ -192,11 +240,13 @@ VALUES
   ('Renewed'), 
   ('Further'), 
   ('Emergency');
+
 -- ReportStatus Table
 -- Code list for report statuses.
+
 CREATE TABLE report_status (
-  report_status_id INT PRIMARY KEY IDENTITY(1, 1), 
-  report_status NVARCHAR(20) NOT NULL
+  report_status_id INTEGER PRIMARY KEY AUTOINCREMENT, 
+  report_status VARCHAR(20) NOT NULL
 );
 INSERT INTO report_status (report_status) 
 VALUES 
@@ -204,11 +254,13 @@ VALUES
   ('Under Review'), 
   ('Made Safe'), 
   ('Closed');
+
 -- TriggerSource Table
 -- Code list for what triggered investigations.
+
 CREATE TABLE trigger_source (
-  trigger_source_id INT PRIMARY KEY IDENTITY(1, 1), 
-  trigger_source NVARCHAR(20) NOT NULL
+  trigger_source_id INTEGER PRIMARY  KEY AUTOINCREMENT, 
+  trigger_source VARCHAR(20) NOT NULL
 );
 INSERT INTO trigger_source (trigger_Source) 
 VALUES 
@@ -219,8 +271,8 @@ VALUES
 -- EscalationStatus Table
 -- Code list for escalation statuses.
 CREATE TABLE escalation_status (
-  escalation_status_id INT PRIMARY KEY IDENTITY(1, 1), 
-  escalation_status NVARCHAR(20) NOT NULL
+  escalation_status_id INTEGER PRIMARY KEY AUTOINCREMENT, 
+  escalation_status VARCHAR(20) NOT NULL
 );
 INSERT INTO escalation_status (escalation_status) 
 VALUES 
@@ -230,8 +282,8 @@ VALUES
 -- NotificationType Table
 -- Code list for types of notifications.
 CREATE TABLE notification_type (
-  notification_type_id INT PRIMARY KEY IDENTITY(1, 1), 
-  notification_type NVARCHAR(20) NOT NULL
+  notification_type_id INTEGER PRIMARY KEY AUTOINCREMENT, 
+  notification_type VARCHAR(20) NOT NULL
 );
 INSERT INTO notification_type (notification_type) 
 VALUES 
@@ -243,8 +295,8 @@ VALUES
 -- EscalationStage Table
 -- Code list for stages in escalation lifecycle.
 CREATE TABLE escalation_stage (
-  escalation_stage_id INT PRIMARY KEY IDENTITY(1, 1), 
-  escalation_stage NVARCHAR(20) NOT NULL
+  escalation_stage_id INTEGER PRIMARY  KEY AUTOINCREMENT, 
+  escalation_stage VARCHAR(20) NOT NULL
 );
 INSERT INTO escalation_stage (escalation_stage) 
 VALUES 
@@ -254,11 +306,11 @@ VALUES
   ('Rejected');
 -- NotificationMethod Table
 -- Code list for notification methods.
-CREATE TABLE notification_method (
-  notification_method_id INT PRIMARY KEY IDENTITY(1, 1), 
-  notification_method NVARCHAR(20) NOT NULL
+CREATE TABLE communication_method (
+  communicaiton_method_id INTEGER PRIMARY KEY AUTOINCREMENT, 
+  communicaiton_method VARCHAR(20) NOT NULL
 );
-INSERT INTO notification_method (notification_method) 
+INSERT INTO communication_method (communication_method) 
 VALUES 
   ('Email'), 
   ('SMS'), 
@@ -266,8 +318,8 @@ VALUES
 -- EscalationType Table
 -- Code list for types of escalations.
 CREATE TABLE escalation_type (
-  escalation_type_id INT PRIMARY KEY IDENTITY(1, 1), 
-  escalation_type NVARCHAR(30) NOT NULL
+  escalation_type_id INTEGER PRIMARY KEY AUTOINCREMENT, 
+  escalation_type VARCHAR(30) NOT NULL
 );
 INSERT INTO escalation_type (escalation_type) 
 VALUES 
@@ -278,12 +330,12 @@ VALUES
 -- Create investigator table
 -- Table storing investigator details.
 CREATE TABLE investigator (
-  investigator_id INT PRIMARY KEY IDENTITY(1, 1), 
-  investigator_name NVARCHAR(100) NOT NULL, 
+  investigator_id INTEGER PRIMARY KEY AUTOINCREMENT, 
+  investigator_name VARCHAR(100) NOT NULL
 );
 
 
-CRECREATE TABLE investigation_history (
+CREATE TABLE investigation_history (
     history_id INTEGER PRIMARY KEY AUTOINCREMENT,
     investigation_id INTEGER NOT NULL,
     
@@ -291,14 +343,16 @@ CRECREATE TABLE investigation_history (
     hazard_id INTEGER NOT NULL,
     tenant_id INTEGER NOT NULL,
     property_id INTEGER NOT NULL,
-    work_order_id INTEGER,
-    appointment_id INTEGER,
-    
+  
     -- Previous vs new types
     previous_hazard_type_id INTEGER,
     new_hazard_type_id INTEGER,
+
     previous_investigation_type_id INTEGER,
     new_investigation_type_id INTEGER,
+
+    previous_escalation_status_id INTEGER,
+    new_escalation_status_id INTEGER,
     
     reason TEXT NOT NULL,
     action_taken TEXT NOT NULL,
