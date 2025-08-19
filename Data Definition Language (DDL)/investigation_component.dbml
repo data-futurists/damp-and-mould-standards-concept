@@ -16,11 +16,11 @@ Table hazard_type {
 Table hazard_report {
   hazard_report_id integer [pk, increment]
   hazard_report_reference varchar(36) [not null, ref: > reference.id]
-  uprn varchar(50) [not null, ref: > address.uprn]
-  tenancy_id varchar(50) [not null, ref: > tenancy.tenancy_id]
-  hazard_type_id integer [not null, ref: > hazard_type.hazard_type_id]
+  uprn varchar(50) [not null] // ref: > address.uprn]
+  tenancy_id varchar(50) [not null] // ref: > tenancy.tenancy_id]
+  hazard_type_id integer [not null] // ref: > hazard_type.hazard_type_id]
   date_reported date [not null]
-  reported_by_id integer [not null, ref: > person.person_id]
+  reported_by_id integer [not null] // ref: > person.person_id]
   description varchar(500)
   location_details varchar(500)
   emergency_action_taken integer [not null, default: `0`, note: 'CHECK (emergency_action_taken IN (0,1))']
@@ -35,8 +35,8 @@ Table hazard_report {
 Table investigation {
   investigation_id integer [pk, increment]
   investigation_reference varchar(36) [not null, ref: > reference.id]
-  uprn varchar(50) [not null, ref: > address.uprn]
-  tenancy_id varchar(50) [not null, ref: > tenancy.tenancy_id]
+  uprn varchar(50) [not null] // ref: > address.uprn]
+  tenancy_id varchar(50) [not null] // ref: > tenancy.tenancy_id]
   hazard_report_id integer [not null, ref: > hazard_report.hazard_report_id]
   trigger_source_id integer [not null, ref: > trigger_source.trigger_source_id]
   investigation_type_id integer [not null, ref: > investigation_type.investigation_type_id]
@@ -70,8 +70,8 @@ Table investigation_hazard {
 Table notification {
   notification_id integer [pk, increment]
   investigation_id integer [ref: > investigation.investigation_id]
-  tenancy_id integer [not null, ref: > tenancy.tenancy_id]
-  work_order_id integer [ref: > work_order.work_order_id]
+  tenancy_id integer //[not null, ref: > tenancy.tenancy_id]
+  work_order_id integer //[ref: > work_order.work_order_id]
   notification_type_id integer [not null, ref: > notification_type.notification_type_id]
   escalation_id integer [ref: > escalation.escalation_id]
   date_sent date [not null]
@@ -88,12 +88,12 @@ Table communication {
   notification_id integer [ref: > notification.notification_id]
   hazard_report_id integer [ref: > hazard_report.hazard_report_id]
   investigation_id integer [ref: > investigation.investigation_id]
-  tenancy_id varchar(50) not null // ref: > tenancy.tenancy_id
-  sender_type varchar(20) [not null, note: 'CHECK (sender_type IN (''Tenant'',''Landlord'',''System''))']
+  tenancy_id varchar(50) [not null] // ref: > tenancy.tenancy_id
+  sender_type varchar(20) [not null] // note: 'CHECK (sender_type IN (''Tenant'',''Landlord'',''System''))']
   sender_id integer // ref: > person.person_id
-  receiver_type varchar(20) [not null, note: 'CHECK (receiver_type IN (''Tenant'',''Landlord'',''System''))']
+  receiver_type varchar(20) [not null] // note: 'CHECK (receiver_type IN (''Tenant'',''Landlord'',''System''))']
   receiver_id integer //ref: > person.person_id
-  communication_method_id integer [not null, ref: > communication_method.communication.method_id]
+  communication_method_id integer [not null, ref: > communication_method.communication_method_id]
   communication_date datetime [not null, default: `CURRENT_TIMESTAMP`]
   content_summary varchar(500)
   media_id integer [ref: > media.media_id]
@@ -120,7 +120,7 @@ Table escalation {
   tenant_acceptance integer [not null, default: `0`, note: 'CHECK (tenant_acceptance IN (0,1))']
   escalation_notes varchar(500)
 
-  Note: 'CHECK (escalation_end_date IS NULL OR escalation_end_date >= escalation_start_date); CHECK (compensation_amount IS NULL OR compensation_amount >= 0).'
+  // Note: 'CHECK (escalation_end_date IS NULL OR escalation_end_date >= escalation_start_date); CHECK (compensation_amount IS NULL OR compensation_amount >= 0).'
 }
 
 /////////////////////////////////////////////////////
@@ -202,9 +202,9 @@ Table investigator {
 Table media {
   media_id integer [pk, increment]
   hazard_report_id integer [not null, ref: > hazard_report.hazard_report_id]
-  media_type varchar(10) [not null, note: 'CHECK (media_type IN (''photo'',''video''))']
+  media_type varchar(10) [not null] // note: 'CHECK (media_type IN ("photo", "video"))']
   media_attachment attachment [not null]
-  uploaded_by_id integer [not null, ref: > person.person_id]
+  uploaded_by_id integer [not null] // ref: > person.person_id
   date_uploaded datetime [not null, default: `CURRENT_TIMESTAMP`]
 }
 
@@ -214,19 +214,19 @@ Table media {
 
 Table investigation_history {
   history_id integer [pk, increment]
-  investigation_id integer [not null, ref: > investigation.investigation_id]
+  investigation_id integer [not null] // ref: > investigation.investigation_id]
 
   // Snapshot of related entities at the time
-  hazard_id integer [not null, ref: > hazard.hazard_id]
-  tenant_id integer [not null, ref: > tenant.tenant_id]
-  property_id integer [not null, ref: > property.property_id]
+  hazard_id integer [not null] //ref: > hazard_report.hazard_report_id]
+  tenant_id integer [not null] //ref: > tenant.tenant_id
+  property_id integer [not null] //ref: > property.property_id
 
   // Previous vs new types
-  previous_hazard_type_id integer [ref: > hazard_type.hazard_type_id]
-  new_hazard_type_id integer [ref: > hazard_type.hazard_type_id]
+  previous_hazard_type_id integer //[ref: > hazard_type.hazard_type_id]
+  new_hazard_type_id integer //[ref: > hazard_type.hazard_type_id]
 
-  previous_investigation_type_id integer [ref: > investigation_type.investigation_type_id]
-  new_investigation_type_id integer [ref: > investigation_type.investigation_type_id]
+  previous_investigation_type_id integer //[ref: > investigation_type.investigation_type_id]
+  new_investigation_type_id integer //[ref: > investigation_type.investigation_type_id]
 
   previous_escalation_status_id integer
   new_escalation_status_id integer
@@ -235,10 +235,7 @@ Table investigation_history {
   action_taken text [not null]
 
   // Audit metadata
-  recorded_by integer [not null, ref: > person.person_id]
+  recorded_by integer [not null] //ref: > person.person_id
   recorded_at timestamp [not null, default: `CURRENT_TIMESTAMP`]
 
-  // Optional links per DDL constraints
-  work_order_id integer [ref: > work_order.work_order_id]
-  appointment_id integer [ref: > appointment.appointment_id]
 }
