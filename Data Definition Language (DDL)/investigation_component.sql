@@ -156,6 +156,7 @@ CREATE TABLE escalation (
   escalation_reason VARCHAR(100),
   escalation_stage_id INTEGER NOT NULL,
   escalation_type_id INTEGER NOT NULL,
+  escalation_status_id INTEGER NOT NULL,
   escalated_to VARCHAR(100) NOT NULL,
   escalation_start_date DATE NOT NULL,
   escalation_end_date DATE,
@@ -168,6 +169,7 @@ CREATE TABLE escalation (
   CONSTRAINT fk_escalation_investigation FOREIGN KEY (investigation_id) REFERENCES investigation(investigation_id),
   CONSTRAINT fk_escalation_stage FOREIGN KEY (escalation_stage_id) REFERENCES escalation_stage(escalation_stage_id),
   CONSTRAINT fk_escalation_type FOREIGN KEY (escalation_type_id) REFERENCES escalation_type(escalation_type_id),
+  CONSTRAINT fk_escalation_status FOREIGN KEY (escalation_status_id) REFERENCES escalation_status(escalation_status_id),
   CONSTRAINT chk_tenant_acceptance CHECK (tenant_acceptance IN (0,1)),
   CONSTRAINT chk_compensation_amount CHECK (compensation_amount IS NULL OR compensation_amount >= 0),
   CONSTRAINT chk_escalation_end_date CHECK (escalation_end_date IS NULL OR escalation_end_date >= escalation_start_date)

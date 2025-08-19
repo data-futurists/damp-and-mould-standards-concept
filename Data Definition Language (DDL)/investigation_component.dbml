@@ -110,6 +110,7 @@ Table escalation {
   escalation_reason varchar(100)
   escalation_stage_id integer [not null, ref: > escalation_stage.escalation_stage_id]
   escalation_type_id integer [not null, ref: > escalation_type.escalation_type_id]
+  escalation_status_id integer [not null, ref: > escalation_status.escalation_status_id]
   escalated_to varchar(100) [not null]
   escalation_start_date date [not null]
   escalation_end_date date
