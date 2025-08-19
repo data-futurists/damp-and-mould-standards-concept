@@ -16,11 +16,11 @@ Table hazard_type {
 Table hazard_report {
   hazard_report_id integer [pk, increment]
   hazard_report_reference varchar(36) [not null, ref: > reference.id]
-  uprn varchar(50) [not null] // ref: > address.uprn]
-  tenancy_id varchar(50) [not null] // ref: > tenancy.tenancy_id]
-  hazard_type_id integer [not null] // ref: > hazard_type.hazard_type_id]
+  uprn varchar(50) [not null] // ref: > address.uprn
+  tenancy_id varchar(50) [not null] // ref: > tenancy.tenancy_id
+  hazard_type_id integer [not null] // ref: > hazard_type.hazard_type_id
   date_reported date [not null]
-  reported_by_id integer [not null] // ref: > person.person_id]
+  reported_by_id integer [not null] // ref: > person.person_id
   description varchar(500)
   location_details varchar(500)
   emergency_action_taken integer [not null, default: `0`, note: 'CHECK (emergency_action_taken IN (0,1))']
@@ -35,8 +35,8 @@ Table hazard_report {
 Table investigation {
   investigation_id integer [pk, increment]
   investigation_reference varchar(36) [not null, ref: > reference.id]
-  uprn varchar(50) [not null] // ref: > address.uprn]
-  tenancy_id varchar(50) [not null] // ref: > tenancy.tenancy_id]
+  uprn varchar(50) [not null] // ref: > address.uprn
+  tenancy_id varchar(50) [not null] // ref: > tenancy.tenancy_id
   hazard_report_id integer [not null, ref: > hazard_report.hazard_report_id]
   trigger_source_id integer [not null, ref: > trigger_source.trigger_source_id]
   investigation_type_id integer [not null, ref: > investigation_type.investigation_type_id]
@@ -89,9 +89,9 @@ Table communication {
   hazard_report_id integer [ref: > hazard_report.hazard_report_id]
   investigation_id integer [ref: > investigation.investigation_id]
   tenancy_id varchar(50) [not null] // ref: > tenancy.tenancy_id
-  sender_type varchar(20) [not null] // note: 'CHECK (sender_type IN (''Tenant'',''Landlord'',''System''))']
+  sender_type varchar(20) [not null] // note: 'CHECK (sender_type IN (''Tenant'',''Landlord'',''System''))
   sender_id integer // ref: > person.person_id
-  receiver_type varchar(20) [not null] // note: 'CHECK (receiver_type IN (''Tenant'',''Landlord'',''System''))']
+  receiver_type varchar(20) [not null] // note: 'CHECK (receiver_type IN (''Tenant'',''Landlord'',''System''))
   receiver_id integer //ref: > person.person_id
   communication_method_id integer [not null, ref: > communication_method.communication_method_id]
   communication_date datetime [not null, default: `CURRENT_TIMESTAMP`]
@@ -202,7 +202,7 @@ Table investigator {
 Table media {
   media_id integer [pk, increment]
   hazard_report_id integer [not null, ref: > hazard_report.hazard_report_id]
-  media_type varchar(10) [not null] // note: 'CHECK (media_type IN ("photo", "video"))']
+  media_type varchar(10) [not null] // note: 'CHECK (media_type IN ("photo", "video"))
   media_attachment attachment [not null]
   uploaded_by_id integer [not null] // ref: > person.person_id
   date_uploaded datetime [not null, default: `CURRENT_TIMESTAMP`]
@@ -214,10 +214,10 @@ Table media {
 
 Table investigation_history {
   history_id integer [pk, increment]
-  investigation_id integer [not null] // ref: > investigation.investigation_id]
+  investigation_id integer [not null] // ref: > investigation.investigation_id
 
   // Snapshot of related entities at the time
-  hazard_id integer [not null] //ref: > hazard_report.hazard_report_id]
+  hazard_id integer [not null] //ref: > hazard_report.hazard_report_id
   tenant_id integer [not null] //ref: > tenant.tenant_id
   property_id integer [not null] //ref: > property.property_id
 
