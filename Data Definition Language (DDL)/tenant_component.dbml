@@ -1,7 +1,6 @@
 table tenant_person {
   tenant_id integer [pk, increment]
   full_name varchar(255) [not null]
-  person_alert_type_id integer
   date_of_birth date
   phone_number integer
   email integer
