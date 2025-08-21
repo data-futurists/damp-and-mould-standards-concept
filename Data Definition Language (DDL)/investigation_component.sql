@@ -25,6 +25,7 @@ CREATE TABLE hazard_type (
   category VARCHAR(500),
   CONSTRAINT fk_hazard_type_health_risk_rating FOREIGN KEY (health_risk_rating_id) REFERENCES health_risk_rating(health_risk_rating_id)
 );
+
 -- Create HazardReport table
 -- Table storing hazard reports submitted.
 
@@ -200,6 +201,7 @@ VALUES
   ('High'), 
   ('Medium'), 
   ('Low');
+
 -- Severity Table
 -- Code list for hazard severity levels.
 
@@ -269,17 +271,21 @@ VALUES
   ('Routine Check'), 
   ('Environmental Sensor'), 
   ('Staff Report');
+
+-----there is an escalation_stage which seems to serve the same purpose as this table----------
+
 -- EscalationStatus Table
 -- Code list for escalation statuses.
-CREATE TABLE escalation_status (
-  escalation_status_id INTEGER PRIMARY KEY AUTOINCREMENT, 
-  escalation_status VARCHAR(20) NOT NULL
-);
-INSERT INTO escalation_status (escalation_status) 
-VALUES 
-  ('None'), 
-  ('In Progress'), 
-  ('Escalated');
+--CREATE TABLE escalation_status (
+--  escalation_status_id INTEGER PRIMARY KEY AUTOINCREMENT, 
+--  escalation_status VARCHAR(20) NOT NULL
+--);
+--INSERT INTO escalation_status (escalation_status) 
+--VALUES 
+--  ('None'), 
+--  ('In Progress'), 
+--  ('Escalated');
+
 -- NotificationType Table
 -- Code list for types of notifications.
 CREATE TABLE notification_type (
