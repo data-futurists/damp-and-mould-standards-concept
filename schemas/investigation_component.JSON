@@ -29,7 +29,7 @@
     },
     "health_risk_rating": {
       "type": "array",
-      "items": { "$ref": "#/definitions/health_risk_Rating" }
+      "items": { "$ref": "#/definitions/health_risk_rating" }
     },
     "severity": {
       "type": "array",
@@ -198,7 +198,7 @@
       ]
     },
 
-    "healthriskrating": {
+    "health_risk_rating": {
       "type": "object",
       "description": "Code list for health risk rating levels.",
       "properties": {

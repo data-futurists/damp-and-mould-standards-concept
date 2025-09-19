@@ -1,7 +1,8 @@
 ----------------------------------------------------------------------------------------
 -- Author: George Foster (TPXImpact)
 -- Email: george.foster@tpximpact.com
---
+-- Updated by: Elena Iurco (Data Futurists)
+-- Email: elena.iurco@datafuturists.com
 -- Scripts below create the required tables in the investigation Module
 -- 
 -- HazardType
@@ -11,11 +12,7 @@
 -- Notification
 -- Escalation
 ----------------------------------------------------------------------------------------
--- NOTES
--- On delete or on update behaviour for the FKs? Leave for now
---
--- search todo to find rows to modify
-----------------------------------------------------------------------------------------
+
 -- Create HazardType table
 -- Table storing types of hazards.
 CREATE TABLE hazard_type (
