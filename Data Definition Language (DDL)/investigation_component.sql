@@ -1,7 +1,8 @@
 ----------------------------------------------------------------------------------------
 -- Author: George Foster (TPXImpact)
 -- Email: george.foster@tpximpact.com
--- Updated by: Elena Iurco (Data Futurists)
+
+-- Updates by: Elena Iurco (Data Futurists)
 -- Email: elena.iurco@datafuturists.com
 -- Scripts below create the required tables in the investigation Module
 -- 
@@ -42,14 +43,14 @@ CREATE TABLE hazard_report (
   further_work_required INTEGER NOT NULL DEFAULT 0,
   further_work_due_date DATE,
   report_status_id INTEGER NOT NULL,
-  CONSTRAINT fk_hazard_report_reference FOREGIN KEY (hazard_report_reference) REFERENCES reference(id),
+  CONSTRAINT fk_hazard_report_reference FOREIGN KEY (hazard_report_reference) REFERENCES reference(id),
   CONSTRAINT fk_hazard_report_property FOREIGN KEY (uprn) REFERENCES address(uprn),
   CONSTRAINT fk_hazard_report_tenancy FOREIGN KEY (tenancy_id) REFERENCES tenancy(tenancy_id),
-  CONSTRAINT fk_hazard_report_investigation_type FOREIGN KEY (investigation_type_id) REFERENCES investigation_type(investigation_type_id),
+  -- note: this was probably made during the first iteration of this table, recommend to delete: CONSTRAINT fk_hazard_report_investigation_type FOREIGN KEY (investigation_type_id) REFERENCES investigation_type(investigation_type_id),
   CONSTRAINT fk_hazard_report_status FOREIGN KEY (report_status_id) REFERENCES report_status(report_status_id),
   CONSTRAINT chk_emergency_action CHECK (emergency_action_taken IN (0,1)),
   CONSTRAINT chk_further_work_required CHECK (further_work_required IN (0,1)),
-  CONSTRAINT chk_further_work_due_date CHECK (further_work_due_date IS NULL OR further_work_due_date >= investigation_due_date),
+  -- note: this was probably made during the first iteration of this table, recommend to delete:CONSTRAINT chk_further_work_due_date CHECK (further_work_due_date IS NULL OR further_work_due_date >= investigation_due_date),
   CONSTRAINT chk_made_safe_date CHECK (made_safe_date IS NULL OR made_safe_date >= date_reported)
 );
 -- Create investigation table
@@ -69,16 +70,16 @@ CREATE TABLE investigation (
   sla_breach_flag INTEGER NOT NULL DEFAULT 0,
   notification_sent_to_tenant INTEGER NOT NULL DEFAULT 0,
   investigation_notes NVARCHAR(500),
-  CONSTRAINT fk_investigation_reference FOREGIN KEY (investigation_reference) REFERENCES reference(id),
+  CONSTRAINT fk_investigation_reference FOREIGN KEY (investigation_reference) REFERENCES reference(id),
   CONSTRAINT fk_investigation_property FOREIGN KEY (uprn) REFERENCES address(uprn),
   CONSTRAINT fk_investigation_tenancy FOREIGN KEY (tenancy_id) REFERENCES tenancy(tenancy_id),
   CONSTRAINT fk_investigation_hazard_report FOREIGN KEY (hazard_report_id) REFERENCES hazard_report(hazard_report_id),
   CONSTRAINT fk_investigation_trigger_source FOREIGN KEY (trigger_source_id) REFERENCES trigger_source(trigger_source_id),
   CONSTRAINT fk_investigation_investigator FOREIGN KEY (investigator_id) REFERENCES investigator(investigator_id),
   CONSTRAINT chk_hazard_confirmed CHECK (hazard_confirmed IN (0,1)),
-  CONSTRAINT chk_repair_required CHECK (repair_required IN (0,1)),
+  -- note: this was probably made during the first iteration of this table, recommend to delete:CONSTRAINT chk_repair_required CHECK (repair_required IN (0,1)),
   CONSTRAINT chk_sla_breach CHECK (sla_breach_flag IN (0,1)),
-  CONSTRAINT chk_notification_sent_to_tenant CHECK (notification_sent_to_tenant IN (0,1)),,
+  CONSTRAINT chk_notification_sent_to_tenant CHECK (notification_sent_to_tenant IN (0,1)),
   CONSTRAINT chk_investigation_scheduled_date CHECK (investigation_scheduled_date IS NULL OR investigation_scheduled_date >= hazard_reported_date),
   CONSTRAINT chk_investigation_completed_date CHECK (investigation_completed_date IS NULL OR investigation_scheduled_date IS NULL OR investigation_completed_date >= investigation_scheduled_date)
 );
@@ -132,7 +133,7 @@ CREATE TABLE escalation (
   alternative_accommodation_details NVARCHAR(500),
   tenant_acceptance INTEGER NOT NULL DEFAULT 0,
   escalation_notes NVARCHAR(500),
-  CONSTRAINT fk_escalation_reference FOREGIN KEY (escalation_reference) REFERENCES reference(id),
+  CONSTRAINT fk_escalation_reference FOREIGN KEY (escalation_reference) REFERENCES reference(id),
   CONSTRAINT fk_escalation_investigation FOREIGN KEY (investigation_id) REFERENCES investigation(investigation_id),
   CONSTRAINT fk_escalation_stage FOREIGN KEY (escalation_stage_id) REFERENCES escalation_stage(escalation_stage_id),
   CONSTRAINT fk_escalation_type FOREIGN KEY (escalation_type_id) REFERENCES escalation_type(escalation_type_id),
@@ -276,5 +277,5 @@ VALUES
 -- Table storing investigator details.
 CREATE TABLE investigator (
   investigator_id INT PRIMARY KEY IDENTITY(1, 1), 
-  investigator_name NVARCHAR(100) NOT NULL, 
+  investigator_name NVARCHAR(100) NOT NULL
 );
